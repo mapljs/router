@@ -1,8 +1,15 @@
 {
-  "name": "library",
+  "name": "@maple/router",
   "version": "0.0.1",
-  "description": "Example package",
-  "keywords": [],
+  "description": "Fast compiled router for all runtimes",
+  "keywords": [
+    "fast",
+    "compiled",
+    "router",
+    "node",
+    "bun",
+    "deno"
+  ],
   "license": "MIT",
   "type": "module",
   "main": "./index.js",
@@ -23,5 +30,7 @@
     "mitata": "latest",
     "typescript": "latest"
   },
-  "dependencies": {}
+  "dependencies": {
+    "@mapl/compiler": "^0.0.2"
+  }
 }
