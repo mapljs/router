@@ -1,39 +1,55 @@
-export type Node = [
-  part: string,
+export interface Node {
+  part: string;
 
-  store: any,
-  children: Record<number, Node> | null,
-  params: ParamNode | null,
+  store: any;
+  children: Record<number, Node> | null;
+  params: ParamNode | null;
 
-  wildcardStore: unknown
-];
+  wildcardStore: unknown;
+}
 
-export type ParamNode = [child: Node | null, store: unknown];
+export interface ParamNode {
+  child: Node | null;
+  store: unknown;
+}
 
 // Implementations
 export function createNode(part: string): Node {
-  return [part, null, null, null, null];
+  return {
+    part,
+    store: null,
+    children: null,
+    params: null,
+    wildcardStore: null
+  };
 }
 
-export function createRootNode(): Node {
-  return ['/', null, null, null, null];
-}
-
-export function createParamNode(node: Node): ParamNode {
+export function createParamNode(node: Node, nextNode: ParamNode['child']): ParamNode {
   // eslint-disable-next-line
-  return node[3] = [null, null];
+  return node.params = {
+    child: nextNode,
+    store: null
+  };
 }
 
 export function cloneNode(node: Node, part: string): Node {
-  return [part, node[1], node[2], node[3], node[4]];
+  return {
+    part,
+    // eslint-disable-next-line
+    store: node.store,
+    children: node.children,
+    params: node.params,
+    wildcardStore: node.wildcardStore
+  };
 }
 
-export function resetNode(node: Node, part: string, children: Node[2]): void {
-  node[0] = part;
-  node[1] = null;
-  node[2] = children;
-  node[3] = null;
-  node[4] = null;
+export function resetNode(node: Node, part: string, children: Node['children']): void {
+  node.part = part;
+  node.children = children;
+
+  node.store = null;
+  node.params = null;
+  node.wildcardStore = null;
 }
 
 // Travel until the end of the node (path should not include end param or wildcard)
@@ -44,23 +60,21 @@ export function visitNode(node: Node, path: string): Node {
   for (let i = 0, { length } = parts; i < length; ++i) {
     // Set param node
     if (i !== 0) {
-      const params: ParamNode = node[3] ?? createParamNode(node);
-
-      if (params[0] === null) {
-        node = params[0] = createNode(parts[i]);
-        continue;
-      }
-
-      node = params[0];
+      if (node.params === null) {
+        const nextNode = createNode(parts[i]);
+        node.params = createParamNode(node, nextNode);
+        node = nextNode;
+      } else
+        node = node.params.child ??= createNode(parts[i]);
     }
 
     for (let j = 0, pathPart = parts[i]; ; ++j) {
-      const nodePart = node[0];
+      const nodePart = node.part;
 
       // Reach the end of the pathname but node still continues
       if (j === pathPart.length) {
         if (j < nodePart.length) {
-          const children: Node[2] = {};
+          const children: Node['children'] = {};
           children[nodePart.charCodeAt(j)] = cloneNode(node, nodePart.slice(j));
           resetNode(node, pathPart, children);
         }
@@ -70,10 +84,10 @@ export function visitNode(node: Node, path: string): Node {
 
       // Add static child
       if (j === nodePart.length) {
-        if (node[2] === null)
-          node[2] = {};
+        if (node.children === null)
+          node.children = {};
         else {
-          const nextNode = node[2][pathPart.charCodeAt(j)];
+          const nextNode = node.children[pathPart.charCodeAt(j)];
 
           // Re-run loop with existing static node
           if (typeof nextNode !== 'undefined') {
@@ -86,7 +100,7 @@ export function visitNode(node: Node, path: string): Node {
 
         // Create and add new node
         const nextNode = createNode(pathPart.slice(j));
-        node[2][pathPart.charCodeAt(j)] = nextNode;
+        node.children[pathPart.charCodeAt(j)] = nextNode;
         node = nextNode;
 
         break;
@@ -95,7 +109,7 @@ export function visitNode(node: Node, path: string): Node {
       // Split into two paths
       if (pathPart[j] !== nodePart[j]) {
         // Split the old path
-        const children: Node[2] = {};
+        const children: Node['children'] = {};
         children[nodePart.charCodeAt(j)] = cloneNode(node, nodePart.slice(j));
 
         const nextNode = createNode(pathPart.slice(j));
@@ -116,10 +130,10 @@ export function insertItem(node: Node, path: string, item: unknown): void {
   if (path.charCodeAt(path.length - 1) === 42) {
     // Ends with wildcard
     if (path.charCodeAt(path.length - 2) === 42)
-      visitNode(node, path.substring(0, path.length - 2))[4] = item;
+      visitNode(node, path.substring(0, path.length - 2)).wildcardStore = item;
     // End with params
     else
-      createParamNode(visitNode(node, path.substring(0, path.length - 1)))[1] = item;
+      createParamNode(visitNode(node, path.substring(0, path.length - 1)), null).store = item;
   } else
-    visitNode(node, path)[1] = item;
+    visitNode(node, path).store = item;
 }
