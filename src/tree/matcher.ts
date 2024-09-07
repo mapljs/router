@@ -38,11 +38,13 @@ export function matchItem(node: Node, path: string, params: string[], startIdx: 
     const slashIdx = path.indexOf('/', pathPartEndIdx);
 
     if (slashIdx === -1) {
+      // Reach the end of the string
       if (paramsNode.store !== null) {
         params.push(path.slice(pathPartEndIdx));
         return paramsNode.store;
       }
     } else if (slashIdx !== pathPartEndIdx && paramsNode.child !== null) {
+      // Parameter should not be empty
       params.push(path.substring(pathPartEndIdx, slashIdx));
 
       const matchResult = matchItem(node, path, params, slashIdx);
