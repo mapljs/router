@@ -107,7 +107,7 @@ export function visitNode(node: Node, path: string): Node {
       }
 
       // Split into two paths
-      if (pathPart[j] !== nodePart[j]) {
+      if (pathPart.charCodeAt(j) !== nodePart.charCodeAt(j)) {
         // Split the old path
         const children: Node['children'] = {};
         children[nodePart.charCodeAt(j)] = cloneNode(node, nodePart.slice(j));
