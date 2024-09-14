@@ -42,8 +42,6 @@ describe('Compile matcher correctly', () => {
     `return (${PATHNAME},${PARAMS})=>{const ${PATHNAME_LEN}=${PATHNAME}.length;${getContent(state)}return null;}`
   )(...state.externalValues);
 
-  console.log(match.toString());
-
   for (let i = 0; i < samplePathsLen; i++)
     test(`${samplePaths[i]}: ${i}`, () => {
       expect(match(resultPaths[i], [])).toBe(i);
