@@ -12,6 +12,8 @@ const root = createNode('/');
 for (let i = 0; i < samplePathsLen; i++)
   insertItem(root, samplePaths[i], i);
 
+console.log(root)
+
 describe('Should match correctly', () => {
   for (let i = 0; i < samplePathsLen; i++)
     test(`${samplePaths[i]}: ${i}`, () => {

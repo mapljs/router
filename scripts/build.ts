@@ -18,9 +18,10 @@ const transpiler = new Bun.Transpiler({
   loader: 'tsx',
   target: 'node',
 
-  // Lighter output
+  // Lighter and more optimized output
+  treeShaking: true,
   minifyWhitespace: true,
-  treeShaking: true
+  inline: true
 });
 
 for (const path of new Bun.Glob('**/*.ts').scanSync(SOURCEDIR))

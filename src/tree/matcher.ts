@@ -9,15 +9,15 @@ export function matchItem(node: Node, path: string, params: string[], startIdx: 
 
   // Only check the pathPart if its length is > 1 since the parent has
   // already checked that the url matches the first character
-  startIdx++;
   if (pathPartLen > 1) {
     if (startIdx + pathPartLen > pathLen) return null;
+    startIdx++;
 
     for (let i = 1; i < pathPartLen; i++, startIdx++) {
       if (part.charCodeAt(i) !== path.charCodeAt(startIdx))
         return null;
     }
-  }
+  } else startIdx++;
 
   // Wildcard does not match here
   if (startIdx === pathLen)
