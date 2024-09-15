@@ -1,13 +1,10 @@
 import { describe, test, expect } from 'bun:test';
 
 import { matchItem } from '@mapl/router/tree/matcher';
-import { PARAMS, PATHNAME, PATHNAME_LEN, compileNode, type RouterCompilerState } from '@mapl/router/tree/compiler';
 import { createNode, insertItem } from '@mapl/router/tree/node';
-import { getExternalKeys, getContent } from '@mapl/compiler';
 
-import { samplePaths, samplePathsLen } from './datasets/paths';
-
-const resultPaths = samplePaths.map((pattern) => pattern.endsWith('**') ? pattern.substring(0, pattern.length - 2) + '1/2/3' : pattern);
+import { samplePaths, samplePathsLen, resultPaths } from './datasets/paths';
+import compileMatcher from './utils/compileMatcher';
 
 const root = createNode('/');
 for (let i = 0; i < samplePathsLen; i++)
@@ -21,25 +18,7 @@ describe('Should match correctly', () => {
 });
 
 describe('Compile matcher correctly', () => {
-  const state: RouterCompilerState<any> = {
-    contentBuilder: [],
-    declarationBuilders: [],
-    localVarCount: 0,
-    externalValues: [],
-
-    compileItem: (item, state) => {
-      state.contentBuilder.push(`return f${state.externalValues.length};`);
-      state.externalValues.push(item);
-    }
-  };
-
-  compileNode(root, state, false, false, 0, '');
-
-  // eslint-disable-next-line
-  const match = Function(
-    ...getExternalKeys(state),
-    `return (${PATHNAME},${PARAMS})=>{const ${PATHNAME_LEN}=${PATHNAME}.length;${getContent(state)}return null;}`
-  )(...state.externalValues);
+  const match = compileMatcher(root);
 
   for (let i = 0; i < samplePathsLen; i++)
     test(`${samplePaths[i]}: ${i}`, () => {

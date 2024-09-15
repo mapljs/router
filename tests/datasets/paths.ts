@@ -14,3 +14,6 @@ export const samplePaths = [
   '/category/*/filter/*/exclude'
 ], samplePathsLen = samplePaths.length;
 
+export const resultPaths = samplePaths.map((pattern) => pattern.endsWith('**') ? pattern.substring(0, pattern.length - 2) + '1/2/3' : pattern);
+
+
