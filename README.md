@@ -1,40 +1,60 @@
-# Library template
+# `@mapl/router`
 
-An NPM library template using Bun.
+A fast compiled radix tree router.
 
-## Scripts
+```ts
+import {
+  PARAMS,
+  PATHNAME,
+  PATHNAME_LEN,
+  compileNode,
+  type RouterCompilerState,
+} from "@mapl/router/tree/compiler";
+import { createNode, insertItem } from "@mapl/router/tree/node";
+import { getExternalKeys, getContent } from "@mapl/compiler";
 
-All script sources.
+// Initialize the root node
+const root = createNode("/");
 
-### [Build](./scripts/build.ts)
+// Add some routes
+insertItem(root, "/", 0);
+insertItem(root, "/user/*", 1);
+insertItem(root, "/**", 2);
 
-Emit `.js` and `.d.ts` files to [`lib`](./lib).
+// Initialize the compiler state
+const state: RouterCompilerState<any> = {
+  contentBuilder: [],
+  declarationBuilders: [],
+  localVarCount: 0,
+  externalValues: [],
 
-### [Publish](./scripts/publish.ts)
+  // Same args as compileNode except the first one
+  compileItem: (item, state) => {
+    state.contentBuilder.push(`return f${state.externalValues.length};`);
+    state.externalValues.push(item);
+  },
+};
 
-Move [`package.json`](./package.json), [`README.md`](./README.md) to [`lib`](./lib) and publish the package.
+// Compile from root node
+compileNode(root, state, false, false, 0, "");
 
-### [Bench](./scripts/bench.ts)
+// Create the match function using the result state
+const match = Function(
+  ...getExternalKeys(state),
+  `return (${PATHNAME},${PARAMS})=>{const ${PATHNAME_LEN}=${PATHNAME}.length;${getContent(state)}}`,
+)(...state.externalValues);
 
-Run files that ends with `.bench.ts` extension.
+// Example usage
+const res0 = match("/", []);
+res0; // 0
 
-## Package scripts
+const params1 = [];
+const res1 = match("/user/0", params1);
+params1; // ['0']
+res1; // 1
 
-All specified scripts in [`package.json`](./package.json).
-
-```bash
-# Build and run tests
-bun build:test
-
-# Build and run benchmarks
-bun build:bench
-
-# Build and publish the package
-bun build:publish
-
-# Lint
-bun lint
-
-# Lint and fix if possible
-bun lint:fix
+const params2 = [];
+const res2 = match("/navigate/to/about", params2);
+params2; // ['navigate/to/about']
+res2; // 2
 ```

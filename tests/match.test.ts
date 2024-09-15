@@ -28,9 +28,8 @@ describe('Compile matcher correctly', () => {
     externalValues: [],
 
     compileItem: (item, state) => {
-      const itemId = state.externalValues.length;
+      state.contentBuilder.push(`return f${state.externalValues.length};`);
       state.externalValues.push(item);
-      state.contentBuilder.push(`return f${itemId};`);
     }
   };
 
