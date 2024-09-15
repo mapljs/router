@@ -1,5 +1,5 @@
 import type { Node } from './node';
-import { getContent, getExternalKeys, type CompilerState } from '@mapl/compiler';
+import type { CompilerState } from '@mapl/compiler';
 
 type ParametersExcludeState<T> = T extends (arg0: any, arg1: any, ...rest: infer R) => any ? R : never;
 
@@ -121,24 +121,4 @@ export function compileNode(
 
   if (partLen !== 1)
     builder.push('}');
-}
-
-// eslint-disable-next-line
-const compileItem: RouterCompilerState<any>['compileItem'] = (item, state) => {
-  const itemId = state.externalValues.length;
-  state.externalValues.push(item);
-  state.contentBuilder.push(`return f${itemId};`);
-};
-
-export function compileMatcher(root: Node): (path: string, params: string[]) => any {
-  const state: RouterCompilerState<any> = {
-    contentBuilder: [],
-    declarationBuilders: [],
-    localVarCount: 0,
-    externalValues: [],
-    compileItem
-  };
-  compileNode(root, state, false, false, 0, '');
-  // eslint-disable-next-line
-  return Function(...getExternalKeys(state), `return (${PATHNAME},${PARAMS})=>{const ${PATHNAME_LEN}=${PATHNAME}.length;${getContent(state)}return null;}`)(...state.externalValues);
 }
