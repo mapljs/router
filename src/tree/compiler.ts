@@ -1,7 +1,7 @@
 import type { Node } from './node';
 import type { CompilerState } from '@mapl/compiler';
 
-type ParametersExcludeState<T> = T extends (arg0: any, arg1: any, ...rest: infer R) => any ? R : never;
+type ParametersExcludeState<T> = T extends (arg0: any, arg1: any, ...rest: [...infer R, any, any, any]) => any ? R : never;
 
 export interface RouterCompilerState<Item> extends CompilerState {
   compileItem: (item: Item, state: this, ...args: ParametersExcludeState<typeof compileNode>) => void;
@@ -41,7 +41,7 @@ export function compileNode(
 
   if (node[1] !== null) {
     builder.push(`if(${PATHNAME_LEN}===${startIndexPrefix}${startIndexValue}){`);
-    state.compileItem(node[1], state, hasParam, hasMultipleParams, startIndexValue, startIndexPrefix);
+    state.compileItem(node[1], state, hasParam);
     builder.push('}');
   }
 
@@ -93,7 +93,7 @@ export function compileNode(
 
     if (hasStore) {
       builder.push(`if(${hasChild ? CURRENT_PARAM_INDEX : slashIndex}===-1){${PARAMS}.push(${PATHNAME}.slice(${currentIndex}));`);
-      state.compileItem(params[1], state, true, hasParam, startIndexValue, startIndexPrefix);
+      state.compileItem(params[1], state, true);
       builder.push('}');
     }
 
@@ -114,7 +114,7 @@ export function compileNode(
     if (noStore) builder.push(`if(${PATHNAME_LEN}!==${startIndexPrefix}${startIndexValue}){`);
 
     builder.push(`${PARAMS}.push(${PATHNAME}.slice(${startIndexPrefix}${startIndexValue}));`);
-    state.compileItem(node[4], state, hasParam, hasMultipleParams, startIndexValue, startIndexPrefix);
+    state.compileItem(node[4], state, hasParam);
 
     if (noStore) builder.push('}');
   }
