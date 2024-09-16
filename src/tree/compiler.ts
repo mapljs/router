@@ -1,22 +1,10 @@
+import { CURRENT_PARAM_INDEX, PARAMS, PATHNAME, PATHNAME_LEN, PREV_PARAM_INDEX } from '../constants';
+import type { RouterCompilerState } from '../types';
 import type { Node } from './node';
-import type { CompilerState } from '@mapl/compiler';
-
-type ParametersExcludeState<T> = T extends (arg0: any, arg1: any, ...rest: [...infer R, any, any, any]) => any ? R : never;
-
-export interface RouterCompilerState<Item> extends CompilerState {
-  compileItem: (item: Item, state: this, ...args: ParametersExcludeState<typeof compileNode>) => void;
-}
-
-// Compiler constants
-export const PATHNAME = '__req_p';
-export const PATHNAME_LEN = '__req_pl';
-export const PARAMS = '__req_ps';
-export const PREV_PARAM_INDEX = '__req_ppi';
-export const CURRENT_PARAM_INDEX = '__req_cpi';
 
 // __router_p is the pathname
 export function compileNode(
-  node: Node, state: RouterCompilerState<any>,
+  node: Node, state: RouterCompilerState,
 
   // Whether the current path has a parameter
   hasParam: boolean,

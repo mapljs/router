@@ -20,8 +20,7 @@ const transpiler = new Bun.Transpiler({
 
   // Lighter and more optimized output
   treeShaking: true,
-  minifyWhitespace: true,
-  inline: true
+  minifyWhitespace: true
 });
 
 for (const path of new Bun.Glob('**/*.ts').scanSync(SOURCEDIR))

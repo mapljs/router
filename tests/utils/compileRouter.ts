@@ -1,9 +1,10 @@
-import type { Node } from '@mapl/router/tree/node';
-import { PARAMS, PATHNAME, PATHNAME_LEN, compileNode, type RouterCompilerState } from '../../lib/tree/compiler';
+import { PARAMS, PATHNAME, PATHNAME_LEN } from '@mapl/router/constants';
+import type { RouterCompilerState } from '@mapl/router/types';
 import { getExternalKeys, getContent } from '@mapl/compiler';
+import { compileRouter as compileRouterContent, type Router } from '@mapl/router/index';
 
-export default function compileMatcher(root: Node): (path: string, params: string[]) => any {
-  const state: RouterCompilerState<any> = {
+export default function compileRouter(root: Router): (path: string, params: string[]) => any {
+  const state: RouterCompilerState = {
     contentBuilder: [],
     declarationBuilders: [],
     localVarCount: 0,
@@ -15,7 +16,7 @@ export default function compileMatcher(root: Node): (path: string, params: strin
     }
   };
 
-  compileNode(root, state, false, false, 0, '');
+  compileRouterContent(root, state);
 
   // eslint-disable-next-line
   return Function(

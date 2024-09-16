@@ -1,24 +1,14 @@
 import { describe, test, expect } from 'bun:test';
-
-import { matchItem } from '@mapl/router/tree/matcher';
-import { createNode, insertItem } from '@mapl/router/tree/node';
-
+import { createRouter, insertItem } from '@mapl/router/index';
 import { samplePaths, samplePathsLen, resultPaths } from './datasets/paths';
-import compileMatcher from './utils/compileMatcher';
+import compileRouter from './utils/compileRouter';
 
-const root = createNode('/');
+const router = createRouter();
 for (let i = 0; i < samplePathsLen; i++)
-  insertItem(root, samplePaths[i], i);
+  insertItem(router, samplePaths[i], i);
 
-describe('Should match correctly', () => {
-  for (let i = 0; i < samplePathsLen; i++)
-    test(`${samplePaths[i]}: ${i}`, () => {
-      expect(matchItem(root, resultPaths[i], [], 0)).toBe(i);
-    });
-});
-
-describe('Compile matcher correctly', () => {
-  const match = compileMatcher(root);
+describe('Compile router correctly', () => {
+  const match = compileRouter(router);
 
   for (let i = 0; i < samplePathsLen; i++)
     test(`${samplePaths[i]}: ${i}`, () => {
