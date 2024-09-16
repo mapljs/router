@@ -18,9 +18,8 @@ export function createNode(part: string): Node {
   return [part, null, null, null, null];
 }
 
-export function createParamNode(node: Node, nextNode: ParamNode[0]): ParamNode {
-  // eslint-disable-next-line
-  return node[3] = [nextNode, null];
+export function createParamNode(nextNode: ParamNode[0]): ParamNode {
+  return [nextNode, null];
 }
 
 export function cloneNode(node: Node, part: string): Node {
@@ -46,7 +45,7 @@ export function visitNode(node: Node, path: string): Node {
     if (i !== 0) {
       if (node[3] === null) {
         const nextNode = createNode(parts[i]);
-        createParamNode(node, nextNode);
+        node[3] = createParamNode(nextNode);
         node = nextNode;
       } else
         node = node[3][0] ??= createNode(parts[i]);
@@ -117,7 +116,7 @@ export function insertItem(node: Node, path: string, item: unknown): void {
       visitNode(node, path.substring(0, path.length - 2))[4] = item;
     // End with params
     else
-      createParamNode(visitNode(node, path.substring(0, path.length - 1)), null)[1] = item;
+      (visitNode(node, path.substring(0, path.length - 1))[3] = createParamNode(null))[1] = item;
   } else
     visitNode(node, path)[1] = item;
 }
