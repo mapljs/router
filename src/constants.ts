@@ -1,6 +1,7 @@
 // Compiler constants
-export const PATHNAME = '__req_p';
-export const PATHNAME_LEN = '__req_pl';
-export const PARAMS = '__req_ps';
-export const PREV_PARAM_INDEX = '__req_ppi';
-export const CURRENT_PARAM_INDEX = '__req_cpi';
+export const REQ = '__req';
+export const PATH = `${REQ}_p`;
+export const PATH_LEN = `${REQ}_pl`;
+export const PARAMS = `${REQ}_ps`;
+export const PREV_PARAM_IDX = `${REQ}_ppi`;
+export const CURRENT_PARAM_IDX = `${REQ}_cpi`;

@@ -1,4 +1,4 @@
-import { PATHNAME } from './constants';
+import { PATH } from './constants';
 import { compileNode } from './tree/compiler';
 import { createNode, insertItem as nodeInsertItem, type Node } from './tree/node';
 import type { RouterCompilerState } from './types';
@@ -23,7 +23,7 @@ export function compileRouter(router: Router, state: RouterCompilerState): void 
     const contentBuilder = state.contentBuilder;
 
     for (const key in staticMap) {
-      contentBuilder.push(`if(${PATHNAME}===${JSON.stringify(key)}){`);
+      contentBuilder.push(`if(${PATH}===${JSON.stringify(key)}){`);
       state.compileItem(staticMap[key], state, false);
       contentBuilder.push('}');
     }
