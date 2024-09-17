@@ -1,7 +1,7 @@
 export type Node = [
   part: string,
 
-  store: any,
+  store: unknown,
   children: Record<number, Node> | null,
   params: ParamNode | null,
 
