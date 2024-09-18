@@ -1,6 +1,6 @@
 {
   "name": "@mapl/router",
-  "version": "0.0.3",
+  "version": "0.0.4",
   "description": "Fast compiled router for all runtimes",
   "keywords": [
     "fast",
@@ -14,6 +14,7 @@
   "type": "module",
   "main": "./index.js",
   "types": "./index.d.ts",
+  "sideEffects": false,
   "scripts": {
     "build:test": "bun scripts/build.ts && bun test",
     "build:bench": "bun build:test && bun scripts/bench.ts",
