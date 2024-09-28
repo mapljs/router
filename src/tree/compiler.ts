@@ -80,13 +80,15 @@ export function compileNode(
       builder.push(`${hasParam ? '' : 'let '}${CURRENT_PARAM_IDX}=${slashIndex};`);
 
     if (hasStore) {
-      builder.push(`if(${hasChild ? CURRENT_PARAM_IDX : slashIndex}===-1){${PARAMS}.push(${PATH}.slice(${currentIndex}));`);
+      const paramsVal = `${PATH}.slice(${currentIndex})`;
+      builder.push(`if(${hasChild ? CURRENT_PARAM_IDX : slashIndex}===-1){${hasParam ? `${PARAMS}.push(${paramsVal})` : `const ${PARAMS}=[${paramsVal}]`};`);
       state.compileItem(params[1], state, true);
       builder.push('}');
     }
 
     if (hasChild) {
-      builder.push(`if(${hasStore ? '' : `${CURRENT_PARAM_IDX}!==-1&&`}${CURRENT_PARAM_IDX}!==${currentIndex}){${PARAMS}.push(${PATH}.substring(${currentIndex},${CURRENT_PARAM_IDX}));`);
+      const paramsVal = `${PATH}.substring(${currentIndex},${CURRENT_PARAM_IDX})`;
+      builder.push(`if(${hasStore ? '' : `${CURRENT_PARAM_IDX}!==-1&&`}${CURRENT_PARAM_IDX}!==${currentIndex}){${hasParam ? `${PARAMS}.push(${paramsVal})` : `const ${PARAMS}=[${paramsVal}]`};`);
       compileNode(params[0]!, state, true, hasParam, 0, `${CURRENT_PARAM_IDX}+`);
       builder.push(`${PARAMS}.pop();}`);
     }
@@ -101,7 +103,8 @@ export function compileNode(
     // Wildcard should not match static case
     if (noStore) builder.push(`if(${PATH_LEN}!==${startIndexPrefix}${startIndexValue}){`);
 
-    builder.push(`${PARAMS}.push(${PATH}.slice(${startIndexPrefix}${startIndexValue}));`);
+    const paramsVal = `${PATH}.slice(${startIndexPrefix}${startIndexValue})`;
+    builder.push(`${hasParam ? `${PARAMS}.push(${paramsVal})` : `const ${PARAMS}=[${paramsVal}]`};`);
     state.compileItem(node[4], state, hasParam);
 
     if (noStore) builder.push('}');

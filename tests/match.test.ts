@@ -9,9 +9,10 @@ for (let i = 0; i < samplePathsLen; i++)
 
 describe('Compile router correctly', () => {
   const match = compileRouter(router);
+  console.log(match.toString());
 
   for (let i = 0; i < samplePathsLen; i++)
     test(`${samplePaths[i]}: ${i}`, () => {
-      expect(match(resultPaths[i], [])).toBe(i);
+      expect(match(resultPaths[i])).toBe(i);
     });
 });
