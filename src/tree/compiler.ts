@@ -1,6 +1,6 @@
-import { CURRENT_PARAM_IDX, PARAMS, PATH, PATH_LEN, PREV_PARAM_IDX } from '../constants';
-import type { RouterCompilerState } from '../types';
-import type { Node } from './node';
+import { CURRENT_PARAM_IDX, PARAMS, PATH, PATH_LEN, PREV_PARAM_IDX } from '../constants.js';
+import type { RouterCompilerState } from '../types.js';
+import type { Node } from './node.js';
 
 // __router_p is the pathname
 export function compileNode(

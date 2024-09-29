@@ -1,6 +1,6 @@
 {
   "name": "@mapl/router",
-  "version": "0.0.6",
+  "version": "0.0.7",
   "description": "Fast compiled router for all runtimes",
   "keywords": [
     "fast",

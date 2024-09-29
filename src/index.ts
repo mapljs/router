@@ -1,7 +1,7 @@
-import { PATH, PATH_LEN } from './constants';
-import { compileNode } from './tree/compiler';
-import { createNode, insertItem as nodeInsertItem, type Node } from './tree/node';
-import type { RouterCompilerState } from './types';
+import { PATH, PATH_LEN } from './constants.js';
+import { compileNode } from './tree/compiler.js';
+import { createNode, insertItem as nodeInsertItem, type Node } from './tree/node.js';
+import type { RouterCompilerState } from './types.js';
 
 export type Router = [staticMap: Record<string, unknown> | null, root: Node | null];
 
