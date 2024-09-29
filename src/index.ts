@@ -1,4 +1,4 @@
-import { PATH } from './constants';
+import { PATH, PATH_LEN } from './constants';
 import { compileNode } from './tree/compiler';
 import { createNode, insertItem as nodeInsertItem, type Node } from './tree/node';
 import type { RouterCompilerState } from './types';
@@ -17,9 +17,10 @@ export function insertItem(router: Router, path: string, item: any): void {
 }
 
 export function compileRouter(router: Router, state: RouterCompilerState): void {
+  const contentBuilder = state.contentBuilder;
+
   if (router[0] !== null) {
     const staticMap = router[0];
-    const contentBuilder = state.contentBuilder;
 
     for (const key in staticMap) {
       contentBuilder.push(`if(${PATH}===${JSON.stringify(key.slice(1))}){`);
@@ -28,6 +29,7 @@ export function compileRouter(router: Router, state: RouterCompilerState): void 
     }
   }
 
+  contentBuilder.push(`const ${PATH_LEN}=${PATH}.length;`);
   if (router[1] !== null)
     compileNode(router[1], state, false, false, -1, '');
 }
