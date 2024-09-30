@@ -23,8 +23,15 @@ export function compileNode(
   startIndexValue++;
   if (partLen !== 1) {
     builder.push(`if(${PATH_LEN}>${startIndexPrefix}${startIndexValue + partLen - 2})`);
-    for (let i = 1; i < partLen; i++, startIndexValue++) builder.push(`if(${PATH}.charCodeAt(${startIndexPrefix}${startIndexValue})===${part.charCodeAt(i)})`);
-    builder.push('{');
+
+    builder.push('if(');
+
+    for (let i = 1, multipleChar = false; i < partLen; i++, startIndexValue++) {
+      builder.push(`${multipleChar ? '&&' : ''}${PATH}.charCodeAt(${startIndexPrefix}${startIndexValue})===${part.charCodeAt(i)}`);
+      multipleChar = true;
+    }
+
+    builder.push('){');
   }
 
   if (node[1] !== null) {
@@ -81,14 +88,14 @@ export function compileNode(
 
     if (hasStore) {
       const paramsVal = `${PATH}.slice(${currentIndex})`;
-      builder.push(`if(${hasChild ? CURRENT_PARAM_IDX : slashIndex}===-1){${hasParam ? `${PARAMS}.push(${paramsVal})` : `const ${PARAMS}=[${paramsVal}]`};`);
+      builder.push(`if(${hasChild ? CURRENT_PARAM_IDX : slashIndex}===-1){${hasParam ? `${PARAMS}.push(${paramsVal})` : `let ${PARAMS}=[${paramsVal}]`};`);
       state.compileItem(params[1], state, true);
       builder.push('}');
     }
 
     if (hasChild) {
       const paramsVal = `${PATH}.substring(${currentIndex},${CURRENT_PARAM_IDX})`;
-      builder.push(`if(${hasStore ? '' : `${CURRENT_PARAM_IDX}!==-1&&`}${CURRENT_PARAM_IDX}!==${currentIndex}){${hasParam ? `${PARAMS}.push(${paramsVal})` : `const ${PARAMS}=[${paramsVal}]`};`);
+      builder.push(`if(${hasStore ? '' : `${CURRENT_PARAM_IDX}!==-1&&`}${CURRENT_PARAM_IDX}!==${currentIndex}){${hasParam ? `${PARAMS}.push(${paramsVal})` : `let ${PARAMS}=[${paramsVal}]`};`);
       compileNode(params[0]!, state, true, hasParam, 0, `${CURRENT_PARAM_IDX}+`);
       builder.push(`${PARAMS}.pop();}`);
     }
@@ -104,7 +111,7 @@ export function compileNode(
     if (noStore) builder.push(`if(${PATH_LEN}!==${startIndexPrefix}${startIndexValue}){`);
 
     const paramsVal = `${PATH}.slice(${startIndexPrefix}${startIndexValue})`;
-    builder.push(`${hasParam ? `${PARAMS}.push(${paramsVal})` : `const ${PARAMS}=[${paramsVal}]`};`);
+    builder.push(`${hasParam ? `${PARAMS}.push(${paramsVal})` : `let ${PARAMS}=[${paramsVal}]`};`);
     state.compileItem(node[4], state, hasParam);
 
     if (noStore) builder.push('}');

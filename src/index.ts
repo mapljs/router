@@ -34,7 +34,7 @@ export function compileRouter(router: Router, state: RouterCompilerState): void 
 
   if (hasStatic) contentBuilder.push('else{');
 
-  contentBuilder.push(`const ${PATH_LEN}=${PATH}.length;`);
+  contentBuilder.push(`let ${PATH_LEN}=${PATH}.length;`);
   if (router[1] !== null)
     compileNode(router[1], state, false, false, -1, '');
 
