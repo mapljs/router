@@ -18,18 +18,25 @@ export function insertItem(router: Router, path: string, item: any): void {
 
 export function compileRouter(router: Router, state: RouterCompilerState): void {
   const contentBuilder = state.contentBuilder;
+  const hasStatic = router[0] !== null;
 
-  if (router[0] !== null) {
+  if (hasStatic) {
     const staticMap = router[0];
+    let hasMultiple = false;
 
     for (const key in staticMap) {
-      contentBuilder.push(`if(${PATH}===${JSON.stringify(key.slice(1))}){`);
+      contentBuilder.push(`${hasMultiple ? 'else ' : ''}if(${PATH}===${JSON.stringify(key.slice(1))}){`);
       state.compileItem(staticMap[key], state, false);
       contentBuilder.push('}');
+      hasMultiple = true;
     }
   }
+
+  if (hasStatic) contentBuilder.push('else{');
 
   contentBuilder.push(`const ${PATH_LEN}=${PATH}.length;`);
   if (router[1] !== null)
     compileNode(router[1], state, false, false, -1, '');
+
+  if (hasStatic) contentBuilder.push('}');
 }
