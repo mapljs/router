@@ -1,10 +1,16 @@
-import { CURRENT_PARAM_IDX, PARAMS, PATH, PATH_LEN, PREV_PARAM_IDX } from '../constants.js';
+import {
+  CURRENT_PARAM_IDX,
+  PARAMS,
+  PATH,
+  PATH_LEN,
+  PREV_PARAM_IDX
+} from '../constants.js';
 import type { RouterCompilerState } from '../types.js';
 import type { Node } from './node.js';
 
-// __router_p is the pathname
 export function compileNode(
-  node: Node, state: RouterCompilerState,
+  node: Node,
+  state: RouterCompilerState,
 
   // Whether the current path has a parameter
   hasParam: boolean,
@@ -24,14 +30,9 @@ export function compileNode(
   if (partLen !== 1) {
     builder.push(`if(${PATH_LEN}>${startIndexPrefix}${startIndexValue + partLen - 2})`);
 
-    builder.push('if(');
+    for (let i = 1; i < partLen; i++, startIndexValue++) builder.push(`if(${PATH}.charCodeAt(${startIndexPrefix}${startIndexValue})===${part.charCodeAt(i)})`);
 
-    for (let i = 1, multipleChar = false; i < partLen; i++, startIndexValue++) {
-      builder.push(`${multipleChar ? '&&' : ''}${PATH}.charCodeAt(${startIndexPrefix}${startIndexValue})===${part.charCodeAt(i)}`);
-      multipleChar = true;
-    }
-
-    builder.push('){');
+    builder.push('{');
   }
 
   if (node[1] !== null) {
@@ -47,9 +48,14 @@ export function compileNode(
     if (childrenKeys.length === 1) {
       // A single if statement is enough
       builder.push(`if(${PATH}.charCodeAt(${startIndexPrefix}${startIndexValue})===${childrenKeys[0]}){`);
-      // @ts-expect-error Key exists
-      // eslint-disable-next-line
-      compileNode(children[childrenKeys[0]], state, hasParam, hasMultipleParams, startIndexValue, startIndexPrefix);
+      compileNode(
+        children[childrenKeys[0] as unknown as number],
+        state,
+        hasParam,
+        hasMultipleParams,
+        startIndexValue,
+        startIndexPrefix
+      );
       builder.push('}');
     } else {
       // Setup switch cases
@@ -57,9 +63,14 @@ export function compileNode(
 
       for (let i = 0, l = childrenKeys.length; i < l; i++) {
         builder.push(`case ${childrenKeys[i]}:`);
-        // @ts-expect-error Key exists
-        // eslint-disable-next-line
-        compileNode(children[childrenKeys[i]], state, hasParam, hasMultipleParams, startIndexValue, startIndexPrefix);
+        compileNode(
+          children[childrenKeys[i] as unknown as number],
+          state,
+          hasParam,
+          hasMultipleParams,
+          startIndexValue,
+          startIndexPrefix
+        );
         builder.push('break;');
       }
 
@@ -73,13 +84,18 @@ export function compileNode(
     const hasChild = params[0] !== null;
 
     // Whether to wrap the parameter check in a scope
-    const requireAllocation = hasParam ? hasMultipleParams : hasChild || !hasStore;
+    const requireAllocation = hasParam
+      ? hasMultipleParams
+      : hasChild || !hasStore;
     if (requireAllocation) builder.push('{');
 
     // Declare a variable to save previous param index
-    if (hasParam) builder.push(`${hasMultipleParams ? '' : 'let '}${PREV_PARAM_IDX}=${startIndexPrefix}${startIndexValue};`);
+    if (hasParam)
+      builder.push(`${hasMultipleParams ? '' : 'let '}${PREV_PARAM_IDX}=${startIndexPrefix}${startIndexValue};`);
 
-    const currentIndex = hasParam ? PREV_PARAM_IDX : `${startIndexPrefix}${startIndexValue}`;
+    const currentIndex = hasParam
+      ? PREV_PARAM_IDX
+      : `${startIndexPrefix}${startIndexValue}`;
     const slashIndex = `${PATH}.indexOf('/',${currentIndex})`;
 
     // Need to save the current parameter index if the parameter node is not a leaf node
@@ -96,7 +112,14 @@ export function compileNode(
     if (hasChild) {
       const paramsVal = `${PATH}.substring(${currentIndex},${CURRENT_PARAM_IDX})`;
       builder.push(`if(${hasStore ? '' : `${CURRENT_PARAM_IDX}!==-1&&`}${CURRENT_PARAM_IDX}!==${currentIndex}){${hasParam ? `${PARAMS}.push(${paramsVal})` : `let ${PARAMS}=[${paramsVal}]`};`);
-      compileNode(params[0]!, state, true, hasParam, 0, `${CURRENT_PARAM_IDX}+`);
+      compileNode(
+        params[0]!,
+        state,
+        true,
+        hasParam,
+        0,
+        `${CURRENT_PARAM_IDX}+`
+      );
       builder.push(`${PARAMS}.pop();}`);
     }
 
@@ -108,7 +131,8 @@ export function compileNode(
     const noStore = node[1] === null;
 
     // Wildcard should not match static case
-    if (noStore) builder.push(`if(${PATH_LEN}!==${startIndexPrefix}${startIndexValue}){`);
+    if (noStore)
+      builder.push(`if(${PATH_LEN}!==${startIndexPrefix}${startIndexValue}){`);
 
     const paramsVal = `${PATH}.slice(${startIndexPrefix}${startIndexValue})`;
     builder.push(`${hasParam ? `${PARAMS}.push(${paramsVal})` : `let ${PARAMS}=[${paramsVal}]`};`);
@@ -117,6 +141,5 @@ export function compileNode(
     if (noStore) builder.push('}');
   }
 
-  if (partLen !== 1)
-    builder.push('}');
+  if (partLen !== 1) builder.push('}');
 }
