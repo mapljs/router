@@ -136,7 +136,7 @@ export function compileNode(
 
     const paramsVal = `${PATH}.slice(${startIndexPrefix}${startIndexValue})`;
     builder.push(`${hasParam ? `${PARAMS}.push(${paramsVal})` : `let ${PARAMS}=[${paramsVal}]`};`);
-    state.compileItem(node[4], state, hasParam);
+    state.compileItem(node[4], state, true);
 
     if (noStore) builder.push('}');
   }
