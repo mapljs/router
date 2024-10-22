@@ -1,6 +1,19 @@
 {
   "name": "@mapl/router",
-  "version": "0.0.12",
+  "version": "0.0.13",
+  "main": "./index.js",
+  "devDependencies": {
+    "@stylistic/eslint-plugin": "latest",
+    "eslint": "latest",
+    "typescript-eslint": "latest",
+    "eslint-plugin-jsdoc": "latest",
+    "@types/bun": "latest",
+    "mitata": "latest",
+    "typescript": "latest"
+  },
+  "peerDependencies": {
+    "@mapl/compiler": "^0.0.6"
+  },
   "description": "Fast compiled router for all runtimes",
   "keywords": [
     "fast",
@@ -11,10 +24,6 @@
     "deno"
   ],
   "license": "MIT",
-  "type": "module",
-  "main": "./index.js",
-  "types": "./index.d.ts",
-  "sideEffects": false,
   "scripts": {
     "build:test": "bun scripts/build.ts && bun test",
     "build:bench": "bun build:test && bun scripts/bench.ts",
@@ -22,16 +31,7 @@
     "lint": "eslint ./src",
     "lint:fix": "eslint ./src --fix"
   },
-  "devDependencies": {
-    "@stylistic/eslint-plugin": "latest",
-    "eslint": "latest",
-    "typescript-eslint": "latest",
-    "eslint-plugin-jsdoc": "latest",
-    "@types/bun": "latest",
-    "mitata": "latest",
-    "typescript": "latest"
-  },
-  "dependencies": {
-    "@mapl/compiler": "^0.0.5"
-  }
+  "sideEffects": false,
+  "type": "module",
+  "types": "./index.d.ts"
 }
