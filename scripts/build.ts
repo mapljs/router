@@ -2,6 +2,7 @@
 import { existsSync, rmSync } from 'node:fs';
 import { exec } from './utils';
 import tsconfig from '../tsconfig.json';
+import * as constants from '../src/constants.ts';
 
 // Constants
 const SOURCEDIR = './src';
@@ -13,6 +14,8 @@ if (existsSync(OUTDIR)) rmSync(OUTDIR, { recursive: true });
 // Emit declaration files
 exec`bun x tsc`;
 
+const constantEntries = Object.entries(constants);
+
 // Transpile files concurrently
 const transpiler = new Bun.Transpiler({
   loader: 'tsx',
@@ -20,7 +23,11 @@ const transpiler = new Bun.Transpiler({
 
   // Lighter and more optimized output
   treeShaking: true,
-  minifyWhitespace: true
+  minifyWhitespace: true,
+  inline: true,
+
+  // Inline constants
+  define: Object.fromEntries(constantEntries.map((entry) => [`compilerConstants.${entry[0]}`, JSON.stringify(entry[1])]))
 });
 
 for (const path of new Bun.Glob('**/*.ts').scanSync(SOURCEDIR))

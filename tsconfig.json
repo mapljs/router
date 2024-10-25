@@ -31,5 +31,5 @@
     "stripInternal": true,
     "extendedDiagnostics": true
   },
-  "include": ["src"]
+  "include": ["src", "./globals.d.ts"]
 }

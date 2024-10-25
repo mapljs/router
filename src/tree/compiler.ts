@@ -1,10 +1,3 @@
-import {
-  CURRENT_PARAM_IDX,
-  PARAMS,
-  PATH,
-  PATH_LEN,
-  PREV_PARAM_IDX
-} from '../constants.js';
 import type { RouterCompilerState } from '../types.js';
 import type { Node } from './node.js';
 
@@ -28,15 +21,15 @@ export function compileNode(
   // Same optimization as in the matcher
   startIndexValue++;
   if (partLen !== 1) {
-    builder.push(`if(${PATH_LEN}>${startIndexPrefix}${startIndexValue + partLen - 2})`);
+    builder.push(`if(${compilerConstants.PATH_LEN}>${startIndexPrefix}${startIndexValue + partLen - 2})`);
 
-    for (let i = 1; i < partLen; i++, startIndexValue++) builder.push(`if(${PATH}.charCodeAt(${startIndexPrefix}${startIndexValue})===${part.charCodeAt(i)})`);
+    for (let i = 1; i < partLen; i++, startIndexValue++) builder.push(`if(${compilerConstants.PATH}.charCodeAt(${startIndexPrefix}${startIndexValue})===${part.charCodeAt(i)})`);
 
     builder.push('{');
   }
 
   if (node[1] !== null) {
-    builder.push(`if(${PATH_LEN}===${startIndexPrefix}${startIndexValue}){`);
+    builder.push(`if(${compilerConstants.PATH_LEN}===${startIndexPrefix}${startIndexValue}){`);
     state.compileItem(node[1], state, hasParam);
     builder.push('}');
   }
@@ -47,7 +40,7 @@ export function compileNode(
 
     if (childrenKeys.length === 1) {
       // A single if statement is enough
-      builder.push(`if(${PATH}.charCodeAt(${startIndexPrefix}${startIndexValue})===${childrenKeys[0]}){`);
+      builder.push(`if(${compilerConstants.PATH}.charCodeAt(${startIndexPrefix}${startIndexValue})===${childrenKeys[0]}){`);
       compileNode(
         children[childrenKeys[0] as unknown as number],
         state,
@@ -59,7 +52,7 @@ export function compileNode(
       builder.push('}');
     } else {
       // Setup switch cases
-      builder.push(`switch(${PATH}.charCodeAt(${startIndexPrefix}${startIndexValue})){`);
+      builder.push(`switch(${compilerConstants.PATH}.charCodeAt(${startIndexPrefix}${startIndexValue})){`);
 
       for (let i = 0, l = childrenKeys.length; i < l; i++) {
         builder.push(`case ${childrenKeys[i]}:`);
@@ -91,36 +84,36 @@ export function compileNode(
 
     // Declare a variable to save previous param index
     if (hasParam)
-      builder.push(`${hasMultipleParams ? '' : 'let '}${PREV_PARAM_IDX}=${startIndexPrefix}${startIndexValue};`);
+      builder.push(`${hasMultipleParams ? '' : 'let '}${compilerConstants.PREV_PARAM_IDX}=${startIndexPrefix}${startIndexValue};`);
 
     const currentIndex = hasParam
-      ? PREV_PARAM_IDX
-      : `${startIndexPrefix}${startIndexValue}`;
-    const slashIndex = `${PATH}.indexOf('/',${currentIndex})`;
+      ? compilerConstants.PREV_PARAM_IDX
+      : startIndexPrefix + startIndexValue;
+    const slashIndex = `${compilerConstants.PATH}.indexOf('/',${currentIndex})`;
 
     // Need to save the current parameter index if the parameter node is not a leaf node
     if (hasChild || !hasStore)
-      builder.push(`${hasParam ? '' : 'let '}${CURRENT_PARAM_IDX}=${slashIndex};`);
+      builder.push(`${hasParam ? '' : 'let '}${compilerConstants.CURRENT_PARAM_IDX}=${slashIndex};`);
 
     if (hasStore) {
-      const paramsVal = `${PATH}.slice(${currentIndex})`;
-      builder.push(`if(${hasChild ? CURRENT_PARAM_IDX : slashIndex}===-1){${hasParam ? `${PARAMS}.push(${paramsVal})` : `let ${PARAMS}=[${paramsVal}]`};`);
+      const paramsVal = `${compilerConstants.PATH}.slice(${currentIndex})`;
+      builder.push(`if(${hasChild ? compilerConstants.CURRENT_PARAM_IDX : slashIndex}===-1){${hasParam ? `${compilerConstants.PARAMS}.push(${paramsVal})` : `let ${compilerConstants.PARAMS}=[${paramsVal}]`};`);
       state.compileItem(params[1], state, true);
       builder.push('}');
     }
 
     if (hasChild) {
-      const paramsVal = `${PATH}.substring(${currentIndex},${CURRENT_PARAM_IDX})`;
-      builder.push(`if(${hasStore ? '' : `${CURRENT_PARAM_IDX}!==-1&&`}${CURRENT_PARAM_IDX}!==${currentIndex}){${hasParam ? `${PARAMS}.push(${paramsVal})` : `let ${PARAMS}=[${paramsVal}]`};`);
+      const paramsVal = `${compilerConstants.PATH}.substring(${currentIndex},${compilerConstants.CURRENT_PARAM_IDX})`;
+      builder.push(`if(${hasStore ? '' : `${compilerConstants.CURRENT_PARAM_IDX}!==-1&&`}${compilerConstants.CURRENT_PARAM_IDX}!==${currentIndex}){${hasParam ? `${compilerConstants.PARAMS}.push(${paramsVal})` : `let ${compilerConstants.PARAMS}=[${paramsVal}]`};`);
       compileNode(
         params[0]!,
         state,
         true,
         hasParam,
         0,
-        `${CURRENT_PARAM_IDX}+`
+        `${compilerConstants.CURRENT_PARAM_IDX}+`
       );
-      builder.push(`${PARAMS}.pop();}`);
+      builder.push(`${compilerConstants.PARAMS}.pop();}`);
     }
 
     // Close the scope
@@ -132,10 +125,10 @@ export function compileNode(
 
     // Wildcard should not match static case
     if (noStore)
-      builder.push(`if(${PATH_LEN}!==${startIndexPrefix}${startIndexValue}){`);
+      builder.push(`if(${compilerConstants.PATH_LEN}!==${startIndexPrefix}${startIndexValue}){`);
 
-    const paramsVal = `${PATH}.slice(${startIndexPrefix}${startIndexValue})`;
-    builder.push(`${hasParam ? `${PARAMS}.push(${paramsVal})` : `let ${PARAMS}=[${paramsVal}]`};`);
+    const paramsVal = `${compilerConstants.PATH}.slice(${startIndexPrefix}${startIndexValue})`;
+    builder.push(`${hasParam ? `${compilerConstants.PARAMS}.push(${paramsVal})` : `let ${compilerConstants.PARAMS}=[${paramsVal}]`};`);
     state.compileItem(node[4], state, true);
 
     if (noStore) builder.push('}');

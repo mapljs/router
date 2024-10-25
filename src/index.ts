@@ -1,4 +1,3 @@
-import { PATH, PATH_LEN } from './constants.js';
 import { compileNode } from './tree/compiler.js';
 import { createNode, insertItem as nodeInsertItem, type Node } from './tree/node.js';
 import type { RouterCompilerState } from './types.js';
@@ -25,7 +24,7 @@ export function compileRouter(router: Router, state: RouterCompilerState): void 
     let hasMultiple = false;
 
     for (const key in staticMap) {
-      contentBuilder.push(`${hasMultiple ? 'else ' : ''}if(${PATH}===${JSON.stringify(key.slice(1))}){`);
+      contentBuilder.push(`${hasMultiple ? 'else ' : ''}if(${compilerConstants.PATH}==="${key.slice(1).replace(/"/g, '\\"')}"){`);
       state.compileItem(staticMap[key], state, false);
       contentBuilder.push('}');
       hasMultiple = true;
@@ -34,7 +33,7 @@ export function compileRouter(router: Router, state: RouterCompilerState): void 
 
   if (hasStatic) contentBuilder.push('else{');
 
-  contentBuilder.push(`let ${PATH_LEN}=${PATH}.length;`);
+  contentBuilder.push(`let ${compilerConstants.PATH_LEN}=${compilerConstants.PATH}.length;`);
   if (router[1] !== null)
     compileNode(router[1], state, false, false, -1, '');
 
