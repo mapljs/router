@@ -96,7 +96,7 @@ export function visitNode(node: Node, path: string): Node {
         children[nodePart.charCodeAt(j)] = cloneNode(node, nodePart.slice(j));
 
         const nextNode = createNode(pathPart.slice(j));
-        children[pathPart.charCodeAt(j)] = createNode(pathPart.slice(j));
+        children[pathPart.charCodeAt(j)] = nextNode;
 
         resetNode(node, nodePart.substring(0, j), children);
 
