@@ -6,6 +6,7 @@ import compileRouter from './utils/compileRouter';
 const router = createRouter();
 for (let i = 0; i < samplePathsLen; i++)
   insertItem(router, samplePaths[i], i);
+console.log(router);
 
 describe('Compile router correctly', () => {
   const match = compileRouter(router);

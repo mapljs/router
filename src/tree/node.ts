@@ -116,7 +116,7 @@ export function insertItem(node: Node, path: string, item: unknown): void {
       visitNode(node, path.substring(0, path.length - 2))[4] = item;
     // End with params
     else
-      (visitNode(node, path.substring(0, path.length - 1))[3] = createParamNode(null))[1] = item;
+      (visitNode(node, path.substring(0, path.length - 1))[3] ??= createParamNode(null))[1] = item;
   } else
     visitNode(node, path)[1] = item;
 }

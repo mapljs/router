@@ -113,7 +113,12 @@ export function compileNode(
         0,
         `${compilerConstants.CURRENT_PARAM_IDX}+`
       );
-      builder.push(`${compilerConstants.PARAMS}.pop();}`);
+
+      // Don't need to pop when scope is closed
+      if (!requireAllocation)
+        builder.push(`${compilerConstants.PARAMS}.pop();`);
+
+      builder.push('}');
     }
 
     // Close the scope
