@@ -1,6 +1,6 @@
 {
   "name": "@mapl/router",
-  "version": "0.0.20",
+  "version": "0.0.21",
   "main": "./index.js",
   "devDependencies": {
     "@stylistic/eslint-plugin": "latest",
