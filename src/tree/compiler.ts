@@ -4,7 +4,6 @@ import type { Node } from './node.js';
 export function compileNode(
   node: Node,
   builder: Builder<string>,
-  compileItem: (item: any) => void,
 
   // Whether the current path has a parameter
   hasParam: boolean,
@@ -27,11 +26,8 @@ export function compileNode(
     builder.push('{');
   }
 
-  if (node[1] !== null) {
-    builder.push(`if(${compilerConstants.PATH_LEN}===${startIndexPrefix}${startIndexValue}){`);
-    compileItem(node[1]);
-    builder.push('}');
-  }
+  if (node[1] !== null)
+    builder.push(`if(${compilerConstants.PATH_LEN}===${startIndexPrefix}${startIndexValue}){${node[1]}}`);
 
   if (node[2] !== null) {
     const children = node[2];
@@ -43,7 +39,6 @@ export function compileNode(
       compileNode(
         children[childrenKeys[0] as unknown as number],
         builder,
-        compileItem,
         hasParam,
         hasMultipleParams,
         startIndexValue,
@@ -59,7 +54,6 @@ export function compileNode(
         compileNode(
           children[childrenKeys[i] as unknown as number],
           builder,
-          compileItem,
           hasParam,
           hasMultipleParams,
           startIndexValue,
@@ -98,9 +92,7 @@ export function compileNode(
 
     if (hasStore) {
       const paramsVal = `${compilerConstants.PATH}.slice(${currentIndex})`;
-      builder.push(`if(${hasChild ? compilerConstants.CURRENT_PARAM_IDX : slashIndex}===-1){${hasParam ? `${compilerConstants.PARAMS}.push(${paramsVal})` : `let ${compilerConstants.PARAMS}=[${paramsVal}]`};`);
-      compileItem(params[1]);
-      builder.push('}');
+      builder.push(`if(${hasChild ? compilerConstants.CURRENT_PARAM_IDX : slashIndex}===-1){${hasParam ? `${compilerConstants.PARAMS}.push(${paramsVal})` : `let ${compilerConstants.PARAMS}=[${paramsVal}]`};${params[1]}}`);
     }
 
     if (hasChild) {
@@ -109,7 +101,6 @@ export function compileNode(
       compileNode(
         params[0]!,
         builder,
-        compileItem,
         true,
         hasParam,
         0,
@@ -117,8 +108,7 @@ export function compileNode(
       );
 
       // Don't need to pop when scope is closed
-      if (!requireAllocation)
-        builder.push(`${compilerConstants.PARAMS}.pop();`);
+      if (!requireAllocation) builder.push(`${compilerConstants.PARAMS}.pop();`);
 
       builder.push('}');
     }
@@ -131,12 +121,10 @@ export function compileNode(
     const noStore = node[1] === null;
 
     // Wildcard should not match static case
-    if (noStore)
-      builder.push(`if(${compilerConstants.PATH_LEN}!==${startIndexPrefix}${startIndexValue}){`);
+    if (noStore) builder.push(`if(${compilerConstants.PATH_LEN}!==${startIndexPrefix}${startIndexValue}){`);
 
     const paramsVal = `${compilerConstants.PATH}.slice(${startIndexPrefix}${startIndexValue})`;
-    builder.push(`${hasParam ? `${compilerConstants.PARAMS}.push(${paramsVal})` : `let ${compilerConstants.PARAMS}=[${paramsVal}]`};`);
-    compileItem(node[4]);
+    builder.push(`${hasParam ? `${compilerConstants.PARAMS}.push(${paramsVal})` : `let ${compilerConstants.PARAMS}=[${paramsVal}]`};${node[4]}`);
 
     if (noStore) builder.push('}');
   }

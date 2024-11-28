@@ -1,16 +1,16 @@
 export type Node = [
   part: string,
 
-  store: unknown,
+  store: string | null,
   children: Record<number, Node> | null,
   params: ParamNode | null,
 
-  wildcardStore: unknown
+  wildcardStore: string | null
 ];
 
 export type ParamNode = [
   child: Node | null,
-  store: unknown
+  store: string | null
 ];
 
 // Implementations
@@ -109,7 +109,7 @@ export function visitNode(node: Node, path: string): Node {
   return node;
 }
 
-export function insertItem(node: Node, path: string, item: unknown): void {
+export function insertItem(node: Node, path: string, item: string): void {
   if (path.charCodeAt(path.length - 1) === 42) {
     // Ends with wildcard
     if (path.charCodeAt(path.length - 2) === 42)

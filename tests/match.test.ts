@@ -6,7 +6,7 @@ function runTest(samplePaths: string[]) {
   // Build the tree
   const router = createRouter();
   for (let i = 0; i < samplePaths.length; i++)
-    insertItem(router, samplePaths[i], i);
+    insertItem(router, samplePaths[i], `return ${i};`);
   console.log(Bun.inspect(router));
 
   // Build result paths
