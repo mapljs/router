@@ -1,6 +1,7 @@
+import type { Builder } from '@mapl/compiler';
+
 import { compileNode } from './tree/compiler.js';
 import { createNode, insertItem as nodeInsertItem, type Node } from './tree/node.js';
-import type { RouterCompilerState } from './types.js';
 
 export type Router = [staticMap: Record<string, unknown> | null, root: Node | null];
 
@@ -15,8 +16,7 @@ export function insertItem(router: Router, path: string, item: any): void {
     (router[0] ??= {})[path] = item;
 }
 
-export function compileRouter(router: Router, state: RouterCompilerState): void {
-  const contentBuilder = state.contentBuilder;
+export function compileRouter(router: Router, contentBuilder: Builder<string>, compileItem: (item: any) => void): void {
   const hasStatic = router[0] !== null;
 
   if (hasStatic) {
@@ -25,17 +25,18 @@ export function compileRouter(router: Router, state: RouterCompilerState): void 
 
     for (const key in staticMap) {
       contentBuilder.push(`${hasMultiple ? 'else ' : ''}if(${compilerConstants.PATH}==="${key.slice(1).replace(/"/g, '\\"')}"){`);
-      state.compileItem(staticMap[key], state, false);
+      compileItem(staticMap[key]);
       contentBuilder.push('}');
       hasMultiple = true;
     }
   }
 
-  if (hasStatic) contentBuilder.push('else{');
+  if (router[1] !== null) {
+    if (hasStatic) contentBuilder.push('else{');
 
-  contentBuilder.push(`let ${compilerConstants.PATH_LEN}=${compilerConstants.PATH}.length;`);
-  if (router[1] !== null)
-    compileNode(router[1], state, false, false, -1, '');
+    contentBuilder.push(`let ${compilerConstants.PATH_LEN}=${compilerConstants.PATH}.length;`);
+    compileNode(router[1], contentBuilder, compileItem, false, false, -1, '');
 
-  if (hasStatic) contentBuilder.push('}');
+    if (hasStatic) contentBuilder.push('}');
+  }
 }

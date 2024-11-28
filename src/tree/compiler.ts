@@ -1,9 +1,10 @@
-import type { RouterCompilerState } from '../types.js';
+import type { Builder } from '@mapl/compiler';
 import type { Node } from './node.js';
 
 export function compileNode(
   node: Node,
-  state: RouterCompilerState,
+  builder: Builder<string>,
+  compileItem: (item: any) => void,
 
   // Whether the current path has a parameter
   hasParam: boolean,
@@ -13,8 +14,6 @@ export function compileNode(
   startIndexValue: number,
   startIndexPrefix: string
 ): void {
-  const builder = state.contentBuilder;
-
   const part = node[0];
   const partLen = part.length;
 
@@ -30,7 +29,7 @@ export function compileNode(
 
   if (node[1] !== null) {
     builder.push(`if(${compilerConstants.PATH_LEN}===${startIndexPrefix}${startIndexValue}){`);
-    state.compileItem(node[1], state, hasParam);
+    compileItem(node[1]);
     builder.push('}');
   }
 
@@ -43,7 +42,8 @@ export function compileNode(
       builder.push(`if(${compilerConstants.PATH}.charCodeAt(${startIndexPrefix}${startIndexValue})===${childrenKeys[0]}){`);
       compileNode(
         children[childrenKeys[0] as unknown as number],
-        state,
+        builder,
+        compileItem,
         hasParam,
         hasMultipleParams,
         startIndexValue,
@@ -58,7 +58,8 @@ export function compileNode(
         builder.push(`case ${childrenKeys[i]}:`);
         compileNode(
           children[childrenKeys[i] as unknown as number],
-          state,
+          builder,
+          compileItem,
           hasParam,
           hasMultipleParams,
           startIndexValue,
@@ -98,7 +99,7 @@ export function compileNode(
     if (hasStore) {
       const paramsVal = `${compilerConstants.PATH}.slice(${currentIndex})`;
       builder.push(`if(${hasChild ? compilerConstants.CURRENT_PARAM_IDX : slashIndex}===-1){${hasParam ? `${compilerConstants.PARAMS}.push(${paramsVal})` : `let ${compilerConstants.PARAMS}=[${paramsVal}]`};`);
-      state.compileItem(params[1], state, true);
+      compileItem(params[1]);
       builder.push('}');
     }
 
@@ -107,7 +108,8 @@ export function compileNode(
       builder.push(`if(${hasStore ? '' : `${compilerConstants.CURRENT_PARAM_IDX}!==-1&&`}${compilerConstants.CURRENT_PARAM_IDX}!==${currentIndex}){${hasParam ? `${compilerConstants.PARAMS}.push(${paramsVal})` : `let ${compilerConstants.PARAMS}=[${paramsVal}]`};`);
       compileNode(
         params[0]!,
-        state,
+        builder,
+        compileItem,
         true,
         hasParam,
         0,
@@ -134,7 +136,7 @@ export function compileNode(
 
     const paramsVal = `${compilerConstants.PATH}.slice(${startIndexPrefix}${startIndexValue})`;
     builder.push(`${hasParam ? `${compilerConstants.PARAMS}.push(${paramsVal})` : `let ${compilerConstants.PARAMS}=[${paramsVal}]`};`);
-    state.compileItem(node[4], state, true);
+    compileItem(node[4]);
 
     if (noStore) builder.push('}');
   }
