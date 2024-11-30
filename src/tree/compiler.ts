@@ -84,14 +84,20 @@ export function compileNode(
     const currentIndex = hasParam
       ? compilerConstants.PREV_PARAM_IDX
       : startIndexPrefix + startIndexValue;
-    const slashIndex = `${compilerConstants.PATH}.indexOf('/',${currentIndex})`;
+    const slashIndex = `${compilerConstants.PATH}.indexOf('/'${
+      currentIndex === '0'
+        ? ''
+        // eslint-disable-next-line
+        : ',' + currentIndex})`;
 
     // Need to save the current parameter index if the parameter node is not a leaf node
     if (hasChild || !hasStore)
       builder.push(`${hasParam ? '' : 'let '}${compilerConstants.CURRENT_PARAM_IDX}=${slashIndex};`);
 
     if (hasStore) {
-      const paramsVal = `${compilerConstants.PATH}.slice(${currentIndex})`;
+      const paramsVal = currentIndex === '0'
+        ? compilerConstants.PATH
+        : `${compilerConstants.PATH}.slice(${currentIndex})`;
       builder.push(`if(${hasChild ? compilerConstants.CURRENT_PARAM_IDX : slashIndex}===-1){${hasParam ? `${compilerConstants.PARAMS}.push(${paramsVal})` : `let ${compilerConstants.PARAMS}=[${paramsVal}]`};${params[1]}}`);
     }
 
@@ -119,11 +125,14 @@ export function compileNode(
 
   if (node[4] !== null) {
     const noStore = node[1] === null;
+    const currentIndex = startIndexPrefix + startIndexValue;
 
     // Wildcard should not match static case
-    if (noStore) builder.push(`if(${compilerConstants.PATH_LEN}!==${startIndexPrefix}${startIndexValue}){`);
+    if (noStore) builder.push(`if(${compilerConstants.PATH_LEN}!==${currentIndex}){`);
 
-    const paramsVal = `${compilerConstants.PATH}.slice(${startIndexPrefix}${startIndexValue})`;
+    const paramsVal = currentIndex === '0'
+      ? compilerConstants.PATH
+      : `${compilerConstants.PATH}.slice(${currentIndex})`;
     builder.push(`${hasParam ? `${compilerConstants.PARAMS}.push(${paramsVal})` : `let ${compilerConstants.PARAMS}=[${paramsVal}]`};${node[4]}`);
 
     if (noStore) builder.push('}');
