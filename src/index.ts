@@ -1,6 +1,6 @@
 import type { Builder } from '@mapl/compiler';
 
-import { compileNode } from './tree/compiler.js';
+import compileNode from './tree/compiler.js';
 import { createNode, insertItem as nodeInsertItem, type Node } from './tree/node.js';
 
 export type Router = [staticMap: Record<string, string> | null, root: Node | null];

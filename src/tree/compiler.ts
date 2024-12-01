@@ -1,7 +1,8 @@
 import type { Builder } from '@mapl/compiler';
 import type { Node } from './node.js';
 
-export function compileNode(
+// eslint-disable-next-line
+const f = (
   node: Node,
   builder: Builder<string>,
 
@@ -12,32 +13,30 @@ export function compileNode(
   // Current start index
   startIndexValue: number,
   startIndexPrefix: string
-): void {
+): void => {
   const part = node[0];
   const partLen = part.length;
 
   // Same optimization as in the matcher
-  startIndexValue++;
   if (partLen !== 1) {
-    builder.push(`if(${compilerConstants.PATH_LEN}>${startIndexPrefix}${startIndexValue + partLen - 2})`);
-
-    for (let i = 1; i < partLen; i++, startIndexValue++) builder.push(`if(${compilerConstants.PATH}.charCodeAt(${startIndexPrefix}${startIndexValue})===${part.charCodeAt(i)})`);
-
+    builder.push(`if(${compilerConstants.PATH_LEN}>${startIndexPrefix}${startIndexValue + partLen - 1})`);
+    for (let i = 1; i < partLen; i++) builder.push(`if(${compilerConstants.PATH}.charCodeAt(${startIndexPrefix}${startIndexValue + i})===${part.charCodeAt(i)})`);
     builder.push('{');
   }
+  startIndexValue += partLen;
 
   if (node[1] !== null)
     builder.push(`if(${compilerConstants.PATH_LEN}===${startIndexPrefix}${startIndexValue}){${node[1]}}`);
 
   if (node[2] !== null) {
     const children = node[2];
-    const childrenKeys = Object.keys(children);
+    const childrenEntries = Object.entries(children);
 
-    if (childrenKeys.length === 1) {
+    if (childrenEntries.length === 1) {
       // A single if statement is enough
-      builder.push(`if(${compilerConstants.PATH}.charCodeAt(${startIndexPrefix}${startIndexValue})===${childrenKeys[0]}){`);
-      compileNode(
-        children[childrenKeys[0] as unknown as number],
+      builder.push(`if(${compilerConstants.PATH}.charCodeAt(${startIndexPrefix}${startIndexValue})===${childrenEntries[0][0]}){`);
+      f(
+        childrenEntries[0][1],
         builder,
         hasParam,
         hasMultipleParams,
@@ -49,10 +48,10 @@ export function compileNode(
       // Setup switch cases
       builder.push(`switch(${compilerConstants.PATH}.charCodeAt(${startIndexPrefix}${startIndexValue})){`);
 
-      for (let i = 0, l = childrenKeys.length; i < l; i++) {
-        builder.push(`case ${childrenKeys[i]}:`);
-        compileNode(
-          children[childrenKeys[i] as unknown as number],
+      for (let i = 0, l = childrenEntries.length; i < l; i++) {
+        builder.push(`case ${childrenEntries[i][0]}:`);
+        f(
+          childrenEntries[i][1],
           builder,
           hasParam,
           hasMultipleParams,
@@ -104,7 +103,7 @@ export function compileNode(
     if (hasChild) {
       const paramsVal = `${compilerConstants.PATH}.substring(${currentIndex},${compilerConstants.CURRENT_PARAM_IDX})`;
       builder.push(`if(${hasStore ? '' : `${compilerConstants.CURRENT_PARAM_IDX}!==-1&&`}${compilerConstants.CURRENT_PARAM_IDX}!==${currentIndex}){${hasParam ? `${compilerConstants.PARAMS}.push(${paramsVal})` : `let ${compilerConstants.PARAMS}=[${paramsVal}]`};`);
-      compileNode(
+      f(
         params[0]!,
         builder,
         true,
@@ -139,4 +138,6 @@ export function compileNode(
   }
 
   if (partLen !== 1) builder.push('}');
-}
+};
+
+export default f;
