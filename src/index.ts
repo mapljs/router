@@ -1,5 +1,3 @@
-import type { Builder } from '@mapl/compiler';
-
 import compileNode from './tree/compiler.js';
 import { createNode, insertItem as nodeInsertItem, type Node } from './tree/node.js';
 
@@ -16,7 +14,7 @@ export function insertItem(router: Router, path: string, item: string): void {
     (router[0] ??= {})[path] = item;
 }
 
-export function compileRouter(router: Router, contentBuilder: Builder<string>): void {
+export function compileRouter(router: Router, contentBuilder: string[]): void {
   const hasStatic = router[0] !== null;
 
   if (hasStatic) {

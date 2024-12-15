@@ -1,10 +1,9 @@
-import type { Builder } from '@mapl/compiler';
 import type { Node } from './node.js';
 
 // eslint-disable-next-line
 const f = (
   node: Node,
-  builder: Builder<string>,
+  builder: string[],
 
   // Whether the current path has a parameter
   hasParam: boolean,

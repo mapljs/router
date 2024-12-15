@@ -1,6 +1,6 @@
 {
   "name": "@mapl/router",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "main": "./index.js",
   "devDependencies": {
     "@stylistic/eslint-plugin": "latest",
@@ -10,9 +10,6 @@
     "@types/bun": "latest",
     "mitata": "latest",
     "typescript": "latest"
-  },
-  "peerDependencies": {
-    "@mapl/compiler": "0.0.x"
   },
   "description": "Fast compiled router for all runtimes",
   "keywords": [
