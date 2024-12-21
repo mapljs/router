@@ -15,24 +15,16 @@ export function insertItem(router: Router, path: string, item: string): void {
 }
 
 export function compileRouter(router: Router, contentBuilder: string[]): void {
-  const hasStatic = router[0] !== null;
-
-  if (hasStatic) {
+  if (router[0] !== null) {
     const staticMap = router[0];
-    let hasMultiple = false;
 
-    for (const key in staticMap) {
-      contentBuilder.push(`${hasMultiple ? 'else ' : ''}if(${compilerConstants.PATH}==="${key.slice(1).replace(/"/g, '\\"')}"){${staticMap[key]}}`);
-      hasMultiple = true;
-    }
+    contentBuilder.push(`switch(${compilerConstants.PATH}){`);
+    for (const key in staticMap) contentBuilder.push(`case "${key.slice(1).replace(/"/g, '\\"')}":{${staticMap[key]}break;}`);
+    contentBuilder.push('}');
   }
 
   if (router[1] !== null) {
-    if (hasStatic) contentBuilder.push('else{');
-
     contentBuilder.push(`let ${compilerConstants.PATH_LEN}=${compilerConstants.PATH}.length;`);
     compileNode(router[1], contentBuilder, false, false, -1, '');
-
-    if (hasStatic) contentBuilder.push('}');
   }
 }

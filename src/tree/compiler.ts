@@ -101,7 +101,7 @@ const f = (
 
     if (hasChild) {
       const paramsVal = `${compilerConstants.PATH}.substring(${currentIndex},${compilerConstants.CURRENT_PARAM_IDX})`;
-      builder.push(`if(${hasStore ? '' : `${compilerConstants.CURRENT_PARAM_IDX}!==-1&&`}${compilerConstants.CURRENT_PARAM_IDX}!==${currentIndex}){${hasParam ? `${compilerConstants.PARAMS}.push(${paramsVal})` : `let ${compilerConstants.PARAMS}=[${paramsVal}]`};`);
+      builder.push(`if(${compilerConstants.CURRENT_PARAM_IDX}${hasStore ? '!==' : '>'}${currentIndex}){${hasParam ? `${compilerConstants.PARAMS}.push(${paramsVal})` : `let ${compilerConstants.PARAMS}=[${paramsVal}]`};`);
       f(
         params[0]!,
         builder,
