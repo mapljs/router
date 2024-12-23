@@ -3,7 +3,6 @@ import type { Node } from './node.js';
 // eslint-disable-next-line
 const f = (
   node: Node,
-  builder: string[],
 
   // Whether the current path has a parameter
   hasParam: boolean,
@@ -12,20 +11,22 @@ const f = (
   // Current start index
   startIndexValue: number,
   startIndexPrefix: string
-): void => {
+): string => {
+  let builder = '';
+
   const part = node[0];
   const partLen = part.length;
 
   // Same optimization as in the matcher
   if (partLen !== 1) {
-    builder.push(`if(${compilerConstants.PATH_LEN}>${startIndexPrefix}${startIndexValue + partLen - 1})`);
-    for (let i = 1; i < partLen; i++) builder.push(`if(${compilerConstants.PATH}.charCodeAt(${startIndexPrefix}${startIndexValue + i})===${part.charCodeAt(i)})`);
-    builder.push('{');
+    builder += `if(${compilerConstants.PATH_LEN}>${startIndexPrefix}${startIndexValue + partLen - 1})`;
+    for (let i = 1; i < partLen; i++) builder += `if(${compilerConstants.PATH}.charCodeAt(${startIndexPrefix}${startIndexValue + i})===${part.charCodeAt(i)})`;
+    builder += '{';
   }
   startIndexValue += partLen;
 
   if (node[1] !== null)
-    builder.push(`if(${compilerConstants.PATH_LEN}===${startIndexPrefix}${startIndexValue}){${node[1]}}`);
+    builder += `if(${compilerConstants.PATH_LEN}===${startIndexPrefix}${startIndexValue}){${node[1]}}`;
 
   if (node[2] !== null) {
     const children = node[2];
@@ -33,34 +34,32 @@ const f = (
 
     if (childrenEntries.length === 1) {
       // A single if statement is enough
-      builder.push(`if(${compilerConstants.PATH}.charCodeAt(${startIndexPrefix}${startIndexValue})===${childrenEntries[0][0]}){`);
-      f(
+      builder += `if(${compilerConstants.PATH}.charCodeAt(${startIndexPrefix}${startIndexValue})===${childrenEntries[0][0]}){${f(
         childrenEntries[0][1],
-        builder,
+
         hasParam,
         hasMultipleParams,
+
         startIndexValue,
         startIndexPrefix
-      );
-      builder.push('}');
+      )}}`;
     } else {
       // Setup switch cases
-      builder.push(`switch(${compilerConstants.PATH}.charCodeAt(${startIndexPrefix}${startIndexValue})){`);
+      builder += `switch(${compilerConstants.PATH}.charCodeAt(${startIndexPrefix}${startIndexValue})){`;
 
       for (let i = 0, l = childrenEntries.length; i < l; i++) {
-        builder.push(`case ${childrenEntries[i][0]}:`);
-        f(
+        builder += `case ${childrenEntries[i][0]}:${f(
           childrenEntries[i][1],
-          builder,
+
           hasParam,
           hasMultipleParams,
+
           startIndexValue,
           startIndexPrefix
-        );
-        builder.push('break;');
+        )}break;`;
       }
 
-      builder.push('}');
+      builder += '}';
     }
   }
 
@@ -73,11 +72,12 @@ const f = (
     const requireAllocation = hasParam
       ? hasMultipleParams
       : hasChild || !hasStore;
-    if (requireAllocation) builder.push('{');
+    if (requireAllocation)
+      builder += '{';
 
     // Declare a variable to save previous param index
     if (hasParam)
-      builder.push(`${hasMultipleParams ? '' : 'let '}${compilerConstants.PREV_PARAM_IDX}=${startIndexPrefix}${startIndexValue};`);
+      builder += `${hasMultipleParams ? '' : 'let '}${compilerConstants.PREV_PARAM_IDX}=${startIndexPrefix}${startIndexValue};`;
 
     const currentIndex = hasParam
       ? compilerConstants.PREV_PARAM_IDX
@@ -90,53 +90,51 @@ const f = (
 
     // Need to save the current parameter index if the parameter node is not a leaf node
     if (hasChild || !hasStore)
-      builder.push(`${hasParam ? '' : 'let '}${compilerConstants.CURRENT_PARAM_IDX}=${slashIndex};`);
+      builder += `${hasParam ? '' : 'let '}${compilerConstants.CURRENT_PARAM_IDX}=${slashIndex};`;
 
     if (hasStore) {
       const paramsVal = currentIndex === '0'
         ? compilerConstants.PATH
         : `${compilerConstants.PATH}.slice(${currentIndex})`;
-      builder.push(`if(${hasChild ? compilerConstants.CURRENT_PARAM_IDX : slashIndex}===-1){${hasParam ? `${compilerConstants.PARAMS}.push(${paramsVal})` : `let ${compilerConstants.PARAMS}=[${paramsVal}]`};${params[1]}}`);
+      builder += `if(${hasChild ? compilerConstants.CURRENT_PARAM_IDX : slashIndex}===-1){${hasParam ? `${compilerConstants.PARAMS}.push(${paramsVal})` : `let ${compilerConstants.PARAMS}=[${paramsVal}]`};${params[1]}}`;
     }
 
     if (hasChild) {
       const paramsVal = `${compilerConstants.PATH}.substring(${currentIndex},${compilerConstants.CURRENT_PARAM_IDX})`;
-      builder.push(`if(${compilerConstants.CURRENT_PARAM_IDX}${hasStore ? '!==' : '>'}${currentIndex}){${hasParam ? `${compilerConstants.PARAMS}.push(${paramsVal})` : `let ${compilerConstants.PARAMS}=[${paramsVal}]`};`);
-      f(
+      builder += `if(${compilerConstants.CURRENT_PARAM_IDX}${hasStore ? '!==' : '>'}${currentIndex}){${hasParam
+        ? `${compilerConstants.PARAMS}.push(${paramsVal})`
+        : `let ${compilerConstants.PARAMS}=[${paramsVal}]`
+      };${f(
         params[0]!,
-        builder,
+
         true,
         hasParam,
+
         0,
         `${compilerConstants.CURRENT_PARAM_IDX}+`
-      );
-
-      // Don't need to pop when scope is closed
-      if (!requireAllocation) builder.push(`${compilerConstants.PARAMS}.pop();`);
-
-      builder.push('}');
+      )}${requireAllocation ? '' : `${compilerConstants.PARAMS}.pop();`}}`;
     }
 
     // Close the scope
-    if (requireAllocation) builder.push('}');
+    if (requireAllocation)
+      builder += '}';
   }
 
   if (node[4] !== null) {
     const noStore = node[1] === null;
     const currentIndex = startIndexPrefix + startIndexValue;
 
-    // Wildcard should not match static case
-    if (noStore) builder.push(`if(${compilerConstants.PATH_LEN}!==${currentIndex}){`);
-
     const paramsVal = currentIndex === '0'
       ? compilerConstants.PATH
       : `${compilerConstants.PATH}.slice(${currentIndex})`;
-    builder.push(`${hasParam ? `${compilerConstants.PARAMS}.push(${paramsVal})` : `let ${compilerConstants.PARAMS}=[${paramsVal}]`};${node[4]}`);
+    const body = `${hasParam ? `${compilerConstants.PARAMS}.push(${paramsVal})` : `let ${compilerConstants.PARAMS}=[${paramsVal}]`};${node[4]}`;
 
-    if (noStore) builder.push('}');
+    // Wildcard should not match static case
+    builder += noStore ? `if(${compilerConstants.PATH_LEN}!==${currentIndex}){${body}}` : body;
   }
 
-  if (partLen !== 1) builder.push('}');
+  // eslint-disable-next-line
+  return partLen === 1 ? builder : builder + '}';
 };
 
 export default f;
