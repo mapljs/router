@@ -37,7 +37,7 @@ export const injectMatcher = (deps: any[]) => deps.push(matcher);
 export default (router: Router, decls: string[], deps: any[], matcherId: number, captures: string): string => {
   const builder = router[0].length === 0
     ? ''
-    : `${router[0].map((pair) => `if(${compilerConstants.PATH}==="${pair[0].slice(1).replace(/"/g, '\\"')}"){${pair[1]}}`).join('')}}`;
+    : router[0].map((pair) => `if(${compilerConstants.PATH}==="${pair[0].slice(1).replace(/"/g, '\\"')}"){${pair[1]}}`).join('');
 
   if (router[1] === null)
     return builder;
