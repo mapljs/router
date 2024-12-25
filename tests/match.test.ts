@@ -1,5 +1,8 @@
 import { describe, test, expect } from 'bun:test';
+
 import { createRouter, insertItem } from '@mapl/router/index';
+import buildMatcher from '@mapl/router/match';
+
 import compileRouter from './utils/compileRouter';
 
 function runTest(samplePaths: string[]) {
@@ -16,14 +19,20 @@ function runTest(samplePaths: string[]) {
       : pattern.slice(1)
   );
 
-  describe(samplePaths.join(' - '), () => {
-    const match = compileRouter(router);
-    console.log(match.toString());
+  describe('["' + samplePaths.join('", "') + '"]', () => {
+    const compiledMatch = compileRouter(router);
+    const match = buildMatcher(router);
 
-    for (let i = 0; i < samplePaths.length; i++)
+    for (let i = 0; i < samplePaths.length; i++) {
       test(`${samplePaths[i]}: ${i}`, () => {
-        expect(match(resultPaths[i])).toBe(i);
+        expect(compiledMatch(resultPaths[i])).toBe(i);
       });
+
+      // Test the matcher as well
+      test(`${samplePaths[i]}: ${i} - No compilation`, () => {
+        expect(match(resultPaths[i], [])).toBe(`return ${i};`);
+      });
+    }
   });
 }
 

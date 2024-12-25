@@ -1,5 +1,5 @@
 import type { Router } from './index.js';
-import matchNode from './tree/matcher.ts';
+import matchNode from './tree/matcher.js';
 
 export type Matcher = (path: string, params: string[]) => unknown;
 
