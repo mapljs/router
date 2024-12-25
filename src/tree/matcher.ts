@@ -4,18 +4,18 @@ import type { Node } from './node.js';
  * Match a pathname and returns the result
  */
 // eslint-disable-next-line
-const f = (node: Node<unknown>, path: string, params: string[], start: number): unknown => {
+const f = (node: Node<unknown>, path: string, params: string[], start: number, len: number): unknown => {
   const part = node[0];
   let tmp: any = part.length;
 
   // Only check the part if its length is > 1 since the parent has
   // already checked that the url matches the first character
-  if (tmp > 1 && (start + tmp > path.length || path.indexOf(part, start) !== start))
+  if (tmp !== 1 && (start + tmp > len || path.indexOf(part, start) !== start))
     return null;
   start += tmp;
 
   // Reached the end of the URL
-  if (start === path.length)
+  if (start === len && node[1] !== null)
     return node[1];
 
   // Check the next children node
@@ -23,7 +23,7 @@ const f = (node: Node<unknown>, path: string, params: string[], start: number): 
     tmp = node[2][path.charCodeAt(start)];
     if (typeof tmp !== 'undefined') {
       // eslint-disable-next-line
-      tmp = f(tmp, path, params, start);
+      tmp = f(tmp, path, params, start, len);
       if (tmp !== null) return tmp;
     }
   }
@@ -40,7 +40,7 @@ const f = (node: Node<unknown>, path: string, params: string[], start: number): 
     } else if (tmp !== start && node[3][0] !== null) {
       params.push(path.substring(start, tmp as number));
 
-      tmp = f(node[3][0], path, params, tmp as number);
+      tmp = f(node[3][0], path, params, tmp as number, len);
       if (tmp !== null)
         return tmp;
 

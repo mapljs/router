@@ -14,16 +14,17 @@ const f = (
 ): string => {
   let builder = '';
 
-  const part = node[0];
-  const partLen = part.length;
-
   // Same optimization as in the matcher
-  if (partLen !== 1) {
-    builder += `if(${compilerConstants.PATH_LEN}>${startIndexPrefix}${startIndexValue + partLen - 1})`;
-    for (let i = 1; i < partLen; i++) builder += `if(${compilerConstants.PATH}.charCodeAt(${startIndexPrefix}${startIndexValue + i})===${part.charCodeAt(i)})`;
+  if (node[0].length !== 1) {
+    const part = node[0];
+    const len = part.length;
+
+    builder += `if(${compilerConstants.PATH_LEN}>${startIndexPrefix}${startIndexValue + len - 1})`;
+    for (let i = 1; i < len; i++) builder += `if(${compilerConstants.PATH}.charCodeAt(${startIndexPrefix}${startIndexValue + i})===${part.charCodeAt(i)})`;
     builder += '{';
-  }
-  startIndexValue += partLen;
+
+    startIndexValue += len;
+  } else startIndexValue++;
 
   if (node[1] !== null)
     builder += `if(${compilerConstants.PATH_LEN}===${startIndexPrefix}${startIndexValue}){${node[1]}}`;
@@ -134,7 +135,7 @@ const f = (
   }
 
   // eslint-disable-next-line
-  return partLen === 1 ? builder : builder + '}';
+  return node[0].length === 1 ? builder : builder + '}';
 };
 
 export default f;

@@ -1,9 +1,9 @@
 import { describe, test, expect } from 'bun:test';
 
 import { createRouter, insertItem } from '@mapl/router/index';
-import buildMatcher from '@mapl/router/match';
 
 import compileRouter from './utils/compileRouter';
+import fastCompileRouter from './utils/fastCompileRouter';
 
 function runTest(samplePaths: string[]) {
   // Build the tree
@@ -21,7 +21,7 @@ function runTest(samplePaths: string[]) {
 
   describe('["' + samplePaths.join('", "') + '"]', () => {
     const compiledMatch = compileRouter(router);
-    const match = buildMatcher(router);
+    const fastCompiledMatch = fastCompileRouter(router);
 
     for (let i = 0; i < samplePaths.length; i++) {
       test(`${samplePaths[i]}: ${i}`, () => {
@@ -29,8 +29,8 @@ function runTest(samplePaths: string[]) {
       });
 
       // Test the matcher as well
-      test(`${samplePaths[i]}: ${i} - No compilation`, () => {
-        expect(match(resultPaths[i], [])).toBe(`return ${i};`);
+      test(`${samplePaths[i]}: ${i} - Fast compilation`, () => {
+        expect(fastCompiledMatch(resultPaths[i])).toBe(i);
       });
     }
   });
