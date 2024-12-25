@@ -1,20 +1,19 @@
-export type Node = [
+export type Node<T = string> = [
   part: string,
 
-  store: string | null,
+  store: T | null,
   children: Node[] | null,
-  params: ParamNode | null,
+  params: ParamNode<T> | null,
 
-  wildcardStore: string | null
+  wildcardStore: T | null
 ];
 
-export type ParamNode = [
-  child: Node | null,
-  store: string | null
+export type ParamNode<T = string> = [
+  child: Node<T> | null,
+  store: T | null
 ];
 
 // Implementations
-
 // eslint-disable-next-line
 export const createNode = (part: string): Node => [part, null, null, null, null],
   // eslint-disable-next-line

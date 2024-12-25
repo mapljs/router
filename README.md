@@ -1,3 +1,3 @@
 # `@mapl/router`
 
-A fast compiled radix tree router.
+A fast radix tree router.
