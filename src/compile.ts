@@ -4,10 +4,7 @@ import compileNode from './tree/compiler.js';
 export default (router: Router): string => {
   const builder = router[0].length === 0
     ? ''
-    : `switch(${compilerConstants.PATH}){${router[0]
-      .map((pair) => `case "${pair[0].slice(1).replace(/"/g, '\\"')}":{${pair[1]}break;}`)
-      .join('')
-    }}`;
+    : `${router[0].map((pair) => `if(${compilerConstants.PATH}==="${pair[0].slice(1).replace(/"/g, '\\"')}"){${pair[1]}}`).join('')}}`;
 
   return router[1] === null
     ? builder
