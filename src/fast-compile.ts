@@ -28,10 +28,13 @@ const f = (node: Node<unknown>, fns: string[]) => {
     node[4] = fns.push(node[4] as string);
 };
 
+// eslint-disable-next-line
+export const injectMatcher = (deps: any[]) => deps.push(matcher);
+
 /**
  * Compile the router but with no pattern matching code
  */
-export default (router: Router, decls: string[], deps: any[], captures: string): string => {
+export default (router: Router, decls: string[], deps: any[], matcherId: number, captures: string): string => {
   const builder = router[0].length === 0
     ? ''
     : `switch(${compilerConstants.PATH}){${router[0]
@@ -46,13 +49,12 @@ export default (router: Router, decls: string[], deps: any[], captures: string):
   const fns: string[] = [];
   f(router[1], fns);
 
-  return `${builder}let ${compilerConstants.PARAMS}=[],${compilerConstants.TMP}=f${
-    // Inject the path matcher in
-    deps.push(matcher)
-  }(f${deps.push(router[1])},${compilerConstants.PATH},${compilerConstants.PARAMS},-1,${compilerConstants.PATH}.length);if(${compilerConstants.TMP}!==null){${compilerConstants.TMP}=d${
+  const args = `(${compilerConstants.TMP},${compilerConstants.PARAMS}${captures})`;
+
+  return `${builder}let ${compilerConstants.PARAMS}=[],${compilerConstants.TMP}=f${matcherId}(f${deps.push(router[1])},${compilerConstants.PATH},${compilerConstants.PARAMS},-1,${compilerConstants.PATH}.length);if(${compilerConstants.TMP}!==null){${compilerConstants.TMP}=d${
     // Create a function that combines other function bodies
-    decls.push(`(${compilerConstants.TMP},${compilerConstants.PARAMS}${captures})=>{switch(${compilerConstants.TMP}){${
-      fns.map((fn, i) => `case ${i + 1}:{${fn}break;}`).join('')
-    }}}`)
-  }(${compilerConstants.TMP},${compilerConstants.PARAMS}${captures});if(${compilerConstants.TMP}!=null)return ${compilerConstants.TMP};}`;
+    decls.push(`${args}=>{${
+      fns.map((fn, i) => `if(${compilerConstants.TMP}===${i + 1}){${fn}}`).join('')
+    }}`)
+  }${args};if(${compilerConstants.TMP}!=null)return ${compilerConstants.TMP};}`;
 };
