@@ -30,6 +30,8 @@ const f = (node: Node<unknown>, fns: string[]) => {
 
 // eslint-disable-next-line
 export const injectMatcher = (deps: any[]) => deps.push(matcher);
+// eslint-disable-next-line
+export const injectRouterTree = (deps: any[], router: Router) => deps.push(router[1]);
 
 /**
  * Compile the router but with no pattern matching code
