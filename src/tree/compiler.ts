@@ -48,7 +48,7 @@ const f = (
       // Setup switch cases
       builder += `switch(${compilerConstants.PATH}.charCodeAt(${startIndexPrefix}${startIndexValue})){`;
 
-      for (let i = 0, l = childrenEntries.length; i < l; i++) {
+      for (let i = 0; i < childrenEntries.length; i++) {
         builder += `case ${childrenEntries[i][0]}:${f(
           childrenEntries[i][1],
 
