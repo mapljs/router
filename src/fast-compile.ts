@@ -34,7 +34,7 @@ export const injectMatcher = (deps: any[]) => deps.push(matcher);
 /**
  * Compile the router but with no pattern matching code
  */
-export default (router: Router, decls: string[], deps: any[], matcherId: number, captures: string): string => {
+export default (router: Router, decls: string[], routerId: number, matcherId: number, captures: string): string => {
   const builder = router[0].length === 0
     ? ''
     : router[0].map((pair) => `if(${compilerConstants.PATH}==="${pair[0].slice(1).replace(/"/g, '\\"')}"){${pair[1]}}`).join('');
@@ -48,10 +48,10 @@ export default (router: Router, decls: string[], deps: any[], matcherId: number,
 
   const args = `(${compilerConstants.TMP},${compilerConstants.PARAMS}${captures})`;
 
-  return `${builder}let ${compilerConstants.PARAMS}=[],${compilerConstants.TMP}=f${matcherId}(f${deps.push(router[1])},${compilerConstants.PATH},${compilerConstants.PARAMS},-1,${compilerConstants.PATH}.length);if(${compilerConstants.TMP}!==null){${compilerConstants.TMP}=d${
+  return `${builder}let ${compilerConstants.PARAMS}=[],${compilerConstants.TMP}=f${matcherId}(f${routerId},${compilerConstants.PATH},${compilerConstants.PARAMS},-1,${compilerConstants.PATH}.length);if(${compilerConstants.TMP}!==null)return d${
     // Create a function that combines other function bodies
     decls.push(`${args}=>{${
       fns.map((fn, i) => `if(${compilerConstants.TMP}===${i + 1}){${fn}}`).join('')
     }}`)
-  }${args};if(${compilerConstants.TMP}!=null)return ${compilerConstants.TMP};}`;
+  }${args};`;
 };
