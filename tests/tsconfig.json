@@ -1,11 +1,7 @@
 {
   "compilerOptions": {
     // Enable latest features
-    "lib": [
-      "ESNext",
-      "DOM",
-      "DOM.Iterable"
-    ],
+    "lib": ["ESNext", "DOM", "DOM.Iterable"],
     "target": "ESNext",
     "module": "Preserve",
     "moduleDetection": "force",
@@ -36,15 +32,8 @@
     "extendedDiagnostics": true,
     // Alias
     "paths": {
-      "@mapl/router/*": [
-        "../lib/*"
-      ],
-      "@mapl/router": [
-        "../lib/index.js"
-      ]
+      "@mapl/router/*": ["../lib/*"]
     }
   },
-  "include": [
-    "."
-  ]
+  "include": ["."]
 }

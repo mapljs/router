@@ -1,6 +1,7 @@
 import { describe, test, expect } from 'bun:test';
 
 import { createRouter, insertItem } from '@mapl/router/index';
+import quickMatch from '@mapl/router/quick-match';
 
 import compileRouter from './utils/compileRouter';
 import fastCompileRouter from './utils/fastCompileRouter';
@@ -31,6 +32,10 @@ function runTest(samplePaths: string[]) {
       // Test the matcher as well
       test(`${samplePaths[i]}: ${i} - Fast compilation`, () => {
         expect(fastCompiledMatch(resultPaths[i])).toBe(i);
+      });
+
+      test(`${samplePaths[i]}: ${i} - Quick match`, () => {
+        expect(quickMatch(samplePaths[i], resultPaths[i])).not.toBeNull();
       });
     }
   });
