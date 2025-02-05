@@ -16,8 +16,8 @@ function runTest(samplePaths: string[]) {
   // Build result paths
   const resultPaths = samplePaths.map(
     (pattern) => pattern.endsWith('**')
-      ? pattern.substring(1, pattern.length - 2) + '1/2/3'
-      : pattern.slice(1)
+      ? pattern.substring(0, pattern.length - 2) + '1/2/3'
+      : pattern
   );
 
   describe('["' + samplePaths.join('", "') + '"]', () => {
@@ -26,12 +26,12 @@ function runTest(samplePaths: string[]) {
 
     for (let i = 0; i < samplePaths.length; i++) {
       test(`${samplePaths[i]}: ${i}`, () => {
-        expect(compiledMatch(resultPaths[i])).toBe(i);
+        expect(compiledMatch(resultPaths[i].slice(1))).toBe(i);
       });
 
       // Test the matcher as well
       test(`${samplePaths[i]}: ${i} - Fast compilation`, () => {
-        expect(fastCompiledMatch(resultPaths[i])).toBe(i);
+        expect(fastCompiledMatch(resultPaths[i].slice(1))).toBe(i);
       });
 
       test(`${samplePaths[i]}: ${i} - Quick match`, () => {
