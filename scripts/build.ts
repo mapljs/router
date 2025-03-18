@@ -18,7 +18,7 @@ const constantEntries = Object.entries(constants);
 
 // Transpile files concurrently
 const transpiler = new Bun.Transpiler({
-  loader: 'tsx',
+  loader: 'ts',
   target: 'node',
 
   // Lighter and more optimized output
