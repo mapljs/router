@@ -32,7 +32,8 @@
     "extendedDiagnostics": true,
     // Alias
     "paths": {
-      "@mapl/router/*": ["../lib/*"]
+      "@mapl/router/*": ["../lib/*"],
+      "@mapl/router": ["../lib/index.js"]
     }
   },
   "include": ["."]

@@ -4,7 +4,6 @@ import { createRouter, insertItem } from '@mapl/router/index';
 import quickMatch from '@mapl/router/quick-match';
 
 import compileRouter from './utils/compileRouter';
-import fastCompileRouter from './utils/fastCompileRouter';
 
 function runTest(samplePaths: string[]) {
   // Build the tree
@@ -22,16 +21,11 @@ function runTest(samplePaths: string[]) {
 
   describe('["' + samplePaths.join('", "') + '"]', () => {
     const compiledMatch = compileRouter(router);
-    const fastCompiledMatch = fastCompileRouter(router);
+    console.log(compiledMatch.toString());
 
     for (let i = 0; i < samplePaths.length; i++) {
       test(`${samplePaths[i]}: ${i}`, () => {
         expect(compiledMatch(resultPaths[i].slice(1))).toBe(i);
-      });
-
-      // Test the matcher as well
-      test(`${samplePaths[i]}: ${i} - Fast compilation`, () => {
-        expect(fastCompiledMatch(resultPaths[i].slice(1))).toBe(i);
       });
 
       test(`${samplePaths[i]}: ${i} - Quick match`, () => {

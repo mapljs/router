@@ -3,7 +3,6 @@ import type { Node } from './node.js';
 /**
  * Match a pathname and returns the result
  */
-// eslint-disable-next-line
 const f = (node: Node<unknown>, path: string, params: string[], start: number): unknown => {
   const part = node[0];
   let tmp: any = part.length;
@@ -21,8 +20,7 @@ const f = (node: Node<unknown>, path: string, params: string[], start: number): 
   // Check the next children node
   if (node[2] !== null) {
     tmp = node[2][path.charCodeAt(start)];
-    if (typeof tmp !== 'undefined') {
-      // eslint-disable-next-line
+    if (tmp != null) {
       tmp = f(tmp, path, params, start);
       if (tmp !== null) return tmp;
     }
