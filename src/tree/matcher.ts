@@ -3,7 +3,7 @@ import type { Node } from './node.js';
 /**
  * Match a pathname and returns the result
  */
-const f = (node: Node<unknown>, path: string, params: string[], start: number): unknown => {
+const f = <T>(node: Node<T>, path: string, params: string[], start: number): T | null => {
   const part = node[0];
   let tmp: any = part.length;
 

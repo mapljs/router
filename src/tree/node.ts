@@ -2,7 +2,7 @@ export type Node<T = unknown> = [
   part: string,
 
   store: T | null,
-  children: Node[] | null,
+  children: Node<T>[] | null,
   params: ParamNode<T> | null,
 
   wildcardStore: T | null
@@ -14,7 +14,7 @@ export type ParamNode<T = unknown> = [
 ];
 
 // Implementations
-export const createNode = (part: string): Node => [part, null, null, null, null];
+export const createNode = <T>(part: string): Node<T> => [part, null, null, null, null];
 export const createParamNode = (nextNode: ParamNode[0]): ParamNode => [nextNode, null];
 export const cloneNode = (node: Node, part: string): Node => [part, node[1], node[2], node[3], node[4]];
 

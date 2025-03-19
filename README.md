@@ -6,5 +6,8 @@ A fast radix tree router.
 
 ```ts
 '/*/info' // Capture the value of a segment
-'/**' // Capture the entire path after
+'/**' // Capture everything after the slash
 ```
+
+## Limitation
+Patterns cannot include quotes and escape characters.

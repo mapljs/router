@@ -1,6 +1,6 @@
 {
   "name": "@mapl/router",
-  "version": "0.4.0",
+  "version": "0.4.1",
   "main": "./index.js",
   "devDependencies": {
     "@stylistic/eslint-plugin": "latest",
@@ -8,6 +8,7 @@
     "eslint": "latest",
     "eslint-plugin-jsdoc": "latest",
     "mitata": "^1.0.34",
+    "tsx": "^4.19.3",
     "typescript": "latest",
     "typescript-eslint": "latest"
   },
@@ -23,7 +24,7 @@
   "license": "MIT",
   "scripts": {
     "build:test": "bun scripts/build.ts && bun test",
-    "build:bench": "bun build:test && bun scripts/bench.ts",
+    "bench": "bun scripts/bench.ts",
     "build:publish": "bun build:test && bun scripts/publish.ts",
     "lint": "eslint ./src",
     "lint:fix": "eslint ./src --fix"

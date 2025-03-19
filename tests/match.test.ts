@@ -1,16 +1,17 @@
 import { describe, test, expect } from 'bun:test';
 
-import { createRouter, insertItem } from '@mapl/router/index';
+import { createRouter, insertItem } from '@mapl/router';
+import { o2 } from '@mapl/router/tree/compiler';
 import quickMatch from '@mapl/router/quick-match';
+import match from '@mapl/router/tree/matcher';
 
 import compileRouter from './utils/compileRouter';
 
 function runTest(samplePaths: string[]) {
   // Build the tree
-  const router = createRouter();
+  const router = createRouter<string>();
   for (let i = 0; i < samplePaths.length; i++)
     insertItem(router, samplePaths[i], `return ${i};`);
-  console.log(Bun.inspect(router));
 
   // Build result paths
   const resultPaths = samplePaths.map(
@@ -20,16 +21,21 @@ function runTest(samplePaths: string[]) {
   );
 
   describe('["' + samplePaths.join('", "') + '"]', () => {
-    const compiledMatch = compileRouter(router);
-    console.log(compiledMatch.toString());
+    const compiledO2 = compileRouter(router, o2);
+
+    const staticMap = Object.fromEntries(router[0]);
 
     for (let i = 0; i < samplePaths.length; i++) {
-      test(`${samplePaths[i]}: ${i}`, () => {
-        expect(compiledMatch(resultPaths[i].slice(1))).toBe(i);
+      test(`${samplePaths[i]} - O2`, () => {
+        expect(compiledO2(resultPaths[i])).toBe(i);
       });
 
-      test(`${samplePaths[i]}: ${i} - Quick match`, () => {
-        expect(quickMatch(samplePaths[i], resultPaths[i])).not.toBeNull();
+      test(`${samplePaths[i]} - Tree match`, () => {
+        expect(staticMap[resultPaths[i]] ?? (router[1] ? match(router[1], resultPaths[i], [], 0) : null)).not.toBeNil();
+      });
+
+      test(`${samplePaths[i]} - Quick match`, () => {
+        expect(quickMatch(samplePaths[i], resultPaths[i])).not.toBeNil();
       });
     }
   });

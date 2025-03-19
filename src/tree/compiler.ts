@@ -1,7 +1,7 @@
 import type { Node } from './node.js';
 
-const f = (
-  node: Node,
+export type Compiler = (
+  node: Node<string>,
 
   // Parameters count
   paramCount: number,
@@ -9,19 +9,27 @@ const f = (
   // Current start index
   startIndexValue: number,
   startIndexPrefix: string
-): string => {
+) => string;
+
+const toChar = (c: [string, Node<string>]): string => String.fromCharCode(+c[0]);
+
+export const o2: Compiler = (
+  node, paramCount,
+  startIndexValue, startIndexPrefix
+) => {
   let builder = '';
 
   // Same optimization as in the matcher
   if (node[0] !== '/') {
     const part = node[0];
-    const len = part.length;
+    const start = startIndexPrefix + (startIndexValue + 1);
 
-    builder += 'if(' + compilerConstants.PATH_LEN + '>' + startIndexPrefix + (startIndexValue + len - 1) + ')';
-    for (let i = 1; i < len; i++) builder += 'if(' + compilerConstants.PATH + '.charCodeAt(' + startIndexPrefix + (startIndexValue + i) + ')===' + part.charCodeAt(i) + ')';
-    builder += '{';
+    builder += 'if(' + compilerConstants.PATH + (part.length === 2
+      ? '[' + start + ']==="' + part[1] + '"'
+      : '.startsWith("' + part.slice(1) + '",' + start + ')'
+    ) + '){';
 
-    startIndexValue += len;
+    startIndexValue += part.length;
   } else startIndexValue++;
 
   if (node[1] !== null) builder += 'if(' + compilerConstants.PATH_LEN + '===' + startIndexPrefix + startIndexValue + '){' + node[1] + '}';
@@ -32,7 +40,7 @@ const f = (
 
     if (childrenEntries.length === 1) {
       // A single if statement is enough
-      builder += 'if(' + compilerConstants.PATH + '.charCodeAt(' + startIndexPrefix + startIndexValue + ')===' + childrenEntries[0][0] + '){' + f(
+      builder += 'if(' + compilerConstants.PATH + '[' + startIndexPrefix + startIndexValue + ']==="' + toChar(childrenEntries[0]) + '"){' + o2(
         childrenEntries[0][1],
 
         paramCount,
@@ -42,10 +50,10 @@ const f = (
       ) + '}';
     } else {
       // Setup switch cases
-      builder += 'switch(' + compilerConstants.PATH + '.charCodeAt(' + startIndexPrefix + startIndexValue + ')){';
+      builder += 'switch(' + compilerConstants.PATH + '[' + startIndexPrefix + startIndexValue + ']){';
 
       for (let i = 0; i < childrenEntries.length; i++) {
-        builder += 'case ' + childrenEntries[i][0] + ':' + f(
+        builder += 'case"' + toChar(childrenEntries[i]) + '":' + o2(
           childrenEntries[i][1],
 
           paramCount,
@@ -64,9 +72,7 @@ const f = (
     const hasStore = params[1] !== null;
     const hasChild = params[0] !== null;
 
-    // Whether to wrap the parameter check in a scope
-    const requireAllocation = paramCount > 1 || hasChild || !hasStore;
-    if (requireAllocation) builder += '{';
+    builder += '{';
 
     // Declare a variable to save previous param index
     if (paramCount > 0) builder += (paramCount > 1 ? '' : 'let ') + compilerConstants.PREV_PARAM_IDX + '=' + startIndexPrefix + startIndexValue + ';';
@@ -74,7 +80,7 @@ const f = (
     const currentIndex = paramCount > 0
       ? compilerConstants.PREV_PARAM_IDX
       : startIndexPrefix + startIndexValue;
-    const slashIndex = compilerConstants.PATH + '.indexOf(\'/\'' + (currentIndex === '0' ? '' : ',' + currentIndex) + ')';
+    const slashIndex = compilerConstants.PATH + '.indexOf("/"' + (currentIndex === '0' ? '' : ',' + currentIndex) + ')';
 
     // Need to save the current parameter index if the parameter node is not a leaf node
     if (hasChild || !hasStore) builder += (paramCount > 0 ? '' : 'let ') + compilerConstants.CURRENT_PARAM_IDX + '=' + slashIndex + ';';
@@ -87,8 +93,8 @@ const f = (
     }
 
     if (hasChild) {
-      const paramsVal = compilerConstants.PATH + '.substring(' + currentIndex + ',' + compilerConstants.CURRENT_PARAM_IDX + ')';
-      builder += 'if(' + compilerConstants.CURRENT_PARAM_IDX + (hasStore ? '!==' : '>') + currentIndex + '){let ' + compilerConstants.PARAMS + paramCount + '=' + paramsVal + ';' + f(
+      const paramsVal = compilerConstants.PATH + '.slice(' + currentIndex + ',' + compilerConstants.CURRENT_PARAM_IDX + ')';
+      builder += 'if(' + compilerConstants.CURRENT_PARAM_IDX + '>' + currentIndex + '){let ' + compilerConstants.PARAMS + paramCount + '=' + paramsVal + ';' + o2(
         params[0]!,
         paramCount + 1,
         0,
@@ -96,8 +102,7 @@ const f = (
       ) + '}';
     }
 
-    // Close the scope
-    if (requireAllocation) builder += '}';
+    builder += '}';
   }
 
   if (node[4] !== null) {
@@ -111,11 +116,9 @@ const f = (
 
     // Wildcard should not match static case
     builder += noStore
-      ? 'if(' + compilerConstants.PATH_LEN + '!==' + currentIndex + '){' + body + '}'
+      ? 'if(' + compilerConstants.PATH_LEN + '>' + currentIndex + '){' + body + '}'
       : body;
   }
 
   return node[0] === '/' ? builder : builder + '}';
 };
-
-export default f;
