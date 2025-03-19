@@ -9,7 +9,7 @@ const f = <T>(node: Node<T>, path: string, params: string[], start: number): T |
 
   // Only check the part if its length is > 1 since the parent has
   // already checked that the url matches the first character
-  if (tmp !== 1 && (start + tmp > path.length || path.indexOf(part, start) !== start))
+  if (tmp !== 1 && (start + tmp > path.length || !path.startsWith(part, start)))
     return null;
   start += tmp;
 
