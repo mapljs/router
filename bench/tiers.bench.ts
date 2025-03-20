@@ -28,17 +28,21 @@ function loadTest(label: string, samplePaths: string[]) {
     bench(`${label} - O2`, () => {
       for (let i = 0; i < resultPaths.length; i++)
         do_not_optimize(compiledO2(resultPaths[i]));
-    }).gc('inner');
+    });
 
     bench(`${label} - Tree match`, () => {
       for (let i = 0; i < resultPaths.length; i++)
         do_not_optimize(staticMap.get(resultPaths[i]) ?? match(resultPaths[i], []));
-    }).gc('inner');
+    });
 
     bench(`${label} - Quick match`, () => {
-      for (let i = 0; i < resultPaths.length; i++)
-        do_not_optimize(staticMap.get(resultPaths[i]) ?? quickMatch(samplePaths[i], resultPaths[i]));
-    }).gc('inner');
+      for (let j = 0; j < resultPaths.length; j++) {
+        const path = resultPaths[j];
+        if (staticMap.get(path) == null)
+          for (let i = 0; i < samplePaths.length; i++)
+            do_not_optimize(quickMatch(samplePaths[i], path));
+      }
+    });
   });
 }
 
