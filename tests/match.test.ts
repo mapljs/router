@@ -1,10 +1,11 @@
 import { describe, test, expect } from 'bun:test';
 
-import { createRouter, insertItem } from '@mapl/router';
-import { o2 } from '@mapl/router/tree/compiler';
-import quickMatch from '@mapl/router/quick-match';
-import match from '@mapl/router/tree/matcher';
+import { createRouter, insertItem } from '@mapl/router/path';
 
+import quickMatch from '@mapl/router/quick-match';
+import compileMatch from '@mapl/router/path/matcher';
+
+import { o2 } from '@mapl/router/tree/compiler';
 import compileRouter from './utils/compileRouter';
 
 function runTest(samplePaths: string[]) {
@@ -21,9 +22,8 @@ function runTest(samplePaths: string[]) {
   );
 
   describe('["' + samplePaths.join('", "') + '"]', () => {
-    const compiledO2 = compileRouter(router, o2);
-
-    const staticMap = Object.fromEntries(router[0]);
+    const compiledO2 = compileRouter(router, o2, 0);
+    const [staticMap, match] = compileMatch(router, 0);
 
     for (let i = 0; i < samplePaths.length; i++) {
       test(`${samplePaths[i]} - O2`, () => {
@@ -31,7 +31,7 @@ function runTest(samplePaths: string[]) {
       });
 
       test(`${samplePaths[i]} - Tree match`, () => {
-        expect(staticMap[resultPaths[i]] ?? (router[1] ? match(router[1], resultPaths[i], [], 0) : null)).not.toBeNil();
+        expect(staticMap.get(resultPaths[i]) ?? match(resultPaths[i], [])).not.toBeNil();
       });
 
       test(`${samplePaths[i]} - Quick match`, () => {

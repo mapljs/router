@@ -1,20 +1,18 @@
 import { run, bench, summary, do_not_optimize } from 'mitata';
 
-import { createRouter, insertItem } from '@mapl/router';
-import { o2 } from '@mapl/router/tree/compiler';
-import match from '@mapl/router/tree/matcher';
-import quickMatch from '@mapl/router/quick-match';
+import { createRouter, insertItem } from '@mapl/router/path';
 
+import quickMatch from '@mapl/router/quick-match';
+import compileMatch from '@mapl/router/path/matcher';
+
+import { o2 } from '@mapl/router/tree/compiler';
 import compileRouter from '../tests/utils/compileRouter';
 
 function loadTest(label: string, samplePaths: string[]) {
   // Build the tree
   const router = createRouter<string>();
-  for (let i = 0; i < samplePaths.length; i++) {
-    if (!samplePaths[i].includes('*'))
-      throw new Error('Path must be dynamic!');
+  for (let i = 0; i < samplePaths.length; i++)
     insertItem(router, samplePaths[i], `return ${i};`);
-  }
 
   // Build result paths
   const resultPaths = samplePaths.map(
@@ -24,10 +22,8 @@ function loadTest(label: string, samplePaths: string[]) {
   );
 
   summary(() => {
-    const compiledO2 = compileRouter(router, o2);
-    console.log('O2:', compiledO2.toString());
-
-    console.log();
+    const compiledO2 = compileRouter(router, o2, 0);
+    const [staticMap, match] = compileMatch(router, 0);
 
     bench(`${label} - O2`, () => {
       for (let i = 0; i < resultPaths.length; i++)
@@ -36,17 +32,20 @@ function loadTest(label: string, samplePaths: string[]) {
 
     bench(`${label} - Tree match`, () => {
       for (let i = 0; i < resultPaths.length; i++)
-        do_not_optimize(match(router[1]!, resultPaths[i], [], 0));
+        do_not_optimize(staticMap.get(resultPaths[i]) ?? match(resultPaths[i], []));
     }).gc('inner');
 
     bench(`${label} - Quick match`, () => {
       for (let i = 0; i < resultPaths.length; i++)
-        do_not_optimize(quickMatch(samplePaths[i], resultPaths[i]));
+        do_not_optimize(staticMap.get(resultPaths[i]) ?? quickMatch(samplePaths[i], resultPaths[i]));
     }).gc('inner');
   });
 }
 
 loadTest('Simple API', [
+  '/',
+  '/about',
+
   '/*',
   '/*/navigate',
   '/**',
@@ -56,7 +55,7 @@ loadTest('Simple API', [
 
   '/category/*',
   '/category/*/filter/*',
-  '/category/*/filter/*/exclude'
+  '/category/*/filter/*/exclude',
 ]);
 
 loadTest('Same base 1', [

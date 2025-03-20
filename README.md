@@ -10,4 +10,4 @@ A fast radix tree router.
 ```
 
 ## Limitation
-Patterns cannot include quotes and escape characters.
+Patterns and methods cannot include quotes and escape characters.

@@ -6,11 +6,15 @@ export type PathTransformResult = [
 
 export type PathTransformer = (path: string) => PathTransformResult;
 
+export type InferNormalRoute<T extends string> = T extends `${string}*${infer Next}`
+  ? Next extends '*' ? [string] : [...InferNormalRoute<Next>, string]
+  : [];
+
 export type InferFSRoute<T extends string> = T extends `${string}[${infer Current}]${infer Rest}`
-  ? Current extends `...${infer Name}`
-    ? Record<Name, string>
-    : Record<Current, string> & InferFSRoute<Rest>
-  : {};
+  ? Current extends `...${string}`
+    ? [string]
+    : [...InferFSRoute<Rest>, string]
+  : [];
 
 export const transformFSRoute: PathTransformer = (path) => {
   let idx = path.indexOf('[', 1);
@@ -42,10 +46,10 @@ export const transformFSRoute: PathTransformer = (path) => {
 };
 
 export type InferRoute<T extends string> = T extends `${string}:${infer Current}`
-  ? Current extends `${infer Name}/${infer Rest}`
-    ? Record<Name, string> & InferRoute<Rest>
-    : Record<Current, string>
-  : T extends '*' ? { '*': string } : {};
+  ? Current extends `${string}/${infer Rest}`
+    ? [...InferRoute<Rest>, string]
+    : [string]
+  : T extends '*' ? [string] : [];
 
 export const transformRoute: PathTransformer = (path) => {
   let idx = path.indexOf(':', 1);

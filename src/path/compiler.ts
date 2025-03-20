@@ -1,5 +1,5 @@
 import type { Router } from './index.js';
-import type { Compiler } from './tree/compiler.ts';
+import type { Compiler } from '../tree/compiler.js';
 
 export default (
   router: Router<string>,

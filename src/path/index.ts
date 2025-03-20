@@ -1,4 +1,4 @@
-import { createNode, insertItem as nodeInsertItem, insertItemWithParts as nodeInsertItemWithParts, type Node } from './tree/node.js';
+import { createNode, insertItem as nodeInsertItem, insertItemWithParts as nodeInsertItemWithParts, type Node } from '../tree/node.js';
 
 export type Router<T = unknown> = [staticMap: [path: string, item: T][], root: Node<T> | null];
 
@@ -15,9 +15,6 @@ export const insertItemWithParts = <T>(
   router: Router<T>, parts: string[],
   flag: 0 | 1 | 2, item: T
 ): void => {
-  // Flag = 1: has params
-  // Flag = 2: has wildcard
-
   if (flag === 0)
     router[0].push([parts[0], item] as const);
   else
