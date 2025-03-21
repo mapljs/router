@@ -53,7 +53,11 @@ export type InferRoute<T extends string> = T extends `${string}:${infer Current}
 
 export const transformRoute: PathTransformer = (path) => {
   let idx = path.indexOf(':', 1);
-  if (idx === -1) return [[], [path], 0];
+  if (idx === -1) {
+    return path.endsWith('*')
+      ? [['*'], [path.slice(0, -1)], 2]
+      : [[], [path], 0];
+  }
 
   const params: string[] = [];
   const parts: string[] = [];
