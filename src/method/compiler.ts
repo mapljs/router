@@ -6,14 +6,15 @@ export default (
   router: Router<string>,
   compile: Compiler,
   methodInput: string,
+  parsePath: string,
   startIndex: 0 | 1
 ): string => {
   let str = 'switch(' + methodInput + '){';
-  for (const key in router) str += 'case"' + key + '":' + compilePath(router[key]!, compile, startIndex) + 'break;';
+  for (const key in router) str += 'case"' + key + '":{' + parsePath + compilePath(router[key]!, compile, startIndex) + 'break;}';
   str += '}';
 
   const all = router[ALL];
-  if (all != null) str += compilePath(all, compile, startIndex);
+  if (all != null) str += parsePath + compilePath(all, compile, startIndex);
 
   return str;
 };
