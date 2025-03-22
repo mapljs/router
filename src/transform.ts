@@ -49,7 +49,7 @@ export type InferRoute<T extends string> = T extends `${string}:${infer Current}
   ? Current extends `${string}/${infer Rest}`
     ? [...InferRoute<Rest>, string]
     : [string]
-  : T extends '*' ? [string] : [];
+  : T extends `${string}*` ? [string] : [];
 
 export const transformRoute: PathTransformer = (path) => {
   let idx = path.indexOf(':', 1);
