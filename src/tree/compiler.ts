@@ -20,7 +20,7 @@ export const o2: Compiler = (
   let builder = '';
 
   // Same optimization as in the matcher
-  if (node[0] !== '/') {
+  if (node[0].length !== 1) {
     const part = node[0];
     const start = startIndexPrefix + (startIndexValue + 1);
 
@@ -120,5 +120,5 @@ export const o2: Compiler = (
       : body;
   }
 
-  return node[0] === '/' ? builder : builder + '}';
+  return node[0].length !== 1 ? builder + '}' : builder;
 };
