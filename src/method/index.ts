@@ -4,6 +4,7 @@ import {
   insertItem as insertItemToPath,
   insertItemWithParts as insertItemToPathRouterWithPaths
 } from '../path/index.js';
+import type { PathTransformResult } from '../transform.js';
 
 export const ALL: unique symbol = Symbol();
 export type ALL = typeof ALL;
@@ -17,8 +18,8 @@ export const insertItem = <T>(router: Router<T>, method: Method, path: string, i
 
 export const insertItemWithParts = <T>(
   router: Router<T>, method: Method,
-  parts: string[], flag: 0 | 1 | 2,
+  result: PathTransformResult,
   item: T
 ): void => {
-  insertItemToPathRouterWithPaths(router[method] ??= createPathRouter(), parts, flag, item);
+  insertItemToPathRouterWithPaths(router[method] ??= createPathRouter(), result, item);
 };
