@@ -6,3 +6,4 @@ export const PARAMS = 'q';
 export const PREV_PARAM_IDX = 'i';
 export const CURRENT_PARAM_IDX = 'j';
 export const TMP = 't';
+export const DEP = 'f';
