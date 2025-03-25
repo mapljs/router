@@ -10,7 +10,7 @@ export default (
   startIndex: 0 | 1
 ): string => {
   let str = 'switch(' + methodInput + '){';
-  for (const key in router) str += 'case"' + key + '":{' + parsePath + compilePath(router[key]!, compile, startIndex) + 'break;}';
+  for (const key in router) str += 'case"' + key + '":{' + parsePath + compilePath(router[key]!, compile, startIndex) + 'break}';
   str += '}';
 
   const all = router[ALL];
