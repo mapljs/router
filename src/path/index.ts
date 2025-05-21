@@ -1,5 +1,4 @@
-import type { PathTransformResult } from '../transform.js';
-import { createNode, insertItem as nodeInsertItem, insertItemWithParts as nodeInsertItemWithParts, type Node } from '../tree/node.js';
+import { createNode, insertItem as nodeInsertItem, type Node } from '../tree/node.js';
 
 export type Router<T = unknown> = [staticMap: [path: string, item: T][], root: Node<T> | null];
 
