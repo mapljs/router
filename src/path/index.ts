@@ -12,15 +12,6 @@ export const insertItem = <T>(router: Router, path: string, item: T): void => {
     router[0].push([path, item] as const);
 };
 
-export const insertItemWithParts = <T>(
-  router: Router<T>, result: PathTransformResult, item: T
-): void => {
-  if (result[2] === 0)
-    router[0].push([result[1][0], item] as const);
-  else
-    nodeInsertItemWithParts(router[1] ??= createNode('/'), result, item);
-};
-
 export const countParams = (path: string): number => {
   let cnt = 0;
   for (let i = -1; (i = path.indexOf('*', i + 1)) !== -1; cnt++);
