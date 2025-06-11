@@ -1,22 +1,11 @@
 import type { Node } from './node.js';
 
-export type Compiler = (
-  node: Node<string>,
-
-  // Parameters count
-  paramCount: number,
-
-  // Current start index
-  startIndexValue: number,
-  startIndexPrefix: string
-) => string;
-
 const toChar = (c: [string, Node<string>]): string => String.fromCharCode(+c[0]);
 
-export const o2: Compiler = (
-  node, paramCount,
-  startIndexValue, startIndexPrefix
-) => {
+export const compile = (
+  node: Node<string>, paramCount: number,
+  startIndexValue: number, startIndexPrefix: string
+): string => {
   let builder = '';
 
   // Same optimization as in the matcher
@@ -40,7 +29,7 @@ export const o2: Compiler = (
 
     if (childrenEntries.length === 1) {
       // A single if statement is enough
-      builder += 'if(' + compilerConstants.PATH + '[' + startIndexPrefix + startIndexValue + ']==="' + toChar(childrenEntries[0]) + '"){' + o2(
+      builder += 'if(' + compilerConstants.PATH + '[' + startIndexPrefix + startIndexValue + ']==="' + toChar(childrenEntries[0]) + '"){' + compile(
         childrenEntries[0][1],
 
         paramCount,
@@ -53,7 +42,7 @@ export const o2: Compiler = (
       builder += 'switch(' + compilerConstants.PATH + '[' + startIndexPrefix + startIndexValue + ']){';
 
       for (let i = 0; i < childrenEntries.length; i++) {
-        builder += 'case"' + toChar(childrenEntries[i]) + '":' + o2(
+        builder += 'case"' + toChar(childrenEntries[i]) + '":' + compile(
           childrenEntries[i][1],
 
           paramCount,
@@ -94,7 +83,7 @@ export const o2: Compiler = (
 
     if (hasChild) {
       const paramsVal = compilerConstants.PATH + '.slice(' + currentIndex + ',' + compilerConstants.CURRENT_PARAM_IDX + ')';
-      builder += 'if(' + compilerConstants.CURRENT_PARAM_IDX + '>' + currentIndex + '){let ' + compilerConstants.PARAMS + paramCount + '=' + paramsVal + ';' + o2(
+      builder += 'if(' + compilerConstants.CURRENT_PARAM_IDX + '>' + currentIndex + '){let ' + compilerConstants.PARAMS + paramCount + '=' + paramsVal + ';' + compile(
         params[0]!,
         paramCount + 1,
         0,

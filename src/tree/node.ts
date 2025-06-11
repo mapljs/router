@@ -1,5 +1,3 @@
-import type { PathTransformResult } from '../transform.js';
-
 export type Node<T = unknown> = [
   part: string,
 
@@ -101,32 +99,6 @@ export const visitNode = (node: Node, parts: string[]): Node => {
   }
 
   return node;
-};
-
-export const insertItemWithParts = <T>(
-  node: Node<T>, result: PathTransformResult, item: T
-): void => {
-  const nextNode = visitNode(node, result[1]);
-
-  // Flag = 1: has params
-  // Flag = 2: has wildcard
-  switch (result[2]) {
-    case 0:
-      nextNode[1] = item;
-      break;
-
-    case 1:
-      // End with params
-      if (result[1].length === result[0].length)
-        (nextNode[3] ??= createParamNode(null))[1] = item;
-      else
-        nextNode[1] = item;
-      break;
-
-    case 2:
-      // End with wildcard
-      nextNode[4] = item;
-  }
 };
 
 export const insertItem = <T>(node: Node<T>, path: string, item: T): void => {

@@ -4,12 +4,8 @@ import {
   insertItem as insertItemToPath
 } from '../path/index.js';
 
-export const ALL: unique symbol = Symbol();
-export type ALL = typeof ALL;
+export type Router<T = unknown> = Partial<Record<string, PathRouter<T>>>;
 
-export type Method = string | ALL;
-export type Router<T = unknown> = Partial<Record<Method, PathRouter<T>>>;
-
-export const insertItem = <T>(router: Router<T>, method: Method, path: string, item: T): void => {
+export const insertItem = <T>(router: Router<T>, method: string, path: string, item: T): void => {
   insertItemToPath(router[method] ??= createPathRouter(), path, item);
 };
