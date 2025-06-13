@@ -102,13 +102,13 @@ export const visitNode = (node: Node, parts: string[]): Node => {
 };
 
 export const insertItem = <T>(node: Node<T>, path: string, item: T): void => {
-  if (path.charCodeAt(path.length - 1) === 42) {
+  if (path[path.length - 1] === '*') {
     // Ends with wildcard
-    if (path.charCodeAt(path.length - 2) === 42)
-      visitNode(node, path.substring(0, path.length - 2).split('*'))[4] = item;
+    if (path[path.length - 2] === '*')
+      visitNode(node, path.slice(0, -2).split('*'))[4] = item;
       // End with params
     else
-      (visitNode(node, path.substring(0, path.length - 1).split('*'))[3] ??= createParamNode(null))[1] = item;
+      (visitNode(node, path.slice(0, -1).split('*'))[3] ??= createParamNode(null))[1] = item;
   } else
     visitNode(node, path.split('*'))[1] = item;
 };
