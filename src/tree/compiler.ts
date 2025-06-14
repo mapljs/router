@@ -9,7 +9,7 @@ export const compile = (
   let builder = '';
 
   // Same optimization as in the matcher
-  if (node[0].length !== 1) {
+  if (node[0] !== '/') {
     const part = node[0];
     const start = startIndexPrefix + (startIndexValue + 1);
 
@@ -21,7 +21,9 @@ export const compile = (
     startIndexValue += part.length;
   } else startIndexValue++;
 
-  if (node[1] !== null) builder += 'if(' + compilerConstants.PATH_LEN + '===' + startIndexPrefix + startIndexValue + '){' + node[1] + '}';
+  let currentIndex = startIndexPrefix + startIndexValue;
+
+  if (node[1] !== null) builder += 'if(' + compilerConstants.PATH_LEN + '===' + currentIndex + '){' + node[1] + '}';
 
   if (node[2] !== null) {
     const children = node[2];
@@ -29,7 +31,7 @@ export const compile = (
 
     if (childrenEntries.length === 1) {
       // A single if statement is enough
-      builder += 'if(' + compilerConstants.PATH + '[' + startIndexPrefix + startIndexValue + ']==="' + toChar(childrenEntries[0]) + '"){' + compile(
+      builder += 'if(' + compilerConstants.PATH + '[' + currentIndex + ']==="' + toChar(childrenEntries[0]) + '"){' + compile(
         childrenEntries[0][1],
 
         paramCount,
@@ -39,17 +41,17 @@ export const compile = (
       ) + '}';
     } else {
       // Setup switch cases
-      builder += 'switch(' + compilerConstants.PATH + '[' + startIndexPrefix + startIndexValue + ']){';
+      builder += 'switch(' + compilerConstants.PATH + '[' + currentIndex + ']){';
 
       for (let i = 0; i < childrenEntries.length; i++) {
-        builder += 'case"' + toChar(childrenEntries[i]) + '":' + compile(
+        builder += 'case"' + toChar(childrenEntries[i]) + '":{' + compile(
           childrenEntries[i][1],
 
           paramCount,
 
           startIndexValue,
           startIndexPrefix
-        ) + 'break;';
+        ) + 'break;}';
       }
 
       builder += '}';
@@ -61,24 +63,25 @@ export const compile = (
     const hasStore = params[1] !== null;
     const hasChild = params[0] !== null;
 
-    builder += '{';
-
     // Declare a variable to save previous param index
-    if (paramCount > 0) builder += (paramCount > 1 ? '' : 'let ') + compilerConstants.PREV_PARAM_IDX + '=' + startIndexPrefix + startIndexValue + ';';
+    if (paramCount > 0) {
+      builder += 'let ' + compilerConstants.PREV_PARAM_IDX + '=' + currentIndex + ';';
+      currentIndex = compilerConstants.PREV_PARAM_IDX;
+    }
 
-    const currentIndex = paramCount > 0
-      ? compilerConstants.PREV_PARAM_IDX
-      : startIndexPrefix + startIndexValue;
-    const slashIndex = compilerConstants.PATH + '.indexOf("/"' + (currentIndex === '0' ? '' : ',' + currentIndex) + ')';
+    let slashIndex = compilerConstants.PATH + '.indexOf("/"' + (currentIndex === '0' ? '' : ',' + currentIndex) + ')';
 
     // Need to save the current parameter index if the parameter node is not a leaf node
-    if (hasChild || !hasStore) builder += (paramCount > 0 ? '' : 'let ') + compilerConstants.CURRENT_PARAM_IDX + '=' + slashIndex + ';';
+    if (hasChild || !hasStore) {
+      builder += (paramCount > 0 ? '' : 'let ') + compilerConstants.CURRENT_PARAM_IDX + '=' + slashIndex + ';';
+      slashIndex = compilerConstants.CURRENT_PARAM_IDX;
+    }
 
     if (hasStore) {
       const paramsVal = currentIndex === '0'
         ? compilerConstants.PATH
         : compilerConstants.PATH + '.slice(' + currentIndex + ')';
-      builder += 'if(' + (hasChild ? compilerConstants.CURRENT_PARAM_IDX : slashIndex) + '===-1){let ' + compilerConstants.PARAMS + paramCount + '=' + paramsVal + ';' + params[1] + '}';
+      builder += 'if(' + slashIndex + '===-1){let ' + compilerConstants.PARAMS + paramCount + '=' + paramsVal + ';' + params[1] + '}';
     }
 
     if (hasChild) {
@@ -90,13 +93,10 @@ export const compile = (
         compilerConstants.CURRENT_PARAM_IDX + '+'
       ) + '}';
     }
-
-    builder += '}';
   }
 
   if (node[4] !== null) {
     const noStore = node[1] === null;
-    const currentIndex = startIndexPrefix + startIndexValue;
 
     const paramsVal = currentIndex === '0'
       ? compilerConstants.PATH
@@ -109,5 +109,5 @@ export const compile = (
       : body;
   }
 
-  return node[0].length !== 1 ? builder + '}' : builder;
+  return node[0] !== '/' ? builder + '}' : builder;
 };

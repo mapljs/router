@@ -3,7 +3,7 @@ import { describe, test, expect } from 'bun:test';
 import { createRouter, insertItem } from '@mapl/router/path';
 import compileRouter from './utils/compileRouter';
 
-function runTest(samplePaths: string[]) {
+const runTest = (samplePaths: string[], label: string) => {
   // Build the tree
   const router = createRouter<string>();
   for (let i = 0; i < samplePaths.length; i++)
@@ -12,16 +12,18 @@ function runTest(samplePaths: string[]) {
   // Build result paths
   const resultPaths = samplePaths.map(
     (pattern) => pattern.endsWith('**')
-      ? pattern.substring(0, pattern.length - 2) + '1/2/3'
+      ? pattern.slice(0, -2) + '1/2/3/4'
       : pattern
   );
 
-  describe('["' + samplePaths.join('", "') + '"]', () => {
-    const compiledO2 = compileRouter(router, 0);
+  describe(label, () => {
+    const compiled = compileRouter(router, 0);
+    console.log(label + ':', compiled.toString());
+    console.log();
 
     for (let i = 0; i < samplePaths.length; i++) {
       test(`${samplePaths[i]}`, () => {
-        expect(compiledO2(resultPaths[i])).toBe(i);
+        expect(compiled(resultPaths[i])).toBe(i);
       });
     }
   });
@@ -41,14 +43,24 @@ runTest([
   '/category/*',
   '/category/*/filter/*',
   '/category/*/filter/*/exclude',
-]);
+], 'Simple API');
 
 runTest([
   '/*/file',
   '/*'
-]);
+], 'Edge case 1');
 
 runTest([
   '/api/works/*/lock',
   '/api/staff/*'
-]);
+], 'Edge case 2');
+
+runTest([
+  '/api/*/sub/*',
+  '/api/*/sub/**'
+], 'Reuse index tracker');
+
+runTest([
+  '/api/*/nested/*/2/*/nested',
+  '/api/*/nested/**'
+], 'Must not override index tracker');
