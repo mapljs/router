@@ -1,5 +1,5 @@
-import type { Subject } from "../cases.js";
-import KoaTreeRouter from "koa-tree-router";
+import type { Subject } from '../cases.js';
+import KoaTreeRouter from 'koa-tree-router';
 
 export const tree = {
   'basic-api': () => {
@@ -27,9 +27,7 @@ export const tree = {
     return (method, path) => {
       // @ts-ignore
       const match = router.find(method, path);
-      return match.handle === null
-        ? ''
-        : match.handle[0](match.params);
-    }
-  }
-} satisfies Subject
+      return match.handle === null ? '' : match.handle[0](match.params);
+    };
+  },
+} satisfies Subject;

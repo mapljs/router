@@ -11,7 +11,7 @@ const ALL: Record<string, Subject> = {
   hono_regexp: hono.regexp,
   hono_trie: hono.trie,
   koa_tree: koa.tree,
-  trek
+  trek,
 };
 
 // Sort into categories
