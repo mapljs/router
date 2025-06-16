@@ -3,14 +3,21 @@ import type { Subject } from '../cases.js';
 import * as mapl from './mapl.js';
 import * as hono from './hono.js';
 import * as koa from './koa.js';
+import * as rou3 from './rou3.js';
 import trek from './trek.js';
 
 const ALL: Record<string, Subject> = {
   mapl_jit: mapl.jit,
   mapl_tree: mapl.tree,
+
   hono_regexp: hono.regexp,
   hono_trie: hono.trie,
+
   koa_tree: koa.tree,
+
+  rou3_jit: rou3.jit,
+  rou3_tree: rou3.tree,
+
   trek,
 };
 

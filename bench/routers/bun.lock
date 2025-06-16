@@ -6,6 +6,7 @@
         "@medley/router": "^0.2.1",
         "hono": "^4.7.11",
         "koa-tree-router": "^0.13.1",
+        "rou3": "^0.7.0",
         "trek-router": "^1.2.0",
       },
       "devDependencies": {
@@ -61,6 +62,8 @@
     "object-treeify": ["object-treeify@1.1.33", "", {}, "sha512-EFVjAYfzWqWsBMRHPMAXLCDIJnpMhdWAqR7xG6M6a2cs6PMFpl/+Z20w9zDW4vkxOFfddegBKq9Rehd0bxWE7A=="],
 
     "picocolors": ["picocolors@1.1.1", "", {}, "sha512-xceH2snhtb5M9liqDsmEw56le376mTZkEX/jEb/RxNFyegNul7eNslCXP9FDj/Lcu0X8KEyMceP2ntpaHrDEVA=="],
+
+    "rou3": ["rou3@0.7.0", "", {}, "sha512-iuliR0PgQvH8M1R5f85Vo1bIx+26rDdFHZgHmLwVXvxkuTTPOhWicLXcAywAtOiRPAWHtJ3OAwLCFjNBNh8h5A=="],
 
     "trek-router": ["trek-router@1.2.0", "", {}, "sha512-43A1krE0myUO2DV+RQBUYLwK3Q5osszQ65jFe/TFGWMnhdZx0nvq2GQXecXwIPU0weSFo1pYmHfhHHaUPPIRNg=="],
 
