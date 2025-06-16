@@ -3,61 +3,61 @@ import { insertItem } from '@mapl/router/method';
 import compile from '@mapl/router/method/compiler';
 import type { Node } from '@mapl/router/tree/node.js';
 
-const matchNode = <T>(
-  node: Node<T>,
-  path: string,
-  params: string[],
-  start: number,
-): T | undefined => {
-  const part = node[0];
-  const partLen = part.length;
-
-  // Only check the part if its length is > 1 since the parent has
-  // already checked that the url matches the first character
-  if (partLen === 1 || (start + partLen <= path.length && path.startsWith(part, start))) {
-    start += partLen;
-
-    // Reached the end of the URL
-    if (start === path.length && node[1] !== null) return node[1];
-
-    // Check the next children node
-    if (node[2] !== null) {
-      const child = node[2][path.charCodeAt(start)];
-      if (child != null) {
-        const match = matchNode(child, path, params, start);
-        if (match !== null) return match;
-      }
-    }
-
-    // Check for parameters
-    if (node[3] !== null) {
-      const endIdx = path.indexOf('/', start);
-
-      if (endIdx === -1) {
-        if (node[3][1] !== null) {
-          params.push(path.slice(start));
-          return node[3][1];
-        }
-      } else if (endIdx > start && node[3][0] !== null) {
-        params.push(path.slice(start, endIdx));
-
-        const match = matchNode(node[3][0], path, params, endIdx);
-        if (match !== null) return match;
-
-        params.pop();
-      }
-    }
-
-    // Wildcard
-    if (node[4] !== null) {
-      params.push(path.slice(start));
-      return node[4];
-    }
-  }
-};
-
-export const radix = {
+export const tree = {
   'basic-api': () => {
+    const matchNode = <T>(
+      node: Node<T>,
+      path: string,
+      params: string[],
+      start: number,
+    ): T | undefined => {
+      const part = node[0];
+      const partLen = part.length;
+
+      // Only check the part if its length is > 1 since the parent has
+      // already checked that the url matches the first character
+      if (partLen === 1 || (start + partLen <= path.length && path.startsWith(part, start))) {
+        start += partLen;
+
+        // Reached the end of the URL
+        if (start === path.length && node[1] !== null) return node[1];
+
+        // Check the next children node
+        if (node[2] !== null) {
+          const child = node[2][path.charCodeAt(start)];
+          if (child != null) {
+            const match = matchNode(child, path, params, start);
+            if (match !== null) return match;
+          }
+        }
+
+        // Check for parameters
+        if (node[3] !== null) {
+          const endIdx = path.indexOf('/', start);
+
+          if (endIdx === -1) {
+            if (node[3][1] !== null) {
+              params.push(path.slice(start));
+              return node[3][1];
+            }
+          } else if (endIdx > start && node[3][0] !== null) {
+            params.push(path.slice(start, endIdx));
+
+            const match = matchNode(node[3][0], path, params, endIdx);
+            if (match !== null) return match;
+
+            params.pop();
+          }
+        }
+
+        // Wildcard
+        if (node[4] !== null) {
+          params.push(path.slice(start));
+          return node[4];
+        }
+      }
+    };
+
     type Handler = (params: string[]) => string;
     const router = {};
 

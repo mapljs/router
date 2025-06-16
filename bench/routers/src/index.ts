@@ -1,12 +1,13 @@
 import type { Subject } from '../cases.js';
 
-import { jit as maplJit, radix as maplRadix } from './mapl.js';
-import { regexp as honoRegexp } from './hono.js';
+import * as mapl from './mapl.js';
+import * as hono from './hono.js';
 
 const ALL: Record<string, Subject> = {
-  mapl_jit: maplJit,
-  mapl: maplRadix,
-  hono_regexp: honoRegexp,
+  mapl_jit: mapl.jit,
+  mapl_tree: mapl.tree,
+  hono_regexp: hono.regexp,
+  hono_trie: hono.trie
 };
 
 // Sort into categories
