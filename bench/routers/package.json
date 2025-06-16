@@ -1,8 +1,8 @@
 {
   "type": "module",
   "scripts": {
-    "startup": "tsx startup.ts",
-    "startup:bun": "bun startup.ts",
+    "startup": "tsx --no-opt startup.ts",
+    "startup:bun": "BUN_JSC_useDFGJIT=0 bun startup.ts",
     "perf": "tsx --expose-gc --allow-natives-syntax perf.ts",
     "perf:bun": "bun perf.ts"
   },
