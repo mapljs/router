@@ -1,7 +1,9 @@
-import type { Subject } from '../cases.js';
 import { insertItem } from '@mapl/router/method';
+import { countParams } from '@mapl/router/path';
 import compile from '@mapl/router/method/compiler';
 import type { Node } from '@mapl/router/tree/node.js';
+
+import type { Subject } from '../cases.js';
 
 export const tree = {
   'basic-api': () => {
@@ -146,20 +148,13 @@ export const jit = {
     // Insert helper for mapl
     const insert = (method: string, pat: string, id: number) => {
       // Count params
-      let params = 0;
-      for (let i = 0; i < pat.length; i++) params += pat[i] === '*' ? 1 : 0;
-      params -= pat.endsWith('**') ? 1 : 0;
-
-      // Return
-      let str = 'return"' + id;
-      if (params === 0) str += '"';
-      else {
-        str += ': "';
-        for (let i = 0; i < params; i++)
-          str += '+q' + i + (i === params - 1 ? '' : '+" - "');
-      }
-
-      insertItem(router, method, pat, str);
+      if (pat.includes('*')) {
+        let str = 'return"' + id + ': "+q0';
+        for (let i = 1, params = countParams(pat); i < params; i++)
+          str += '+" - "+q' + i;
+        insertItem(router, method, pat, str);
+      } else
+        insertItem(router, method, pat, 'return "' + id + '"');
     };
 
     insert('GET', '/user', 0);

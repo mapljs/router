@@ -18,7 +18,7 @@ export const insertItem = <T>(router: Router, path: string, item: T): void => {
 };
 
 export const countParams = (path: string): number => {
-  let cnt = 0;
-  for (let i = -1; (i = path.indexOf('*', i + 1)) !== -1; cnt++);
-  return cnt - (path.endsWith('**') ? 1 : 0);
+  let cnt = path.endsWith('**') ? 2 : 0;
+  for (let i = path.length - cnt; (i = path.lastIndexOf('*', i - 1)) !== -1; cnt++);
+  return cnt;
 };
