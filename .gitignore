@@ -1,6 +1,5 @@
-# Packages and locks
+# Packages
 node_modules
-bun.lockb
 
 # Output files
 lib

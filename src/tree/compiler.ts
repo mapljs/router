@@ -51,7 +51,7 @@ export const compile = (
 
           startIndexValue,
           startIndexPrefix
-        ) + 'break;}';
+        ) + 'break}';
       }
 
       builder += '}';
@@ -77,34 +77,30 @@ export const compile = (
       slashIndex = compilerConstants.CURRENT_PARAM_IDX;
     }
 
-    if (hasStore) {
-      const paramsVal = currentIndex === '0'
-        ? compilerConstants.PATH
-        : compilerConstants.PATH + '.slice(' + currentIndex + ')';
-      builder += 'if(' + slashIndex + '===-1){let ' + compilerConstants.PARAMS + paramCount + '=' + paramsVal + ';' + params[1] + '}';
-    }
+    if (hasStore)
+      builder += 'if(' + slashIndex + '===-1){let ' + compilerConstants.PARAMS + paramCount + '=' + (
+        currentIndex === '0'
+          ? compilerConstants.PATH
+          : compilerConstants.PATH + '.slice(' + currentIndex + ')'
+      ) + ';' + params[1] + '}';
 
-    if (hasChild) {
-      const paramsVal = compilerConstants.PATH + '.slice(' + currentIndex + ',' + compilerConstants.CURRENT_PARAM_IDX + ')';
-      builder += 'if(' + compilerConstants.CURRENT_PARAM_IDX + '>' + currentIndex + '){let ' + compilerConstants.PARAMS + paramCount + '=' + paramsVal + ';' + compile(
+    if (hasChild)
+      builder += 'if(' + compilerConstants.CURRENT_PARAM_IDX + '>' + currentIndex + '){let ' + compilerConstants.PARAMS + paramCount + '=' + compilerConstants.PATH + '.slice(' + currentIndex + ',' + compilerConstants.CURRENT_PARAM_IDX + ');' + compile(
         params[0]!,
         paramCount + 1,
         0,
         compilerConstants.CURRENT_PARAM_IDX + '+'
       ) + '}';
-    }
   }
 
   if (node[4] !== null) {
-    const noStore = node[1] === null;
-
     const paramsVal = currentIndex === '0'
       ? compilerConstants.PATH
       : compilerConstants.PATH + '.slice(' + currentIndex + ')';
     const body = 'let ' + compilerConstants.PARAMS + paramCount + '=' + paramsVal + ';' + node[4];
 
     // Wildcard should not match static case
-    builder += noStore
+    builder += node[1] === null
       ? 'if(' + compilerConstants.PATH_LEN + '>' + currentIndex + '){' + body + '}'
       : body;
   }

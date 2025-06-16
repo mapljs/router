@@ -35,6 +35,5 @@
       "@mapl/router/*": ["../lib/*"],
       "@mapl/router": ["../lib"]
     }
-  },
-  "include": ["."]
+  }
 }

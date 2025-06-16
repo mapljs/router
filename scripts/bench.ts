@@ -1,10 +1,22 @@
 import { Glob } from 'bun';
-import { exec } from './utils';
+import { BENCH, cd, exec } from './utils.js';
 
-const cmd = process.argv.includes('--node') ? 'bun tsx' : 'bun';
+const exe = { raw: 'bun run' };
 
-Bun.$.cwd('./bench');
-for (const path of new Glob('**/*.bench.ts').scanSync('./bench')) {
-  console.log('Running benchmark:', path);
-  await exec`${{ raw: cmd }} ./${path}`;
+let exactBench = process.argv[2];
+if (exactBench === '--node') {
+  exe.raw = 'bun tsx --expose-gc --allow-natives-syntax';
+  exactBench = process.argv[3];
 }
+
+cd(BENCH);
+
+if (exactBench != null) {
+  const path = `${exactBench}.bench.ts`;
+  console.log('Running benchmark:', path);
+  await exec`${exe} ${path}`;
+} else
+  for (const path of new Glob('**/*.bench.ts').scanSync(BENCH)) {
+    console.log('Running benchmark:', path);
+    await exec`${exe} ${path}`;
+  }

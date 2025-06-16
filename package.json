@@ -1,39 +1,31 @@
 {
   "name": "@mapl/router",
-  "version": "0.5.2",
-  "main": "./index.js",
+  "version": "0.5.3",
+  "description": "The fastest possible JS router",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/mapljs/router.git"
   },
-  "devDependencies": {
-    "@stylistic/eslint-plugin": "latest",
-    "@types/bun": "latest",
-    "eslint": "latest",
-    "eslint-plugin-jsdoc": "latest",
-    "mitata": "^1.0.34",
-    "tsx": "^4.19.3",
-    "typescript": "latest",
-    "typescript-eslint": "latest"
-  },
-  "description": "Fast compiled router for all runtimes",
-  "keywords": [
-    "fast",
-    "compiled",
-    "router",
-    "node",
-    "bun",
-    "deno"
-  ],
   "license": "MIT",
-  "scripts": {
-    "build:test": "bun scripts/build.ts && bun test",
-    "bench": "bun scripts/bench.ts",
-    "build:publish": "bun build:test && bun scripts/publish.ts",
-    "lint": "eslint ./src",
-    "lint:fix": "eslint ./src --fix"
-  },
-  "sideEffects": false,
   "type": "module",
-  "types": "./index.d.ts"
+  "main": "./index.js",
+  "types": "./index.d.ts",
+  "scripts": {
+    "task": "bun scripts/task.ts",
+    "fmt": "biome format .",
+    "build:test": "bun task build && bun test",
+    "build:publish": "bun task build && bun task report-size && bun task publish"
+  },
+  "devDependencies": {
+    "@biomejs/biome": "^1.9.4",
+    "@types/bun": "^1.2.10",
+    "mitata": "^1.0.34",
+    "oxc-minify": "^0.64.0",
+    "oxc-transform": "^0.65.0",
+    "tsx": "^4.19.3",
+    "typescript": "^5.8.3"
+  },
+  "trustedDependencies": [
+    "@biomejs/biome"
+  ]
 }
