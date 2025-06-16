@@ -1,16 +1,20 @@
-import { list, rand } from "./utils.js";
+import { list, rand } from './utils.js';
 
 // List cases
 const CASES = 1;
-const FORMAT = (id: number, params: string[]) => params.length === 0 ? '' + id : `${id}: ${params.join(' - ')}`;
+const FORMAT = (id: number, params: string[]) =>
+  params.length === 0 ? '' + id : `${id}: ${params.join(' - ')}`;
 
 interface Case {
   routes: {
-    [K in 'GET' | 'POST' | 'PUT' | 'DELETE' | '' | (string & {})]?: Record<string, number>
-  },
+    [K in 'GET' | 'POST' | 'PUT' | 'DELETE' | '' | (string & {})]?: Record<
+      string,
+      number
+    >;
+  };
   fallbacks: {
-    [K in 'GET' | 'POST' | 'PUT' | 'DELETE' | '' | (string & {})]?: string[]
-  }
+    [K in 'GET' | 'POST' | 'PUT' | 'DELETE' | '' | (string & {})]?: string[];
+  };
 }
 
 const cases = {
@@ -26,37 +30,61 @@ const cases = {
         '/event/*/comments': 6,
         '/map/*/events': 7,
         '/status': 8,
-        '/very/deeply/nested/route/hello/there': 9
+        '/very/deeply/nested/route/hello/there': 9,
       },
       POST: {
         '/event/*/comment': 10,
-      }
+      },
     },
     fallbacks: {
       GET: [
-        '/', '/users',
+        '/',
+        '/users',
         '/user/lookup',
-        '/event/comments',
         '/map/events',
         '/very/deeply/nested/route/hello',
-        `/event/${rand.string(5)}/comment`
+        `/event/${rand.string(5)}/comment`,
+      ],
+      PUT: [
+        '/',
+        '/users',
+        '/user/lookup',
+        '/map/events'
+      ],
+      DELETE: [
+        '/',
+        '/users',
+        '/user/lookup',
+        '/map/events'
+      ],
+      OPTIONS: [
+        '/',
+        '/users',
+        '/user/lookup',
+        '/map/events'
+      ],
+      PATCH: [
+        '/',
+        '/users',
+        '/user/lookup',
+        '/map/events'
       ]
-    }
-  }
+    },
+  },
 } satisfies Record<string, Case>;
 
 export type CaseName = keyof typeof cases;
 
 // Generate case tests
 export interface Test {
-  method: string,
-  path: string,
-  expected: string
+  method: string;
+  path: string;
+  expected: string;
 }
 
 export interface CaseTests {
-  routes: Record<string, Test[]>,
-  fallbacks: Test[]
+  routes: Record<string, Test[]>;
+  fallbacks: Test[];
 }
 
 const generateTests = (c: Case): CaseTests => {
@@ -67,27 +95,37 @@ const generateTests = (c: Case): CaseTests => {
     for (const pat in patterns) {
       store[`${method} ${pat}`] = list(CASES, () => {
         const res = rand.path(pat);
-        return { method, path: res.path, expected: FORMAT(patterns[pat], res.params) };
+        return {
+          method,
+          path: res.path,
+          expected: FORMAT(patterns[pat], res.params),
+        };
       });
     }
   }
 
   return {
     routes: store,
-    fallbacks: Object.entries(c.fallbacks).map(([method, paths]) =>
-      paths.map((path): Test => ({ method, path, expected: '' }))
-    ).flat()
+    fallbacks: Object.entries(c.fallbacks)
+      .map(([method, paths]) =>
+        paths.map((path): Test => ({ method, path, expected: '' })),
+      )
+      .flat(),
   };
-}
+};
 
 export const allTests = Object.fromEntries(
-  Object.entries(cases).map(([key, val]) => [key, generateTests(val)])
+  Object.entries(cases).map(([key, val]) => [key, generateTests(val)]),
 );
 
 export type Handler = (method: string, path: string) => string;
 
 // Validate a handler
-export const validate = (label: string, fn: Handler, caseTests: CaseTests): boolean => {
+export const validate = (
+  label: string,
+  fn: Handler,
+  caseTests: CaseTests,
+): boolean => {
   console.log('Validating:', label);
   let res = true;
 
@@ -103,18 +141,36 @@ export const validate = (label: string, fn: Handler, caseTests: CaseTests): bool
       }
 
       console.error(`* ${label} failed test:`, `${test.method} ${test.path}`);
-      console.info("* expected:", test.expected);
-      console.info("* found:", payload);
+      console.info('* expected:', test.expected);
+      console.info('* found:', payload);
       res = false;
     }
   }
 
-  if (!res)
-    console.log('Skipping:', label);
+  for (const test of caseTests.fallbacks) {
+    console.log(`- Not match "${test.method} ${test.path}"`);
+
+    let payload: any;
+    try {
+      payload = fn(test.method, test.path);
+      if (payload === test.expected) continue;
+    } catch (e) {
+      payload = e;
+    }
+
+    console.error(`* ${label} failed test:`, `${test.method} ${test.path}`);
+    console.info('* expected: empty string');
+    console.info('* found:', payload);
+    res = false;
+  }
+
+  if (!res) console.log('Skipping:', label);
+  console.log();
+
   return res;
-}
+};
 
 // Test subject
 export type Subject = {
-  [K in CaseName]?: () => Handler
-}
+  [K in CaseName]?: () => Handler;
+};
