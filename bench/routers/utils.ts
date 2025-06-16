@@ -1,3 +1,5 @@
+import pc from 'picocolors';
+
 const charset =
   'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789$';
 
@@ -57,9 +59,14 @@ const createUnitFormat = (units: string[]) => (n: number) => {
     i++;
     n /= 1000;
   }
-  return n.toFixed(2) + units[i];
+  return pc.yellowBright(n.toFixed(2) + units[i]);
 };
 
 export const format = {
   time: createUnitFormat(['ns', 'us', 'ms', 's']),
+  name: (name: string) => pc.bold(pc.cyan(name)),
+  multiplier: pc.greenBright,
+  header: pc.bold,
+  success: pc.greenBright,
+  error: pc.redBright,
 };

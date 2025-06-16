@@ -1,7 +1,7 @@
-import { list, rand } from './utils.js';
+import { format, list, rand } from './utils.js';
 
 // List cases
-const CASES = 1;
+const CASES = 50;
 const FORMAT = (id: number, params: string[]) =>
   params.length === 0 ? '' + id : `${id}: ${params.join(' - ')}`;
 
@@ -106,42 +106,35 @@ export const validate = (
   fn: Handler,
   caseTests: CaseTests,
 ): boolean => {
-  console.log('Validating:', label);
+  console.log(format.header(label) + ':');
   let res = true;
 
-  for (const name in caseTests.routes) {
-    console.log(`- Match "${name}"`);
-    for (const test of caseTests.routes[name]) {
-      let payload: any;
-      try {
-        payload = fn(test.method, test.path);
-        if (payload === test.expected) continue;
-      } catch (e) {
-        payload = e;
-      }
-
-      console.error(`* ${label} failed test:`, `${test.method} ${test.path}`);
-      console.info('* expected:', test.expected);
-      console.info('* found:', payload);
-      res = false;
-    }
-  }
-
-  for (const test of caseTests.fallbacks) {
-    console.log(`- Not match "${test.method} ${test.path}"`);
-
+  const matchTest = (test: Test) => {
     let payload: any;
     try {
       payload = fn(test.method, test.path);
-      if (payload === test.expected) continue;
+      if (payload === test.expected) return;
     } catch (e) {
       payload = e;
     }
 
-    console.error(`* ${label} failed test:`, `${test.method} ${test.path}`);
-    console.info('* expected: empty string');
-    console.info('* found:', payload);
+    console.log(
+      `    ${format.header(label)} failed test`,
+      format.name(`${test.method} ${test.path}`),
+    );
+    console.log('    expected:', format.success(test.expected));
+    console.log('    found:', format.error(payload));
     res = false;
+  };
+
+  for (const name in caseTests.routes) {
+    console.log(`  Match ${format.name(name)}`);
+    for (const test of caseTests.routes[name]) matchTest(test);
+  }
+
+  for (const test of caseTests.fallbacks) {
+    console.log(`  Not match ${format.name(`${test.method} ${test.path}`)}`);
+    matchTest(test);
   }
 
   if (!res) console.log('Skipping:', label);

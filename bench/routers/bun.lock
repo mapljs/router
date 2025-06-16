@@ -8,6 +8,9 @@
         "koa-tree-router": "^0.13.1",
         "trek-router": "^1.2.0",
       },
+      "devDependencies": {
+        "picocolors": "^1.1.1",
+      },
     },
   },
   "packages": {
@@ -56,6 +59,8 @@
     "koa-tree-router": ["koa-tree-router@0.13.1", "", { "dependencies": { "@types/koa": "^2.15.0", "koa-compose": "^4.1.0" } }, "sha512-MFsDRupP6crtCVgt+kZmg8jgeFZqkr3iumZcIzXfMoSsI4NfhnHVnUb+4ANdgH50QmFmk03ez3Vt8X+FE6Rj6g=="],
 
     "object-treeify": ["object-treeify@1.1.33", "", {}, "sha512-EFVjAYfzWqWsBMRHPMAXLCDIJnpMhdWAqR7xG6M6a2cs6PMFpl/+Z20w9zDW4vkxOFfddegBKq9Rehd0bxWE7A=="],
+
+    "picocolors": ["picocolors@1.1.1", "", {}, "sha512-xceH2snhtb5M9liqDsmEw56le376mTZkEX/jEb/RxNFyegNul7eNslCXP9FDj/Lcu0X8KEyMceP2ntpaHrDEVA=="],
 
     "trek-router": ["trek-router@1.2.0", "", {}, "sha512-43A1krE0myUO2DV+RQBUYLwK3Q5osszQ65jFe/TFGWMnhdZx0nvq2GQXecXwIPU0weSFo1pYmHfhHHaUPPIRNg=="],
 

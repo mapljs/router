@@ -5,7 +5,7 @@ import { format } from './utils.js';
 
 for (const key in categories) {
   const results: { name: string; ns: number }[] = [];
-  console.log('Startup time:', key);
+  console.log(format.header(key) + ':');
 
   const handlers = categories[key];
   for (const name in handlers) {
@@ -21,12 +21,12 @@ for (const key in categories) {
   results.sort((a, b) => a.ns - b.ns);
 
   const fastestNs = results[0].ns;
-  console.log(`1. ${results[0].name}: ${format.time(fastestNs)}`);
+  console.log(`  ${format.name(results[0].name)}: ${format.time(fastestNs)}`);
 
   for (let i = 1; i < results.length; i++) {
     const { name, ns } = results[i];
     console.log(
-      `${i + 1}. ${name}: ${format.time(ns)} - ${(ns / fastestNs).toFixed(2)}x slower`,
+      `    ${format.multiplier((ns / fastestNs).toFixed(2) + 'x')} faster than ${format.name(name)}: ${format.time(ns)}`,
     );
   }
 

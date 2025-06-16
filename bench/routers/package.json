@@ -11,5 +11,8 @@
     "hono": "^4.7.11",
     "koa-tree-router": "^0.13.1",
     "trek-router": "^1.2.0"
+  },
+  "devDependencies": {
+    "picocolors": "^1.1.1"
   }
 }
