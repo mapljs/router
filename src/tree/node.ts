@@ -1,24 +1,38 @@
 export type Node<T = unknown> = [
   part: string,
-
   store: T | null,
   children: Node<T>[] | null,
   params: ParamNode<T> | null,
-
-  wildcardStore: T | null
+  wildcardStore: T | null,
 ];
 
-export type ParamNode<T = unknown> = [
-  child: Node<T> | null,
-  store: T | null
-];
+export type ParamNode<T = unknown> = [child: Node<T> | null, store: T | null];
 
 // Implementations
-export const createNode = <T>(part: string): Node<T> => [part, null, null, null, null];
-export const createParamNode = (nextNode: ParamNode[0]): ParamNode => [nextNode, null];
-export const cloneNode = (node: Node, part: string): Node => [part, node[1], node[2], node[3], node[4]];
+export const createNode = <T>(part: string): Node<T> => [
+  part,
+  null,
+  null,
+  null,
+  null,
+];
+export const createParamNode = (nextNode: ParamNode[0]): ParamNode => [
+  nextNode,
+  null,
+];
+export const cloneNode = (node: Node, part: string): Node => [
+  part,
+  node[1],
+  node[2],
+  node[3],
+  node[4],
+];
 
-export const resetNode = (node: Node, part: string, children: Node[2]): void => {
+export const resetNode = (
+  node: Node,
+  part: string,
+  children: Node[2],
+): void => {
   node[0] = part;
   node[2] = children;
 
@@ -39,8 +53,7 @@ export const visitNode = (node: Node, parts: string[]): Node => {
         const nextNode = createNode(pathPart);
         node[3] = createParamNode(nextNode);
         node = nextNode;
-      } else
-        node = node[3][0] ??= createNode(pathPart);
+      } else node = node[3][0] ??= createNode(pathPart);
     }
 
     for (let j = 0; ; ++j) {
@@ -59,8 +72,7 @@ export const visitNode = (node: Node, parts: string[]): Node => {
 
       // Add static child
       if (j === nodePart.length) {
-        if (node[2] === null)
-          node[2] = [];
+        if (node[2] === null) node[2] = [];
         else {
           const nextNode = node[2][pathPart.charCodeAt(j)] as Node<any> | null;
 
@@ -106,9 +118,9 @@ export const insertItem = <T>(node: Node<T>, path: string, item: T): void => {
     // Ends with wildcard
     if (path[path.length - 2] === '*')
       visitNode(node, path.slice(0, -2).split('*'))[4] = item;
-      // End with params
+    // End with params
     else
-      (visitNode(node, path.slice(0, -1).split('*'))[3] ??= createParamNode(null))[1] = item;
-  } else
-    visitNode(node, path.split('*'))[1] = item;
+      (visitNode(node, path.slice(0, -1).split('*'))[3] ??=
+        createParamNode(null))[1] = item;
+  } else visitNode(node, path.split('*'))[1] = item;
 };

@@ -1,0 +1,13 @@
+{
+  "type": "module",
+  "scripts": {
+    "startup": "tsx startup.ts",
+    "startup:bun": "bun startup.ts",
+    "perf": "tsx --expose-gc --allow-natives-syntax perf.ts",
+    "perf:bun": "bun perf.ts"
+  },
+  "dependencies": {
+    "@medley/router": "^0.2.1",
+    "hono": "^4.7.11"
+  }
+}

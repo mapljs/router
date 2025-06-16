@@ -10,10 +10,8 @@ const runTest = (samplePaths: string[], label: string) => {
     insertItem(router, samplePaths[i], `return ${i};`);
 
   // Build result paths
-  const resultPaths = samplePaths.map(
-    (pattern) => pattern.endsWith('**')
-      ? pattern.slice(0, -2) + '1/2/3/4'
-      : pattern
+  const resultPaths = samplePaths.map((pattern) =>
+    pattern.endsWith('**') ? pattern.slice(0, -2) + '1/2/3/4' : pattern,
   );
 
   describe(label, () => {
@@ -27,40 +25,34 @@ const runTest = (samplePaths: string[], label: string) => {
       });
     }
   });
-}
+};
 
-runTest([
-  '/',
-  '/about',
+runTest(
+  [
+    '/',
+    '/about',
 
-  '/*',
-  '/*/navigate',
-  '/**',
+    '/*',
+    '/*/navigate',
+    '/**',
 
-  '/user/*',
-  '/user/*/dashboard/**',
+    '/user/*',
+    '/user/*/dashboard/**',
 
-  '/category/*',
-  '/category/*/filter/*',
-  '/category/*/filter/*/exclude',
-], 'Simple API');
+    '/category/*',
+    '/category/*/filter/*',
+    '/category/*/filter/*/exclude',
+  ],
+  'Simple API',
+);
 
-runTest([
-  '/*/file',
-  '/*'
-], 'Edge case 1');
+runTest(['/*/file', '/*'], 'Edge case 1');
 
-runTest([
-  '/api/works/*/lock',
-  '/api/staff/*'
-], 'Edge case 2');
+runTest(['/api/works/*/lock', '/api/staff/*'], 'Edge case 2');
 
-runTest([
-  '/api/*/sub/*',
-  '/api/*/sub/**'
-], 'Reuse index tracker');
+runTest(['/api/*/sub/*', '/api/*/sub/**'], 'Reuse index tracker');
 
-runTest([
-  '/api/*/nested/*/2/*/nested',
-  '/api/*/nested/**'
-], 'Must not override index tracker');
+runTest(
+  ['/api/*/nested/*/2/*/nested', '/api/*/nested/**'],
+  'Must not override index tracker',
+);

@@ -1,0 +1,20 @@
+{
+  "compilerOptions": {
+    // Enable latest features
+    "lib": ["ESNext", "DOM", "DOM.Iterable"],
+    "target": "ESNext",
+    "module": "ESNext",
+    "moduleDetection": "force",
+    "resolveJsonModule": true,
+    "isolatedModules": true,
+    // Bundler mode
+    "moduleResolution": "Bundler",
+    "verbatimModuleSyntax": true,
+    "skipLibCheck": true,
+    // Paths
+    "paths": {
+      "@mapl/router/*": ["../lib/*"]
+    }
+  },
+  "include": ["./**/*.ts"]
+}
