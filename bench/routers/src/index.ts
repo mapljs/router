@@ -7,7 +7,7 @@ const ALL: Record<string, Subject> = {
   mapl_jit: mapl.jit,
   mapl_tree: mapl.tree,
   hono_regexp: hono.regexp,
-  hono_trie: hono.trie
+  hono_trie: hono.trie,
 };
 
 // Sort into categories

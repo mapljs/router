@@ -16,7 +16,10 @@ export const tree = {
 
       // Only check the part if its length is > 1 since the parent has
       // already checked that the url matches the first character
-      if (partLen === 1 || (start + partLen <= path.length && path.startsWith(part, start))) {
+      if (
+        partLen === 1 ||
+        (start + partLen <= path.length && path.startsWith(part, start))
+      ) {
         start += partLen;
 
         // Reached the end of the URL
@@ -80,36 +83,41 @@ export const tree = {
       router,
       'GET',
       '/event/*',
-      (params) => '5: ' + params[0]
+      (params) => '5: ' + params[0],
     );
     insertItem<Handler>(
       router,
       'GET',
       '/event/*/comments',
-      (params) => '6: ' + params[0]
+      (params) => '6: ' + params[0],
     );
     insertItem<Handler>(
       router,
       'GET',
       '/map/*/events',
-      (params) => '7: ' + params[0]
+      (params) => '7: ' + params[0],
     );
     insertItem<Handler>(router, 'GET', '/status', () => '8');
-    insertItem<Handler>(router, 'GET', '/very/deeply/nested/route/hello/there', () => '9');
+    insertItem<Handler>(
+      router,
+      'GET',
+      '/very/deeply/nested/route/hello/there',
+      () => '9',
+    );
 
-    insertItem<Handler>(router, 'POST', '/event/*/comment', (params) => '10: ' + params[0]);
+    insertItem<Handler>(
+      router,
+      'POST',
+      '/event/*/comment',
+      (params) => '10: ' + params[0],
+    );
 
     // Build router
-    const methodMap: Map<string, [
-      Map<string, Handler>,
-      Node<Handler> | null
-    ]> = new Map();
+    const methodMap: Map<string, [Map<string, Handler>, Node<Handler> | null]> =
+      new Map();
     for (const method in router) {
       const methodRouter = router[method];
-      methodMap.set(method, [
-        new Map(methodRouter[0]),
-        methodRouter[1]
-      ]);
+      methodMap.set(method, [new Map(methodRouter[0]), methodRouter[1]]);
     }
 
     return (method, path) => {
@@ -127,7 +135,7 @@ export const tree = {
       }
 
       return '';
-    }
+    };
   },
 } satisfies Subject;
 

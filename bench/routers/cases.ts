@@ -45,30 +45,10 @@ const cases = {
         '/very/deeply/nested/route/hello',
         `/event/${rand.string(5)}/comment`,
       ],
-      PUT: [
-        '/',
-        '/users',
-        '/user/lookup',
-        '/map/events'
-      ],
-      DELETE: [
-        '/',
-        '/users',
-        '/user/lookup',
-        '/map/events'
-      ],
-      OPTIONS: [
-        '/',
-        '/users',
-        '/user/lookup',
-        '/map/events'
-      ],
-      PATCH: [
-        '/',
-        '/users',
-        '/user/lookup',
-        '/map/events'
-      ]
+      PUT: ['/', '/users', '/user/lookup', '/map/events'],
+      DELETE: ['/', '/users', '/user/lookup', '/map/events'],
+      OPTIONS: ['/', '/users', '/user/lookup', '/map/events'],
+      PATCH: ['/', '/users', '/user/lookup', '/map/events'],
     },
   },
 } satisfies Record<string, Case>;
