@@ -6,16 +6,13 @@ import * as koa from './koa.js';
 import * as rou3 from './rou3.js';
 import * as trek from './trek.js';
 
-import * as mapl_old from './mapl-old.js';
-
 const FILTERS = {
-  include: (name, subject) => name.startsWith('mapl_jit')
+  include: (name, subject) => true
 } satisfies Record<string, (name: string, o: Subject) => boolean>;
 
 const ALL: Record<string, Subject> = {
   mapl_jit: mapl.jit,
   mapl_tree: mapl.tree,
-  mapl_jit_old: mapl_old.jit,
 
   hono_regexp: hono.regexp,
   hono_tree: hono.trie,
