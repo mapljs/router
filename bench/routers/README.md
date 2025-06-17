@@ -1,7 +1,7 @@
 This benchmark measures different routers matching performance and startup time.
 ```sh
-# Build mapl
-cd ../.. && bun task build && cd bench/routers
+# Install dependencies & build mapl
+cd ../.. && bun i && bun task build && cd bench/routers
 
 # Startup bench
 bun startup
