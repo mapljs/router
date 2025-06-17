@@ -7,7 +7,7 @@ const runTest = (samplePaths: string[], label: string) => {
   // Build the tree
   const router = createRouter<string>();
   for (let i = 0; i < samplePaths.length; i++)
-    insertItem(router, samplePaths[i], `return ${i};`);
+    insertItem(router, samplePaths[i], `return ${i}`);
 
   // Build result paths
   const resultPaths = samplePaths.map((pattern) =>
@@ -51,6 +51,10 @@ runTest(['/*/file', '/*'], 'Edge case 1');
 runTest(['/api/works/*/lock', '/api/staff/*'], 'Edge case 2');
 
 runTest(['/api/*/sub/*', '/api/*/sub/**'], 'Reuse index tracker');
+
+runTest(['/*/ab', '/*/bc'], 'Single character check');
+
+runTest(['/*/a', '/*/b', '/*/c', '/*/d'], 'Children node checks');
 
 runTest(
   ['/api/*/nested/*/2/*/nested', '/api/*/nested/**'],

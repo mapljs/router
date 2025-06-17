@@ -6,6 +6,7 @@
         "@medley/router": "^0.2.1",
         "hono": "^4.7.11",
         "koa-tree-router": "^0.13.1",
+        "mapl-old": "npm:@mapl/router@0.5.3",
         "rou3": "^0.7.0",
         "trek-router": "^1.2.0",
       },
@@ -58,6 +59,8 @@
     "koa-compose": ["koa-compose@4.1.0", "", {}, "sha512-8ODW8TrDuMYvXRwra/Kh7/rJo9BtOfPc6qO8eAfC80CnCvSjSl0bkRM24X6/XBBEyj0v1nRUQ1LyOy3dbqOWXw=="],
 
     "koa-tree-router": ["koa-tree-router@0.13.1", "", { "dependencies": { "@types/koa": "^2.15.0", "koa-compose": "^4.1.0" } }, "sha512-MFsDRupP6crtCVgt+kZmg8jgeFZqkr3iumZcIzXfMoSsI4NfhnHVnUb+4ANdgH50QmFmk03ez3Vt8X+FE6Rj6g=="],
+
+    "mapl-old": ["@mapl/router@0.5.3", "", {}, "sha512-KCawnfDdy9IddZ5WvOtpqoN/noyo5QIuw9+w9JzvcEAykuibfIfukquzphBmIOkoT1K7wK2OJrMF+vuoNBt6AQ=="],
 
     "object-treeify": ["object-treeify@1.1.33", "", {}, "sha512-EFVjAYfzWqWsBMRHPMAXLCDIJnpMhdWAqR7xG6M6a2cs6PMFpl/+Z20w9zDW4vkxOFfddegBKq9Rehd0bxWE7A=="],
 

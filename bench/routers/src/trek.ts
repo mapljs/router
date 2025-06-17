@@ -1,7 +1,7 @@
 import type { Subject } from '../cases.js';
 import Router from 'trek-router';
 
-export default {
+export const tree = {
   'basic-api': () => {
     const router = new Router();
 

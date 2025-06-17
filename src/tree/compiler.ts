@@ -6,32 +6,31 @@ const toChar = (c: [string, Node<string>]): string =>
 export const compile = (
   node: Node<string>,
   paramCount: number,
-  startIndexValue: number,
-  startIndexPrefix: string,
+  idx: number,
+  idxPrefix: string,
 ): string => {
-  let builder = '';
+  let builder = '{';
+  const noStore = node[1] === null;
+  const partLen = node[0].length;
 
-  // Same optimization as in the matcher
-  if (node[0] !== '/') {
-    const part = node[0];
-    const start = startIndexPrefix + (startIndexValue + 1);
+  let currentIdx = idxPrefix + (idx + partLen);
 
+  // Skip checking first character since it's guaranteed to be checked
+  if (node[0].length > 1) {
+    const start = idxPrefix + (idx + 1);
+    builder = partLen === 2
+      // Prevent index out of bound causing deopt
+      ? 'if(' + constants.PATH_LEN + (noStore ? '>' : '>=') + currentIdx + ')if(' + constants.PATH + '[' + start + ']==="' + node[0][1] + '"){'
+      // Don't cause deopt for other paths
+      : (noStore ? 'if(' + constants.PATH_LEN + '>' + currentIdx + ')if(' : 'if(') + constants.PATH + '.startsWith("' + node[0].slice(1) + '",' + start + ')){';
+  }
+  // Don't cause deopt for other paths
+  else if (noStore) builder = 'if(' + constants.PATH_LEN + '>' + currentIdx + '){';
+  idx += partLen;
+
+  if (!noStore)
     builder +=
-      'if(' +
-      constants.PATH +
-      (part.length === 2
-        ? '[' + start + ']==="' + part[1] + '"'
-        : '.startsWith("' + part.slice(1) + '",' + start + ')') +
-      '){';
-
-    startIndexValue += part.length;
-  } else startIndexValue++;
-
-  let currentIndex = startIndexPrefix + startIndexValue;
-
-  if (node[1] !== null)
-    builder +=
-      'if(' + constants.PATH_LEN + '===' + currentIndex + '){' + node[1] + '}';
+      'if(' + constants.PATH_LEN + '===' + currentIdx + '){' + node[1] + '}';
 
   if (node[2] !== null) {
     const childrenEntries = Object.entries(node[2]);
@@ -42,7 +41,7 @@ export const compile = (
         'if(' +
         constants.PATH +
         '[' +
-        currentIndex +
+        currentIdx +
         ']==="' +
         toChar(childrenEntries[0]) +
         '"){' +
@@ -51,28 +50,28 @@ export const compile = (
 
           paramCount,
 
-          startIndexValue,
-          startIndexPrefix,
+          idx,
+          idxPrefix,
         ) +
         '}';
     } else {
       // Setup switch cases
-      builder += 'switch(' + constants.PATH + '[' + currentIndex + ']){';
+      builder += 'switch(' + constants.PATH + '[' + currentIdx + ']){';
 
       for (let i = 0; i < childrenEntries.length; i++) {
         builder +=
           'case"' +
           toChar(childrenEntries[i]) +
-          '":{' +
+          '":' +
           compile(
             childrenEntries[i][1],
 
             paramCount,
 
-            startIndexValue,
-            startIndexPrefix,
+            idx,
+            idxPrefix,
           ) +
-          'break}';
+          'break;';
       }
 
       builder += '}';
@@ -86,14 +85,14 @@ export const compile = (
 
     // Declare a variable to save previous param index
     if (paramCount > 0) {
-      builder += 'let ' + constants.PREV_PARAM_IDX + '=' + currentIndex + ';';
-      currentIndex = constants.PREV_PARAM_IDX;
+      builder += 'let ' + constants.PREV_PARAM_IDX + '=' + currentIdx + ';';
+      currentIdx = constants.PREV_PARAM_IDX;
     }
 
     let slashIndex =
       constants.PATH +
       '.indexOf("/"' +
-      (currentIndex === '0' ? '' : ',' + currentIndex) +
+      (currentIdx === '0' ? '' : ',' + currentIdx) +
       ')';
 
     // Need to save the current parameter index if the parameter node is not a leaf node
@@ -115,26 +114,26 @@ export const compile = (
         constants.PARAMS +
         paramCount +
         '=' +
-        (currentIndex === '0'
+        (currentIdx === '0'
           ? constants.PATH
-          : constants.PATH + '.slice(' + currentIndex + ')') +
+          : constants.PATH + '.slice(' + currentIdx + ')') +
         ';' +
         params[1] +
         '}';
 
     if (hasChild)
       builder +=
-        'if(' +
+        (hasStore ? 'else if(' : 'if(') +
         constants.CURRENT_PARAM_IDX +
         '>' +
-        currentIndex +
+        currentIdx +
         '){let ' +
         constants.PARAMS +
         paramCount +
         '=' +
         constants.PATH +
         '.slice(' +
-        currentIndex +
+        currentIdx +
         ',' +
         constants.CURRENT_PARAM_IDX +
         ');' +
@@ -147,24 +146,17 @@ export const compile = (
         '}';
   }
 
-  if (node[4] !== null) {
-    const body =
+  if (node[4] !== null)
+    builder +=
       'let ' +
       constants.PARAMS +
       paramCount +
       '=' +
-      (currentIndex === '0'
+      (currentIdx === '0'
         ? constants.PATH
-        : constants.PATH + '.slice(' + currentIndex + ')') +
+        : constants.PATH + '.slice(' + currentIdx + ')') +
       ';' +
       node[4];
 
-    // Wildcard should not match static case
-    builder +=
-      node[1] === null
-        ? 'if(' + constants.PATH_LEN + '>' + currentIndex + '){' + body + '}'
-        : body;
-  }
-
-  return node[0] !== '/' ? builder + '}' : builder;
+  return builder + '}';
 };

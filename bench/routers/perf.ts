@@ -1,5 +1,5 @@
 import { validate, allTests, type Test } from './cases.js';
-import categories from './src/index.js';
+import categories from './src/_.js';
 import { bench, do_not_optimize, run, summary } from 'mitata';
 
 for (const cat in categories) {

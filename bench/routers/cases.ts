@@ -137,7 +137,6 @@ export const validate = (
     matchTest(test);
   }
 
-  if (!res) console.log('Skipping:', label);
   console.log();
 
   return res;

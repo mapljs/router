@@ -1,4 +1,4 @@
-import categories from './src/index.js';
+import categories from './src/_.js';
 import { now } from 'mitata/src/lib.mjs';
 import { do_not_optimize } from 'mitata/src/lib.mjs';
 import { format } from './utils.js';

@@ -40,3 +40,5 @@ f(id, params) => `${id}: ${params.join(' - ')}` // Match dynamic routes
 
 Route id for each test cases are in [cases.ts](./cases.ts#L16).
 `*` means capturing current segment (param) and `**` means capturing all segments from the current position (wildcard).
+
+To filter out tests, see the list of filters in [cases.ts](./cases.ts#L9).

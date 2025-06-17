@@ -11,7 +11,11 @@ export type Router<T = unknown> = [
 
 export const createRouter = <T>(): Router<T> => [[], null];
 
-export const insertItem = <T>(router: Router, path: string, item: T): void => {
+export const insertItem = <T>(
+  router: Router<T>,
+  path: string,
+  item: T,
+): void => {
   if (path.includes('*'))
     nodeInsertItem((router[1] ??= createNode('/')), path, item);
   else router[0].push([path, item] as const);
@@ -19,6 +23,10 @@ export const insertItem = <T>(router: Router, path: string, item: T): void => {
 
 export const countParams = (path: string): number => {
   let cnt = path.endsWith('**') ? 2 : 0;
-  for (let i = path.length - cnt; (i = path.lastIndexOf('*', i - 1)) !== -1; cnt++);
+  for (
+    let i = path.length - cnt;
+    (i = path.lastIndexOf('*', i - 1)) !== -1;
+    cnt++
+  );
   return cnt;
 };

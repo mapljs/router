@@ -1,4 +1,4 @@
-import { insertItem } from '@mapl/router/method';
+import { createRouter, insertItem } from '@mapl/router/method';
 import { countParams } from '@mapl/router/path';
 import compile from '@mapl/router/method/compiler';
 import type { Node } from '@mapl/router/tree/node.js';
@@ -64,50 +64,40 @@ export const tree = {
     };
 
     type Handler = (params: string[]) => string;
-    const router = {};
+    const router = createRouter<Handler>();
 
-    insertItem<Handler>(router, 'GET', '/user', () => '0');
-    insertItem<Handler>(router, 'GET', '/user/comments', () => '1');
-    insertItem<Handler>(router, 'GET', '/user/avatar', () => '2');
-    insertItem<Handler>(
+    insertItem(router, 'GET', '/user', () => '0');
+    insertItem(router, 'GET', '/user/comments', () => '1');
+    insertItem(router, 'GET', '/user/avatar', () => '2');
+    insertItem(
       router,
       'GET',
       '/user/lookup/username/*',
       (params) => '3: ' + params[0],
     );
-    insertItem<Handler>(
+    insertItem(
       router,
       'GET',
       '/user/lookup/email/*',
       (params) => '4: ' + params[0],
     );
-    insertItem<Handler>(
-      router,
-      'GET',
-      '/event/*',
-      (params) => '5: ' + params[0],
-    );
-    insertItem<Handler>(
+    insertItem(router, 'GET', '/event/*', (params) => '5: ' + params[0]);
+    insertItem(
       router,
       'GET',
       '/event/*/comments',
       (params) => '6: ' + params[0],
     );
-    insertItem<Handler>(
-      router,
-      'GET',
-      '/map/*/events',
-      (params) => '7: ' + params[0],
-    );
-    insertItem<Handler>(router, 'GET', '/status', () => '8');
-    insertItem<Handler>(
+    insertItem(router, 'GET', '/map/*/events', (params) => '7: ' + params[0]);
+    insertItem(router, 'GET', '/status', () => '8');
+    insertItem(
       router,
       'GET',
       '/very/deeply/nested/route/hello/there',
       () => '9',
     );
 
-    insertItem<Handler>(
+    insertItem(
       router,
       'POST',
       '/event/*/comment',
@@ -143,7 +133,7 @@ export const tree = {
 
 export const jit = {
   'basic-api': () => {
-    const router = {};
+    const router = createRouter<string>();
 
     // Insert helper for mapl
     const insert = (method: string, pat: string, id: number) => {
@@ -153,8 +143,7 @@ export const jit = {
         for (let i = 1, params = countParams(pat); i < params; i++)
           str += '+" - "+q' + i;
         insertItem(router, method, pat, str);
-      } else
-        insertItem(router, method, pat, 'return "' + id + '"');
+      } else insertItem(router, method, pat, 'return "' + id + '"');
     };
 
     insert('GET', '/user', 0);
