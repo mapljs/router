@@ -11,8 +11,7 @@
     "hono": "^4.7.11",
     "koa-tree-router": "^0.13.1",
     "rou3": "^0.7.0",
-    "trek-router": "^1.2.0",
-    "mapl-old": "npm:@mapl/router@0.5.3"
+    "trek-router": "^1.2.0"
   },
   "devDependencies": {
     "picocolors": "^1.1.1"

@@ -16,16 +16,36 @@ export const compile = (
   let currentIdx = idxPrefix + (idx + partLen);
 
   // Skip checking first character since it's guaranteed to be checked
-  if (node[0].length > 1) {
+  if (partLen > 1) {
     const start = idxPrefix + (idx + 1);
-    builder = partLen === 2
-      // Prevent index out of bound causing deopt
-      ? 'if(' + constants.PATH_LEN + (noStore ? '>' : '>=') + currentIdx + ')if(' + constants.PATH + '[' + start + ']==="' + node[0][1] + '"){'
-      // Don't cause deopt for other paths
-      : (noStore ? 'if(' + constants.PATH_LEN + '>' + currentIdx + ')if(' : 'if(') + constants.PATH + '.startsWith("' + node[0].slice(1) + '",' + start + ')){';
+    builder =
+      partLen === 2
+        ? // Prevent index out of bound causing deopt
+          'if(' +
+          constants.PATH_LEN +
+          (noStore ? '>' : '>=') +
+          currentIdx +
+          ')if(' +
+          constants.PATH +
+          '[' +
+          start +
+          ']==="' +
+          node[0][1] +
+          '"){'
+        : // Don't cause deopt for other paths
+          (noStore
+            ? 'if(' + constants.PATH_LEN + '>' + currentIdx + ')if('
+            : 'if(') +
+          constants.PATH +
+          '.startsWith("' +
+          node[0].slice(1) +
+          '",' +
+          start +
+          ')){';
   }
   // Don't cause deopt for other paths
-  else if (noStore) builder = 'if(' + constants.PATH_LEN + '>' + currentIdx + '){';
+  else if (noStore)
+    builder = 'if(' + constants.PATH_LEN + '>' + currentIdx + '){';
   idx += partLen;
 
   if (!noStore)

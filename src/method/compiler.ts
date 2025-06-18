@@ -7,19 +7,21 @@ export default (
   parsePath: string,
   startIndex: 0 | 1,
 ): string => {
-  let str = 'switch(' + methodInput + '){';
+  const allRouter = router[''];
+  let str = '';
 
-  let all = '';
-  for (const key in router) {
-    if (key === '') all = parsePath + compilePath(router['']!, startIndex);
-    else
+  for (const key in router)
+    if (key !== '')
       str +=
-        'case"' +
+        (str === '' ? 'if(' : 'else if(') +
+        methodInput +
+        '==="' +
         key +
-        '":{' +
-        parsePath +
+        '"){' +
+        (allRouter == null ? parsePath : '') +
         compilePath(router[key]!, startIndex) +
-        'break}';
-  }
-  return str + '}' + all;
+        '}';
+  return allRouter == null
+    ? str
+    : parsePath + str + compilePath(allRouter, startIndex);
 };
