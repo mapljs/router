@@ -14,11 +14,9 @@ const runTest = (samplePaths: string[], label: string) => {
     pattern.endsWith('**') ? pattern.slice(0, -2) + '1/2/3/4' : pattern,
   );
 
-  describe(label, () => {
-    const compiled = compileRouter(router, 0);
-    console.log(label + ':', compiled.toString());
-    console.log();
+  const compiled = compileRouter(router);
 
+  describe(label, () => {
     for (let i = 0; i < samplePaths.length; i++) {
       test(`${samplePaths[i]}`, () => {
         expect(compiled(resultPaths[i])).toBe(i);

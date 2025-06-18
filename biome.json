@@ -9,7 +9,13 @@
     "enabled": true
   },
   "files": {
-    "include": ["./src/**/*", "./scripts/**/*", "./tests/**/*", "./bench/**/*"]
+    "include": [
+      "./src/**/*",
+      "./scripts/**/*",
+      "./tests/**/*",
+      "./bench/**/*",
+      "./snapshots/**/*"
+    ]
   },
   "javascript": {
     "formatter": {

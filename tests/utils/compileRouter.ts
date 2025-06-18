@@ -5,8 +5,7 @@ import type { Router } from '@mapl/router/path';
 
 // eslint-disable-next-line
 export default (
-  root: Router<string>,
-  startIndex: 0 | 1,
+  root: Router<string>
 ): ((path: string) => any) =>
   // eslint-disable-next-line
-  Function(`return (${PATH})=>{${buildRouter(root, startIndex)}}`)();
+  Function(`return (${PATH})=>{${buildRouter(root, 0)}}`)();
