@@ -1,5 +1,6 @@
 This benchmark measures different routers matching performance and startup time.
-Requirements: node 24, bun 1.2
+
+Requirements: [node](https://nodejs.org) 24, [bun](https://bun.sh) 1.2
 
 ```sh
 # Install dependencies & build mapl
