@@ -1,9 +1,6 @@
-import { createRouter, addRoute, findRoute } from 'rou3';
-import { compileRouter } from 'rou3/compiler';
+import { createRouter, addRoute } from 'rou3';
 
-import type { Subject } from '../cases.js';
-
-const basicAPI = () => {
+export const basicAPI = () => {
   type Handler = (params: Record<string, string>) => string;
   const router = createRouter<Handler>();
 
@@ -31,30 +28,3 @@ const basicAPI = () => {
   addRoute(router, 'POST', '/event/:a/comment', (params) => '10: ' + params.a);
   return router;
 };
-
-export const jit = {
-  'basic-api': () => {
-    const compiledMatch = compileRouter(basicAPI());
-
-    return (method, path) => {
-      const match = compiledMatch(method, path);
-      return typeof match === 'undefined'
-        ? ''
-        : typeof match.params === 'undefined'
-          ? // @ts-ignore
-            match.data()
-          : match.data(match.params);
-    };
-  },
-} satisfies Subject;
-
-export const tree = {
-  'basic-api': () => {
-    const router = basicAPI();
-
-    return (method, path) => {
-      const match = findRoute(router, method, path);
-      return typeof match === 'undefined' ? '' : match.data(match.params);
-    };
-  },
-} satisfies Subject;
