@@ -1,4 +1,6 @@
 This benchmark measures different routers matching performance and startup time.
+Requirements: node 24, bun 1.2
+
 ```sh
 # Install dependencies & build mapl
 cd ../.. && bun i && bun task build && cd bench/routers && bun i
