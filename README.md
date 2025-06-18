@@ -20,4 +20,4 @@ For jitless examples see:
 - [tree.ts](./bench/routers/src/mapl/tree.ts): A jitless tree router based on `@mapl/router` tree structure.
 
 # Benchmark
-See [./bench/routers](./bench/routers) guide for routers benchmarking.
+See [routers](./bench/routers) guide for routers benchmarking.
