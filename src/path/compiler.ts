@@ -22,7 +22,7 @@ export default (router: Router<string>, startIndex: 0 | 1): string => {
         '=' +
         constants.PATH +
         '.length;' +
-        compile(router[1], 0, -startIndex, '')) +
-    '}'
+        compile(router[1], 0, -startIndex, '') +
+        '}')
   );
 };
