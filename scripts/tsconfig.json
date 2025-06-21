@@ -6,7 +6,6 @@
     "module": "ESNext",
     "moduleDetection": "force",
     "resolveJsonModule": true,
-    "isolatedModules": true,
     // Bundler mode
     "moduleResolution": "Bundler",
     "verbatimModuleSyntax": true,
