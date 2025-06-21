@@ -58,7 +58,7 @@ for (const cat in categories) {
       ({
         name: bench.alias,
         runs: bench.runs.map(({ stats }) => ({
-          avg: time(stats.avg),
+          avg: stats.avg,
           p99: time(stats.p99),
           p999: time(stats.p999),
           mem: stats.heap && byte(stats.heap.avg),
@@ -75,7 +75,11 @@ for (const cat in categories) {
       ...res.runs[0],
     });
   }
-  for (const name in catResults) catResults[name].sort((a, b) => a.avg - b.avg);
+
+  // Format avg after sort
+  for (const name in catResults)
+    for (const item of catResults[name].sort((a, b) => a.avg - b.avg))
+      item.avg = time(item.avg);
 
   writeFileSync('./results.json', JSON.stringify(catResults, null, 2));
 }
