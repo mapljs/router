@@ -17,6 +17,7 @@ const ALL: Record<string, Subject> = {
 
   hono_regexp: hono.regexp,
   hono_tree: hono.trie,
+  hono_pattern: hono.pattern,
 
   koa_tree: koa.tree,
 
