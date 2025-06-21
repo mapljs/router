@@ -1,5 +1,6 @@
 import { validate, allTests, type Test } from './cases.js';
 import categories from './src/_.js';
+import { writeFileSync } from 'node:fs';
 import { bench, do_not_optimize, run, summary } from 'mitata';
 
 for (const cat in categories) {
@@ -37,4 +38,44 @@ for (const cat in categories) {
     });
 }
 
-run();
+{
+  // Formatting stuff
+  const createUnitFormat = (units: string[]) => (n: number) => {
+    let i = 0;
+    while (n >= 1000 && i < units.length - 1) {
+      i++;
+      n /= 1000;
+    }
+    return n.toFixed(2) + units[i];
+  };
+
+  const time = createUnitFormat(['ns', 'µs', 'ms', 's']);
+  const byte = createUnitFormat(['b', 'kb', 'mb', 'gb']);
+
+  // Parse raw results
+  const results = (await run()).benchmarks.map(
+    (bench) =>
+      ({
+        name: bench.alias,
+        runs: bench.runs.map(({ stats }) => ({
+          avg: time(stats.avg),
+          p99: time(stats.p99),
+          p999: time(stats.p999),
+          mem: stats.heap && byte(stats.heap.avg),
+        })),
+      }) as const,
+  );
+
+  // Sort by categories
+  const catResults: Record<string, any[]> = {};
+  for (const res of results) {
+    const [name, route] = res.name.split(' - ', 2);
+    (catResults[route] ??= []).push({
+      name,
+      ...res.runs[0],
+    });
+  }
+  for (const name in catResults) catResults[name].sort((a, b) => a.avg - b.avg);
+
+  writeFileSync('./results.json', JSON.stringify(catResults, null, 2));
+}

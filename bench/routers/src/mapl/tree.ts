@@ -8,20 +8,17 @@ const matchNode = <T>(
   path: string,
   params: string[],
   start: number,
-): T | undefined => {
+): T | null => {
   const part = node[0];
   const partLen = part.length;
 
   // Only check the part if its length is > 1 since the parent has
   // already checked that the url matches the first character
-  if (
-    partLen === 1 ||
-    (start + partLen <= path.length && path.startsWith(part, start))
-  ) {
+  if (partLen === 1 || path.startsWith(part, start)) {
     start += partLen;
 
     // Reached the end of the URL
-    if (start === path.length && node[1] !== null) return node[1];
+    if (start === path.length) return node[1];
 
     // Check the next children node
     if (node[2] !== null) {
@@ -57,6 +54,8 @@ const matchNode = <T>(
       return node[4];
     }
   }
+
+  return null;
 };
 
 export default {
@@ -120,7 +119,7 @@ export default {
         if (tmp[1] !== null) {
           const params = [];
           const dmatch = matchNode(tmp[1], path, params, 0);
-          if (dmatch != null) return dmatch(params);
+          if (dmatch !== null) return dmatch(params);
         }
       }
 
