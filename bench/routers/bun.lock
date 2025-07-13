@@ -6,8 +6,7 @@
         "@medley/router": "^0.2.1",
         "hono": "^4.7.11",
         "koa-tree-router": "^0.13.1",
-        "mapl-old": "npm:@mapl/router@0.5.3",
-        "rou3": "^0.7.0",
+        "rou3": "^0.7.3",
         "trek-router": "^1.2.0",
       },
       "devDependencies": {
@@ -60,13 +59,11 @@
 
     "koa-tree-router": ["koa-tree-router@0.13.1", "", { "dependencies": { "@types/koa": "^2.15.0", "koa-compose": "^4.1.0" } }, "sha512-MFsDRupP6crtCVgt+kZmg8jgeFZqkr3iumZcIzXfMoSsI4NfhnHVnUb+4ANdgH50QmFmk03ez3Vt8X+FE6Rj6g=="],
 
-    "mapl-old": ["@mapl/router@0.5.3", "", {}, "sha512-KCawnfDdy9IddZ5WvOtpqoN/noyo5QIuw9+w9JzvcEAykuibfIfukquzphBmIOkoT1K7wK2OJrMF+vuoNBt6AQ=="],
-
     "object-treeify": ["object-treeify@1.1.33", "", {}, "sha512-EFVjAYfzWqWsBMRHPMAXLCDIJnpMhdWAqR7xG6M6a2cs6PMFpl/+Z20w9zDW4vkxOFfddegBKq9Rehd0bxWE7A=="],
 
     "picocolors": ["picocolors@1.1.1", "", {}, "sha512-xceH2snhtb5M9liqDsmEw56le376mTZkEX/jEb/RxNFyegNul7eNslCXP9FDj/Lcu0X8KEyMceP2ntpaHrDEVA=="],
 
-    "rou3": ["rou3@0.7.0", "", {}, "sha512-iuliR0PgQvH8M1R5f85Vo1bIx+26rDdFHZgHmLwVXvxkuTTPOhWicLXcAywAtOiRPAWHtJ3OAwLCFjNBNh8h5A=="],
+    "rou3": ["rou3@0.7.3", "", {}, "sha512-KKenF/hB2iIhS1ohj226LT+/8uKCBpSMqeS4V1UPN9vad99uLoyIhrULRRB1skaB40LQHcBlSsAi3sT8MaoDDQ=="],
 
     "trek-router": ["trek-router@1.2.0", "", {}, "sha512-43A1krE0myUO2DV+RQBUYLwK3Q5osszQ65jFe/TFGWMnhdZx0nvq2GQXecXwIPU0weSFo1pYmHfhHHaUPPIRNg=="],
 
