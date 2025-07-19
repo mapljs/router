@@ -3,7 +3,9 @@ import type { Subject } from '../../cases.js';
 
 export default {
   'basic-api': () => {
-    const router = new PatternRouter<(params: Record<string, string>) => string>();
+    const router = new PatternRouter<
+      (params: Record<string, string>) => string
+    >();
 
     router.add('GET', '/user', (_) => '0');
     router.add('GET', '/user/comments', (_) => '1');

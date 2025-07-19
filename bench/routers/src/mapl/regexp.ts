@@ -23,29 +23,29 @@ const markParam = (paramMap: number[]) => [...paramMap, state[1]++] as any;
 const compileRegExpSource = (node: Node<any>, paramMap: number[]): string => {
   const parts: string[] = [];
 
-  if (node[1] !== null) {
+  if (node[1] != null) {
     addHandler([node[1], paramMap]);
     parts.push('($)');
   }
 
-  if (node[2] !== null)
+  if (node[2] != null)
     for (const key in node[2])
       parts.push(compileRegExpSource(node[2][key], paramMap));
 
-  if (node[3] !== null) {
+  if (node[3] != null) {
     let builder = '([^/]+)';
     const newParamMap = markParam(paramMap);
 
     const params = node[3];
-    if (params[0] !== null) {
-      if (params[1] !== null) {
+    if (params[0] != null) {
+      if (params[1] != null) {
         addHandler([params[1], newParamMap]);
         builder += '(?:($)|';
       }
 
       builder += compileRegExpSource(params[0], newParamMap);
 
-      if (params[1] !== null) builder += ')';
+      if (params[1] != null) builder += ')';
     } else {
       // Param should should have child or store or both
       addHandler([params[1], newParamMap]);
@@ -55,7 +55,7 @@ const compileRegExpSource = (node: Node<any>, paramMap: number[]): string => {
     parts.push(builder);
   }
 
-  if (node[4] !== null) {
+  if (node[4] != null) {
     addHandler([node[4], markParam(paramMap)]);
     parts.push('(.*$)()');
   }
@@ -131,7 +131,7 @@ export default {
       const methodRouter = router[method];
       const arr: any[] = [new Map(methodRouter[0])];
 
-      if (methodRouter[1] !== null) {
+      if (methodRouter[1] != null) {
         resetState();
         arr.push(
           new RegExp('^' + compileRegExpSource(methodRouter[1], [])),

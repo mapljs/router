@@ -1,6 +1,5 @@
 import categories from './src/_.js';
-import { now } from 'mitata/src/lib.mjs';
-import { do_not_optimize } from 'mitata/src/lib.mjs';
+import { measure } from 'mitata/src/lib.mjs';
 import { format } from './utils.js';
 
 for (const key in categories) {
@@ -11,11 +10,16 @@ for (const key in categories) {
   for (const name in handlers) {
     const fn = handlers[name];
 
-    let start = now();
-    do_not_optimize(fn()('GET', '/'));
-    start = now() - start;
+    const res = await measure(() => fn()('GET', '/'), {
+      inner_gc: true,
+      warmup_samples: 1,
+      max_samples: 3,
+    });
 
-    results.push({ name, ns: start });
+    results.push({
+      name,
+      ns: res.avg,
+    });
   }
 
   results.sort((a, b) => a.ns - b.ns);

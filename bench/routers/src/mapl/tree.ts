@@ -21,41 +21,39 @@ const matchNode = <T>(
     if (start === path.length) return node[1];
 
     // Check the next children node
-    if (node[2] !== null) {
+    if (node[2] != null) {
       const child = node[2][path.charCodeAt(start)];
       if (child != null) {
         const match = matchNode(child, path, params, start);
-        if (match !== null) return match;
+        if (match != null) return match;
       }
     }
 
     // Check for parameters
-    if (node[3] !== null) {
+    if (node[3] != null) {
       const endIdx = path.indexOf('/', start);
 
       if (endIdx === -1) {
-        if (node[3][1] !== null) {
+        if (node[3][1] != null) {
           params.push(path.slice(start));
           return node[3][1];
         }
-      } else if (endIdx > start && node[3][0] !== null) {
+      } else if (endIdx > start && node[3][0] != null) {
         params.push(path.slice(start, endIdx));
 
         const match = matchNode(node[3][0], path, params, endIdx);
-        if (match !== null) return match;
+        if (match != null) return match;
 
         params.pop();
       }
     }
 
     // Wildcard
-    if (node[4] !== null) {
+    if (node[4] != null) {
       params.push(path.slice(start));
       return node[4];
     }
   }
-
-  return null;
 };
 
 export default {
@@ -116,10 +114,10 @@ export default {
         // @ts-ignore
         if (match != null) return match();
 
-        if (tmp[1] !== null) {
+        if (tmp[1] != null) {
           const params = [];
           const dmatch = matchNode(tmp[1], path, params, 0);
-          if (dmatch !== null) return dmatch(params);
+          if (dmatch != null) return dmatch(params);
         }
       }
 

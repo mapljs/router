@@ -58,6 +58,7 @@ for (const cat in categories) {
       ({
         name: bench.alias,
         runs: bench.runs.map(({ stats }) => ({
+          // Need sorting first before formatting
           avg: stats.avg,
           p99: time(stats.p99),
           p999: time(stats.p999),
