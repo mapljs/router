@@ -10,7 +10,7 @@ export const compile = (
   idxPrefix: string,
 ): string => {
   let builder = '{';
-  const noStore = node[1] === null;
+  const noStore = node[1] == null;
   const partLen = node[0].length;
 
   let currentIdx = idxPrefix + (idx + partLen);
@@ -52,7 +52,7 @@ export const compile = (
     builder +=
       'if(' + constants.PATH_LEN + '===' + currentIdx + '){' + node[1] + '}';
 
-  if (node[2] !== null) {
+  if (node[2] != null) {
     const childrenEntries = Object.entries(node[2]);
 
     if (childrenEntries.length === 1) {
@@ -98,10 +98,10 @@ export const compile = (
     }
   }
 
-  if (node[3] !== null) {
+  if (node[3] != null) {
     const params = node[3];
-    const hasStore = params[1] !== null;
-    const hasChild = params[0] !== null;
+    const hasStore = params[1] != null;
+    const hasChild = params[0] != null;
 
     // Declare a variable to save previous param index
     if (paramCount > 0) {
@@ -166,7 +166,7 @@ export const compile = (
         '}';
   }
 
-  if (node[4] !== null)
+  if (node[4] != null)
     builder +=
       'let ' +
       constants.PARAMS +

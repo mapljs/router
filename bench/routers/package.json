@@ -4,7 +4,9 @@
     "startup": "tsx --no-opt startup.ts",
     "startup:bun": "BUN_JSC_useDFGJIT=0 bun startup.ts",
     "perf": "tsx --expose-gc --allow-natives-syntax perf.ts",
-    "perf:bun": "bun perf.ts"
+    "perf:bun": "bun perf.ts",
+    "startup:all": "bun startup && bun startup:bun",
+    "perf:all": "bun perf && bun perf:bun"
   },
   "dependencies": {
     "@medley/router": "^0.2.1",

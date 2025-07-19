@@ -6,10 +6,10 @@ import {
 
 export type Router<T = unknown> = [
   staticMap: [path: string, item: T][],
-  root: Node<T> | null,
+  root: Node<T> | undefined,
 ];
 
-export const createRouter = <T>(): Router<T> => [[], null];
+export const createRouter = <T>(): Router<T> => [[], ,];
 
 export const insertItem = <T>(
   router: Router<T>,

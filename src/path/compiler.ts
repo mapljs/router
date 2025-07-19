@@ -15,7 +15,7 @@ export default (router: Router<string>, startIndex: 0 | 1): string => {
 
   return (
     str +
-    (router[1] === null
+    (router[1] == null
       ? ''
       : '{let ' +
         constants.PATH_LEN +

@@ -70,3 +70,7 @@ export const format = {
   success: pc.greenBright,
   error: pc.redBright,
 };
+
+export const RUNTIME = globalThis.Bun
+  ? `bun_` + process.versions.bun
+  : `node_` + process.versions.node

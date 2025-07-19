@@ -2,6 +2,7 @@ import { validate, allTests, type Test } from './cases.js';
 import categories from './src/_.js';
 import { writeFileSync } from 'node:fs';
 import { bench, do_not_optimize, run, summary } from 'mitata';
+import { RUNTIME } from './utils.js';
 
 for (const cat in categories) {
   console.log('Category:', cat);
@@ -82,5 +83,8 @@ for (const cat in categories) {
     for (const item of catResults[name].sort((a, b) => a.avg - b.avg))
       item.avg = time(item.avg);
 
-  writeFileSync('./results.json', JSON.stringify(catResults, null, 2));
+  writeFileSync(
+    'results_' + RUNTIME + '.json',
+    JSON.stringify(catResults, null, 2)
+  );
 }
