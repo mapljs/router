@@ -65,7 +65,7 @@ const createUnitFormat = (units: string[]) => (n: number) => {
 export const format = {
   time: createUnitFormat(['ns', 'us', 'ms', 's']),
   name: (name: string) => pc.bold(pc.cyan(name)),
-  multiplier: pc.greenBright,
+  multiplier: (t: number) => pc.greenBright(t.toFixed(2) + 'x'),
   header: pc.bold,
   success: pc.greenBright,
   error: pc.redBright,

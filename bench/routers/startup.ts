@@ -12,8 +12,8 @@ for (const key in categories) {
 
     const res = await measure(() => fn()('GET', '/'), {
       inner_gc: true,
-      warmup_samples: 1,
-      max_samples: 3,
+      warmup_samples: 0,
+      max_samples: 1
     });
 
     results.push({
@@ -23,14 +23,14 @@ for (const key in categories) {
   }
 
   results.sort((a, b) => a.ns - b.ns);
+  const baseline = results[0].ns;
 
-  const fastestNs = results[0].ns;
-  console.log(`  ${format.name(results[0].name)}: ${format.time(fastestNs)}`);
-
-  for (let i = 1; i < results.length; i++) {
-    const { name, ns } = results[i];
+  for (let i = 0; i < results.length; i++) {
+    const res = results[i].ns;
     console.log(
-      `    ${format.multiplier((ns / fastestNs).toFixed(2) + 'x')} faster than ${format.name(name)}: ${format.time(ns)}`,
+      `  ${format.name(results[i].name)}: ${format.time(res)}${
+        i === 0 ? '' : ` - ${format.multiplier(res / baseline)} slower`
+      }`,
     );
   }
 
