@@ -73,4 +73,4 @@ export const format = {
 
 export const RUNTIME = globalThis.Bun
   ? `bun_` + process.versions.bun
-  : `node_` + process.versions.node
+  : `node_` + process.versions.node;

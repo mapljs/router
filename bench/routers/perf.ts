@@ -85,6 +85,6 @@ for (const cat in categories) {
 
   writeFileSync(
     'results_' + RUNTIME + '.json',
-    JSON.stringify(catResults, null, 2)
+    JSON.stringify(catResults, null, 2),
   );
 }

@@ -13,7 +13,7 @@ for (const key in categories) {
     const res = await measure(() => fn()('GET', '/'), {
       inner_gc: true,
       warmup_samples: 0,
-      max_samples: 1
+      max_samples: 1,
     });
 
     results.push({

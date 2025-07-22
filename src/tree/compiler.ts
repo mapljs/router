@@ -1,8 +1,5 @@
 import type { Node } from './node.js';
 
-const toChar = (c: [string, Node<string>]): string =>
-  String.fromCharCode(+c[0]);
-
 export const compile = (
   node: Node<string>,
   paramCount: number,
@@ -55,18 +52,17 @@ export const compile = (
   if (node[2] != null) {
     const childrenEntries = Object.entries(node[2]);
 
-    if (childrenEntries.length === 1) {
-      // A single if statement is enough
+    for (let i = 0; i < childrenEntries.length; i++) {
       builder +=
-        'if(' +
+        (i !== 0 ? 'else if(' : 'if(') +
         constants.PATH +
         '[' +
         currentIdx +
         ']==="' +
-        toChar(childrenEntries[0]) +
+        String.fromCharCode(+childrenEntries[i][0]) +
         '"){' +
         compile(
-          childrenEntries[0][1],
+          childrenEntries[i][1],
 
           paramCount,
 
@@ -74,27 +70,6 @@ export const compile = (
           idxPrefix,
         ) +
         '}';
-    } else {
-      // Setup switch cases
-      builder += 'switch(' + constants.PATH + '[' + currentIdx + ']){';
-
-      for (let i = 0; i < childrenEntries.length; i++) {
-        builder +=
-          'case"' +
-          toChar(childrenEntries[i]) +
-          '":' +
-          compile(
-            childrenEntries[i][1],
-
-            paramCount,
-
-            idx,
-            idxPrefix,
-          ) +
-          'break;';
-      }
-
-      builder += '}';
     }
   }
 
