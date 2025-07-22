@@ -1,28 +1,21 @@
 import categories from './src/_.js';
-import { measure } from 'mitata/src/lib.mjs';
+import { now } from 'mitata/src/lib.mjs';
 import { format } from './utils.js';
 
+const exec = new Function('n', 'f', '"use strict";var a=n();f()("GET","/");var b=n();return b-a');
+
 for (const key in categories) {
-  const results: { name: string; ns: number }[] = [];
   console.log(format.header(key) + ':');
 
-  const handlers = categories[key];
-  for (const name in handlers) {
-    const fn = handlers[name];
+  const results = Object
+    .entries(categories[key])
+    .map(
+      ([name, handler]) => ({
+        name, ns: exec(now, handler)
+      })
+    )
+    .sort((a, b) => a.ns - b.ns);
 
-    const res = await measure(() => fn()('GET', '/'), {
-      inner_gc: true,
-      warmup_samples: 0,
-      max_samples: 1,
-    });
-
-    results.push({
-      name,
-      ns: res.avg,
-    });
-  }
-
-  results.sort((a, b) => a.ns - b.ns);
   const baseline = results[0].ns;
 
   for (let i = 0; i < results.length; i++) {
