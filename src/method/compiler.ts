@@ -11,8 +11,8 @@ export default (
   let str = '';
 
   for (const key in router)
-    if (key !== '')
-      str +=
+    key !== '' &&
+      (str +=
         (str === '' ? 'if(' : 'else if(') +
         methodInput +
         '==="' +
@@ -20,7 +20,7 @@ export default (
         '"){' +
         (allRouter == null ? parsePath : '') +
         compilePath(router[key]!, startIndex) +
-        '}';
+        '}');
   return allRouter == null
     ? str
     : parsePath + str + compilePath(allRouter, startIndex);

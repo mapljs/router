@@ -45,9 +45,9 @@ export const compile = (
     builder = 'if(' + constants.PATH_LEN + '>' + currentIdx + '){';
   idx += partLen;
 
-  if (!noStore)
-    builder +=
-      'if(' + constants.PATH_LEN + '===' + currentIdx + '){' + node[1] + '}';
+  noStore ||
+    (builder +=
+      'if(' + constants.PATH_LEN + '===' + currentIdx + '){' + node[1] + '}');
 
   if (node[2] != null) {
     const childrenEntries = Object.entries(node[2]);
@@ -101,8 +101,8 @@ export const compile = (
       slashIndex = constants.CURRENT_PARAM_IDX;
     }
 
-    if (hasStore)
-      builder +=
+    hasStore &&
+      (builder +=
         'if(' +
         slashIndex +
         '===-1){let ' +
@@ -114,10 +114,10 @@ export const compile = (
           : constants.PATH + '.slice(' + currentIdx + ')') +
         ';' +
         params[1] +
-        '}';
+        '}');
 
-    if (hasChild)
-      builder +=
+    hasChild &&
+      (builder +=
         (hasStore ? 'else if(' : 'if(') +
         constants.CURRENT_PARAM_IDX +
         '>' +
@@ -138,11 +138,11 @@ export const compile = (
           0,
           constants.CURRENT_PARAM_IDX + '+',
         ) +
-        '}';
+        '}');
   }
 
-  if (node[4] != null)
-    builder +=
+  node[4] == null ||
+    (builder +=
       'let ' +
       constants.PARAMS +
       paramCount +
@@ -151,7 +151,7 @@ export const compile = (
         ? constants.PATH
         : constants.PATH + '.slice(' + currentIdx + ')') +
       ';' +
-      node[4];
+      node[4]);
 
   return builder + '}';
 };

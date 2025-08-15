@@ -2,18 +2,20 @@ import categories from './src/_.js';
 import { now } from 'mitata/src/lib.mjs';
 import { format } from './utils.js';
 
-const exec = new Function('n', 'f', '"use strict";var a=n();f()("GET","/");var b=n();return b-a');
+const exec = new Function(
+  'n',
+  'f',
+  '"use strict";var a=n();f()("GET","/");var b=n();return b-a',
+);
 
 for (const key in categories) {
   console.log(format.header(key) + ':');
 
-  const results = Object
-    .entries(categories[key])
-    .map(
-      ([name, handler]) => ({
-        name, ns: exec(now, handler)
-      })
-    )
+  const results = Object.entries(categories[key])
+    .map(([name, handler]) => ({
+      name,
+      ns: exec(now, handler),
+    }))
     .sort((a, b) => a.ns - b.ns);
 
   const baseline = results[0].ns;
