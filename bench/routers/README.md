@@ -6,9 +6,6 @@ Requirements: [node](https://nodejs.org) 24, [bun](https://bun.sh) 1.2
 # Install dependencies & build mapl
 cd ../.. && bun i && bun task build && cd bench/routers && bun i
 
-# Startup bench
-bun startup
-
 # Performance bench
 bun perf
 ```
