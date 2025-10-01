@@ -29,6 +29,7 @@
     "bracketSpacing": true
   },
   "linter": {
+    "ignore": ["./snapshots/**/*"],
     "enabled": true,
     "rules": {
       "style": {

@@ -11,10 +11,10 @@ export default (m, p) => {
     } else if (p === '/very/deeply/nested/route/hello/there') {
       return 9;
     }
-    {
-      let l = p.length;
-      if (l > 1) {
-        if (p[1] === 'e') {
+    let l = p.length;
+    if (l > 1) {
+      switch (p.charCodeAt(1)) {
+        case 101: {
           if (l > 7)
             if (p.startsWith('vent/', 2)) {
               let j = p.indexOf('/', 7);
@@ -30,7 +30,8 @@ export default (m, p) => {
                 }
               }
             }
-        } else if (p[1] === 'm') {
+        }
+        case 109: {
           if (l > 5)
             if (p.startsWith('ap/', 2)) {
               let j = p.indexOf('/', 5);
@@ -43,48 +44,50 @@ export default (m, p) => {
                 }
               }
             }
-        } else if (p[1] === 'u') {
+        }
+        case 117: {
           if (l > 13)
             if (p.startsWith('ser/lookup/', 2)) {
-              if (p[13] === 'e') {
-                if (l > 19)
-                  if (p.startsWith('mail/', 14)) {
-                    if (p.indexOf('/', 19) === -1) {
-                      let q0 = p.slice(19);
-                      return 4;
+              switch (p.charCodeAt(13)) {
+                case 101: {
+                  if (l > 19)
+                    if (p.startsWith('mail/', 14)) {
+                      if (p.indexOf('/', 19) === -1) {
+                        let q0 = p.slice(19);
+                        return 4;
+                      }
                     }
-                  }
-              } else if (p[13] === 'u') {
-                if (l > 22)
-                  if (p.startsWith('sername/', 14)) {
-                    if (p.indexOf('/', 22) === -1) {
-                      let q0 = p.slice(22);
-                      return 3;
+                }
+                case 117: {
+                  if (l > 22)
+                    if (p.startsWith('sername/', 14)) {
+                      if (p.indexOf('/', 22) === -1) {
+                        let q0 = p.slice(22);
+                        return 3;
+                      }
                     }
-                  }
+                }
               }
             }
         }
       }
     }
   } else if (m === 'POST') {
-    {
-      let l = p.length;
-      if (l > 1) {
-        if (p[1] === 'e') {
-          if (l > 7)
-            if (p.startsWith('vent/', 2)) {
-              let j = p.indexOf('/', 7);
-              if (j > 7) {
-                let q0 = p.slice(7, j);
-                if (p.startsWith('comment', j + 1)) {
-                  if (l === j + 8) {
-                    return 10;
-                  }
+    let l = p.length;
+    if (l > 1) {
+      if (p.charCodeAt(1) === 101) {
+        if (l > 7)
+          if (p.startsWith('vent/', 2)) {
+            let j = p.indexOf('/', 7);
+            if (j > 7) {
+              let q0 = p.slice(7, j);
+              if (p.startsWith('comment', j + 1)) {
+                if (l === j + 8) {
+                  return 10;
                 }
               }
             }
-        }
+          }
       }
     }
   }

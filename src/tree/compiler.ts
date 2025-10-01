@@ -24,11 +24,11 @@ export const compile = (
           currentIdx +
           ')if(' +
           constants.PATH +
-          '[' +
+          '.charCodeAt(' +
           start +
-          ']==="' +
-          node[0][1] +
-          '"){'
+          ')===' +
+          node[0].charCodeAt(1) +
+          '){'
         : // Don't cause deopt for other paths
           (noStore
             ? 'if(' + constants.PATH_LEN + '>' + currentIdx + ')if('
@@ -52,17 +52,17 @@ export const compile = (
   if (node[2] != null) {
     const childrenEntries = Object.entries(node[2]);
 
-    for (let i = 0; i < childrenEntries.length; i++) {
+    if (childrenEntries.length === 1) {
       builder +=
-        (i !== 0 ? 'else if(' : 'if(') +
+        'if(' +
         constants.PATH +
-        '[' +
+        '.charCodeAt(' +
         currentIdx +
-        ']==="' +
-        String.fromCharCode(+childrenEntries[i][0]) +
-        '"){' +
+        ')===' +
+        childrenEntries[0][0] +
+        '){' +
         compile(
-          childrenEntries[i][1],
+          childrenEntries[0][1],
 
           paramCount,
 
@@ -70,6 +70,27 @@ export const compile = (
           idxPrefix,
         ) +
         '}';
+    } else {
+      builder +=
+        'switch(' + constants.PATH + '.charCodeAt(' + currentIdx + ')){';
+
+      for (let i = 0; i < childrenEntries.length; i++) {
+        builder +=
+          'case ' +
+          childrenEntries[i][0] +
+          ':{' +
+          compile(
+            childrenEntries[i][1],
+
+            paramCount,
+
+            idx,
+            idxPrefix,
+          ) +
+          '}';
+      }
+
+      builder += '}';
     }
   }
 
