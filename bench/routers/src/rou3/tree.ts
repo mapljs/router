@@ -1,7 +1,7 @@
 import { findRoute } from 'rou3';
-import { basicAPI } from './_utils.js';
+import { basicAPI } from './_utils.ts';
 
-import type { Subject } from '../../cases.js';
+import type { Subject } from '../../cases.ts';
 
 export default {
   'basic-api': () => {

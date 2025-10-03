@@ -1,4 +1,4 @@
-import { format, list, rand } from './utils.js';
+import { format, list, rand } from './utils.ts';
 
 // List cases
 const CASES = 50;
@@ -87,10 +87,9 @@ const generateTests = (c: Case): CaseTests => {
   return {
     routes: store,
     fallbacks: Object.entries(c.fallbacks)
-      .map(([method, paths]) =>
+      .flatMap(([method, paths]) =>
         paths.map((path): Test => ({ method, path, expected: '' })),
-      )
-      .flat(),
+      ),
   };
 };
 

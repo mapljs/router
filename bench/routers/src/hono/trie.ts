@@ -1,5 +1,5 @@
 import { TrieRouter } from 'hono/router/trie-router';
-import type { Subject } from '../../cases.js';
+import type { Subject } from '../../cases.ts';
 
 export default {
   'basic-api': () => {

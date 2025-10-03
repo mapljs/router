@@ -10,11 +10,9 @@
     // Bundler mode
     "moduleResolution": "Bundler",
     "verbatimModuleSyntax": true,
-    "skipLibCheck": true,
-    // Paths
-    "paths": {
-      "@mapl/router/*": ["../lib/*"]
-    }
+    "noEmit": true,
+    "allowImportingTsExtensions": true,
+    "skipLibCheck": true
   },
   "include": ["./**/*.ts"]
 }

@@ -1,10 +1,10 @@
-import type { Subject } from '../cases.js';
+import type { Subject } from '../cases.ts';
 
-import * as mapl from './mapl/_.js';
-import * as hono from './hono/_.js';
-import * as koa from './koa.js';
-import * as rou3 from './rou3/_.js';
-import * as trek from './trek.js';
+import * as mapl from './mapl/_.ts';
+import * as hono from './hono/_.ts';
+import * as koa from './koa.ts';
+import * as rou3 from './rou3/_.ts';
+import * as trek from './trek.ts';
 
 const FILTERS = {
   includeSubject: (name) => true,

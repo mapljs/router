@@ -1,5 +1,5 @@
 import { PatternRouter } from 'hono/router/pattern-router';
-import type { Subject } from '../../cases.js';
+import type { Subject } from '../../cases.ts';
 
 export default {
   'basic-api': () => {

@@ -1,7 +1,7 @@
 import { compileRouter } from 'rou3/compiler';
-import { basicAPI } from './_utils.js';
+import { basicAPI } from './_utils.ts';
 
-import type { Subject } from '../../cases.js';
+import type { Subject } from '../../cases.ts';
 
 export default {
   'basic-api': () => {

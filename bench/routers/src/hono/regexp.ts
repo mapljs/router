@@ -1,5 +1,5 @@
 import { RegExpRouter } from 'hono/router/reg-exp-router';
-import type { Subject } from '../../cases.js';
+import type { Subject } from '../../cases.ts';
 
 export default {
   'basic-api': () => {
@@ -24,7 +24,7 @@ export default {
     router.add(
       'GET',
       '/event/:a/comments',
-      (arr, map) => '6: ' + arr[map['a']],
+      (arr, map) => '6: ' + arr[map.a],
     );
     router.add('GET', '/map/:a/events', (arr, map) => '7: ' + arr[map.a]);
     router.add('GET', '/status', (_, _1) => '8');

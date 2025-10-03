@@ -1,7 +1,7 @@
 import { createRouter, insertItem } from '@mapl/router/method';
-import type { Node } from '@mapl/router/tree/node.js';
+import type { Node } from '@mapl/router/tree/node';
 
-import type { Subject } from '../../cases.js';
+import type { Subject } from '../../cases.ts';
 
 const state = [[], 1] as const;
 

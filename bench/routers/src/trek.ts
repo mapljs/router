@@ -1,4 +1,4 @@
-import type { Subject } from '../cases.js';
+import type { Subject } from '../cases.ts';
 import Router from 'trek-router';
 
 export const tree = {

@@ -1,4 +1,4 @@
-import type { Subject } from '../cases.js';
+import type { Subject } from '../cases.ts';
 import KoaTreeRouter from 'koa-tree-router';
 
 export const tree = {

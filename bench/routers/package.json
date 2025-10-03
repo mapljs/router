@@ -12,8 +12,9 @@
     "@medley/router": "^0.2.1",
     "hono": "^4.7.11",
     "koa-tree-router": "^0.13.1",
-    "rou3": "^0.7.3",
-    "trek-router": "^1.2.0"
+    "rou3": "^0.7.7",
+    "trek-router": "^1.2.0",
+    "@mapl/router": "../../lib"
   },
   "devDependencies": {
     "picocolors": "^1.1.1"

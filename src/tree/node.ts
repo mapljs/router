@@ -1,21 +1,21 @@
 export type Node<T = unknown> = [
   part: string,
-  store: T | undefined,
-  children: Node<T>[] | undefined,
-  params: ParamNode<T> | undefined,
-  wildcardStore: T | undefined,
+  store: T | null,
+  children: Node<T>[] | null,
+  params: ParamNode<T> | null,
+  wildcardStore: T | null,
 ];
 
 export type ParamNode<T = unknown> = [
-  child: Node<T> | undefined,
-  store: T | undefined,
+  child: Node<T> | null,
+  store: T | null,
 ];
 
 // Implementations
-export const createNode = <T>(part: string): Node<T> => [part, , , , ,];
+export const createNode = <T>(part: string): Node<T> => [part, null, null, null, null];
 export const createParamNode = (nextNode: ParamNode[0]): ParamNode => [
   nextNode,
-  ,
+  null
 ];
 export const cloneNode = (node: Node, part: string): Node => [
   part,
@@ -33,7 +33,7 @@ export const resetNode = (
   node[0] = part;
   node[2] = children;
 
-  node[1] = node[3] = node[4] = undefined;
+  node[1] = node[3] = node[4] = null;
 };
 
 // Travel until the end of the node (path should not include end param or wildcard)
@@ -116,6 +116,6 @@ export const insertItem = <T>(node: Node<T>, path: string, item: T): void => {
     if (path[path.length - 2] === '*')
       visitNode(node, path.slice(0, -2).split('*'))[4] = item;
     // End with params
-    else (visitNode(node, path.slice(0, -1).split('*'))[3] ??= [, ,])[1] = item;
+    else (visitNode(node, path.slice(0, -1).split('*'))[3] ??= [null, null])[1] = item;
   } else visitNode(node, path.split('*'))[1] = item;
 };

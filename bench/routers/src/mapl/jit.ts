@@ -2,7 +2,7 @@ import { createRouter, insertItem } from '@mapl/router/method';
 import { countParams } from '@mapl/router/path';
 import compile from '@mapl/router/method/compiler';
 
-import type { Subject } from '../../cases.js';
+import type { Subject } from '../../cases.ts';
 
 export default {
   'basic-api': () => {

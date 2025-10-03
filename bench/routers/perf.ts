@@ -1,8 +1,8 @@
-import { validate, allTests, type Test } from './cases.js';
-import categories from './src/_.js';
+import { validate, allTests, type Test } from './cases.ts';
+import categories from './src/_.ts';
 import { writeFileSync } from 'node:fs';
 import { bench, do_not_optimize, run, summary } from 'mitata';
-import { RUNTIME } from './utils.js';
+import { RUNTIME } from './utils.ts';
 
 for (const cat in categories) {
   console.log('Category:', cat);
