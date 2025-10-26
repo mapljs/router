@@ -86,10 +86,9 @@ const generateTests = (c: Case): CaseTests => {
 
   return {
     routes: store,
-    fallbacks: Object.entries(c.fallbacks)
-      .flatMap(([method, paths]) =>
-        paths.map((path): Test => ({ method, path, expected: '' })),
-      ),
+    fallbacks: Object.entries(c.fallbacks).flatMap(([method, paths]) =>
+      paths.map((path): Test => ({ method, path, expected: '' })),
+    ),
   };
 };
 

@@ -1,7 +1,14 @@
 import { describe, test, expect } from 'bun:test';
 
-import { createRouter, insertItem } from '@mapl/router/path';
-import compileRouter from './utils/compileRouter';
+import { createRouter, insertItem, type Router } from '@mapl/router/path';
+
+import { PATH } from '@mapl/router/constants';
+import buildRouter from '@mapl/router/path/compiler';
+
+// eslint-disable-next-line
+const compileRouter = (root: Router<string>): ((path: string) => any) =>
+  // eslint-disable-next-line
+  Function(`return (${PATH})=>{${buildRouter(root, 0)}}`)();
 
 const runTest = (samplePaths: string[], label: string) => {
   // Build the tree

@@ -6,16 +6,19 @@ export type Node<T = unknown> = [
   wildcardStore: T | null,
 ];
 
-export type ParamNode<T = unknown> = [
-  child: Node<T> | null,
-  store: T | null,
-];
+export type ParamNode<T = unknown> = [child: Node<T> | null, store: T | null];
 
 // Implementations
-export const createNode = <T>(part: string): Node<T> => [part, null, null, null, null];
+export const createNode = <T>(part: string): Node<T> => [
+  part,
+  null,
+  null,
+  null,
+  null,
+];
 export const createParamNode = (nextNode: ParamNode[0]): ParamNode => [
   nextNode,
-  null
+  null,
 ];
 export const cloneNode = (node: Node, part: string): Node => [
   part,
@@ -116,6 +119,8 @@ export const insertItem = <T>(node: Node<T>, path: string, item: T): void => {
     if (path[path.length - 2] === '*')
       visitNode(node, path.slice(0, -2).split('*'))[4] = item;
     // End with params
-    else (visitNode(node, path.slice(0, -1).split('*'))[3] ??= [null, null])[1] = item;
+    else
+      (visitNode(node, path.slice(0, -1).split('*'))[3] ??= [null, null])[1] =
+        item;
   } else visitNode(node, path.split('*'))[1] = item;
 };

@@ -21,11 +21,7 @@ export default {
       (arr, map) => '4: ' + arr[map.a],
     );
     router.add('GET', '/event/:a', (arr, map) => '5: ' + arr[map.a]);
-    router.add(
-      'GET',
-      '/event/:a/comments',
-      (arr, map) => '6: ' + arr[map.a],
-    );
+    router.add('GET', '/event/:a/comments', (arr, map) => '6: ' + arr[map.a]);
     router.add('GET', '/map/:a/events', (arr, map) => '7: ' + arr[map.a]);
     router.add('GET', '/status', (_, _1) => '8');
     router.add('GET', '/very/deeply/nested/route/hello/there', (_, _1) => '9');
