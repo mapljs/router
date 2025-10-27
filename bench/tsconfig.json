@@ -3,16 +3,20 @@
     // Enable latest features
     "lib": ["ESNext", "DOM", "DOM.Iterable"],
     "target": "ESNext",
-    "module": "ESNext",
+    "module": "Preserve",
     "moduleDetection": "force",
     "resolveJsonModule": true,
-    "isolatedModules": true,
+    "jsx": "react-jsx",
+    "allowJs": true,
     // Bundler mode
-    "moduleResolution": "Bundler",
+    "moduleResolution": "bundler",
     "verbatimModuleSyntax": true,
-    "noEmit": true,
-    "allowImportingTsExtensions": true,
-    "skipLibCheck": true
-  },
-  "include": ["./**/*.ts"]
+    // Best practices
+    "strict": true,
+    "skipLibCheck": true,
+    // Alias
+    "paths": {
+      "@mapl/router/*": ["../lib/*"]
+    }
+  }
 }

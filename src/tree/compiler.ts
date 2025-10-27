@@ -39,9 +39,8 @@ export const compile = (
           '",' +
           start +
           ')){';
-  }
-  // Don't cause deopt for other paths
-  else if (noStore)
+  } else if (noStore)
+    // Don't cause deopt for other paths
     builder = 'if(' + constants.PATH_LEN + '>' + currentIdx + '){';
   idx += partLen;
 
@@ -87,7 +86,7 @@ export const compile = (
             idx,
             idxPrefix,
           ) +
-          '}';
+          'break}';
       }
 
       builder += '}';
