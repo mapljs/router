@@ -20,7 +20,7 @@ export const paramsCache = (paramCnt: number): ArgsCache => {
 };
 
 export const addArg = (name: string, cache: ArgsCache): ArgsCache => {
-  const arr: ArgsCache = [cache[0] === '' ? name : cache[0] + name] as any;
+  const arr: ArgsCache = [cache[0] === '' ? name : cache[0] + ',' + name] as any;
   for (let i = 1; i < cache.length; i++) arr.push(cache[i] + ',' + name);
   return arr;
 };
