@@ -9,6 +9,13 @@ export type Node<T = unknown> = [
 export type ParamNode<T = unknown> = [child: Node<T> | null, store: T | null];
 
 // Implementations
+export const isEmptyRoot = (node: Node<any>): boolean =>
+  node[0] === '/' &&
+  node[1] === null &&
+  node[2] === null &&
+  node[3] === null &&
+  node[4] === null;
+
 export const createNode = <T>(part: string): Node<T> => [
   part,
   null,
@@ -16,10 +23,12 @@ export const createNode = <T>(part: string): Node<T> => [
   null,
   null,
 ];
+
 export const createParamNode = (nextNode: ParamNode[0]): ParamNode => [
   nextNode,
   null,
 ];
+
 export const cloneNode = (node: Node, part: string): Node => [
   part,
   node[1],

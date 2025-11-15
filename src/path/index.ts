@@ -4,19 +4,23 @@ import {
   type Node,
 } from '../tree/node.js';
 
+/**
+ * @example
+ * [createNode('/'), '/', 'return new Response("Hi");', '/param/*', 'return new Response(p0)'];
+ */
 export type Router<T = unknown> = [
-  staticMap: [path: string, item: T][],
-  root: Node<T> | null,
+  root: Node<T>,
+  // TS can't represent this type
+  ...staticMap: any[]
 ];
 
-export const createRouter = <T>(): Router<T> => [[], null];
+export const createRouter = <T>(): Router<T> => [createNode('/')];
 
 export const insertItem = <T>(
   router: Router<T>,
   path: string,
   item: T,
 ): void => {
-  if (path.includes('*'))
-    nodeInsertItem((router[1] ??= createNode('/')), path, item);
-  else router[0].push([path, item] as const);
+  (path.includes('*') && nodeInsertItem(router[0], path, item)) ||
+    router.push(path, item);
 };

@@ -1,27 +1,28 @@
 import type { Router } from './index.js';
 import { compile } from '../tree/compiler.js';
+import { isEmptyRoot } from '../tree/node.js';
 
 export default (router: Router<string>, startIndex: 0 | 1): string => {
   let str = '';
-  for (let i = 0, pairs = router[0]; i < pairs.length; i++)
+  for (let i = 1; i < router.length; i += 2)
     str +=
       (str === '' ? 'if(' : 'else if(') +
       constants.PATH +
       '==="' +
-      pairs[i][0].slice(startIndex) +
+      router[i].slice(startIndex) +
       '"){' +
-      pairs[i][1] +
+      router[i + 1] +
       '}';
 
   return (
     str +
-    (router[1] == null
+    (isEmptyRoot(router[0])
       ? ''
       : 'let ' +
         constants.PATH_LEN +
         '=' +
         constants.PATH +
         '.length;' +
-        compile(router[1], 0, -startIndex, ''))
+        compile(router[0], 0, -startIndex, ''))
   );
 };
