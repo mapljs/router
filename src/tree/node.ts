@@ -9,8 +9,7 @@ export type Node<T = unknown> = [
 export type ParamNode<T = unknown> = [child: Node<T> | null, store: T | null];
 
 // Implementations
-export const isEmptyRoot = (node: Node<any>): boolean =>
-  node[0] === '/' &&
+export const isEmptyNode = (node: Node<any>): boolean =>
   node[1] === null &&
   node[2] === null &&
   node[3] === null &&

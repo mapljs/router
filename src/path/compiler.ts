@@ -1,6 +1,6 @@
 import type { Router } from './index.js';
 import { compile } from '../tree/compiler.js';
-import { isEmptyRoot } from '../tree/node.js';
+import { isEmptyNode } from '../tree/node.js';
 
 export default (router: Router<string>, startIndex: 0 | 1): string => {
   let str = '';
@@ -16,7 +16,7 @@ export default (router: Router<string>, startIndex: 0 | 1): string => {
 
   return (
     str +
-    (isEmptyRoot(router[0])
+    (isEmptyNode(router[0])
       ? ''
       : 'let ' +
         constants.PATH_LEN +
