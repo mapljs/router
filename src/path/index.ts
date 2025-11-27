@@ -21,6 +21,5 @@ export const insertItem = <T>(
   path: string,
   item: T,
 ): void => {
-  (path.includes('*') && nodeInsertItem(router[0], path, item)) ||
-    router.push(path, item);
+  path.includes('*') ? nodeInsertItem(router[0], path, item) : router.push(path, item);
 };
