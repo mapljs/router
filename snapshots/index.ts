@@ -1,6 +1,6 @@
 import { createRouter, insertItem } from '@mapl/router/method';
 import compile from '@mapl/router/method/compiler';
-import { PATH, PATH_END, PATH_LEN, PATH_START } from '@mapl/router/constants';
+import { PATH } from '@mapl/router/constants';
 
 export const write = (
   outdir: string,
@@ -15,7 +15,7 @@ export const write = (
   }
   Bun.write(
     outdir + name.toLowerCase().replaceAll(' ', '-') + '.ts',
-    `export default(r:Request)=>{${compile(router, 'r.method', `let ${PATH}=r.url,${PATH_START}=${PATH}.indexOf('/',12)+1,${PATH_END}=${PATH}.indexOf('?',${PATH_START}),${PATH_LEN}=${PATH_END}===-1?${PATH}.length:${PATH_END};`, 1)}};`,
+    `export default(${PATH}: string, method: string)=>{${compile(router, 'method', '', 1)}};`,
   );
 };
 

@@ -6,92 +6,44 @@ export const compile = (
   idx: number,
   idxPrefix: string,
 ): string => {
-  let builder = '{';
-  const noStore = node[1] == null;
-  const partLen = node[0].length;
+  let builder = '';
+  let currentIdx = idxPrefix + idx;
 
-  let currentIdx = idxPrefix + (idx + partLen);
-
-  // Skip checking first character since it's guaranteed to be checked
-  if (partLen > 1) {
-    const start = idxPrefix + (idx + 1);
-    builder =
-      partLen === 2
-        ? // Prevent index out of bound causing deopt
-          'if(' +
-          constants.PATH_LEN +
-          (noStore ? '>' : '>=') +
-          currentIdx +
-          ')if(' +
-          constants.PATH +
-          '.charCodeAt(' +
-          start +
-          ')===' +
-          node[0].charCodeAt(1) +
-          '){'
-        : // Don't cause deopt for other paths
-          (noStore
-            ? 'if(' + constants.PATH_LEN + '>' + currentIdx + ')if('
-            : 'if(') +
-          constants.PATH +
-          '.startsWith("' +
-          node[0].slice(1) +
-          '",' +
-          start +
-          ')){';
-  } else if (noStore)
-    // Don't cause deopt for other paths
-    builder = 'if(' + constants.PATH_LEN + '>' + currentIdx + '){';
-  idx += partLen;
-
-  noStore ||
+  node[1] == null ||
     (builder +=
       'if(' + constants.PATH_LEN + '===' + currentIdx + '){' + node[1] + '}');
 
-  if (node[2] != null) {
-    const childrenEntries = Object.entries(node[2]);
+  if (node[2] != null)
+    for (
+      let i = 0, children = Object.values(node[2]);
+      i < children.length;
+      i++
+    ) {
+      const childNode = children[i];
+      const nodePath = childNode[0];
 
-    if (childrenEntries.length === 1) {
+      const nextIdx = idx + nodePath.length;
+
       builder +=
-        'if(' +
+        (childNode[1] == null
+          ? (i > 0 ? 'else if(' : 'if(') +
+            constants.PATH_LEN +
+            '>' +
+            idxPrefix +
+            nextIdx +
+            '&&'
+          : i > 0
+            ? 'else if('
+            : 'if(') +
         constants.PATH +
-        '.charCodeAt(' +
+        '.startsWith("' +
+        nodePath +
+        '",' +
         currentIdx +
-        ')===' +
-        childrenEntries[0][0] +
-        '){' +
-        compile(
-          childrenEntries[0][1],
-
-          paramCount,
-
-          idx,
-          idxPrefix,
-        ) +
+        ')){' +
+        compile(childNode, paramCount, nextIdx, idxPrefix) +
         '}';
-    } else {
-      builder +=
-        'switch(' + constants.PATH + '.charCodeAt(' + currentIdx + ')){';
-
-      for (let i = 0; i < childrenEntries.length; i++) {
-        builder +=
-          'case ' +
-          childrenEntries[i][0] +
-          ':{' +
-          compile(
-            childrenEntries[i][1],
-
-            paramCount,
-
-            idx,
-            idxPrefix,
-          ) +
-          'break}';
-      }
-
-      builder += '}';
     }
-  }
 
   if (node[3] != null) {
     const params = node[3];
@@ -136,8 +88,11 @@ export const compile = (
         params[1] +
         '}');
 
-    hasChild &&
-      (builder +=
+    if (hasChild) {
+      const childNode = params[0]!;
+      const nodePath = childNode[0];
+
+      builder +=
         (hasStore ? 'else if(' : 'if(') +
         constants.CURRENT_PARAM_IDX +
         '>' +
@@ -152,13 +107,32 @@ export const compile = (
         ',' +
         constants.CURRENT_PARAM_IDX +
         ');' +
+        (childNode[1] == null
+          ? 'if(' +
+            constants.PATH_LEN +
+            '>' +
+            constants.CURRENT_PARAM_IDX +
+            '+' +
+            nodePath.length +
+            ')'
+          : '') +
+        (nodePath.length > 1
+          ? 'if(' +
+            constants.PATH +
+            '.startsWith("' +
+            nodePath.slice(1) +
+            '",' +
+            constants.CURRENT_PARAM_IDX +
+            '+1)){'
+          : '{') +
         compile(
-          params[0]!,
+          childNode,
           paramCount + 1,
-          0,
+          nodePath.length,
           constants.CURRENT_PARAM_IDX + '+',
         ) +
-        '}');
+        '}}';
+    }
   }
 
   node[4] == null ||
@@ -173,5 +147,5 @@ export const compile = (
       ';' +
       node[4]);
 
-  return builder + '}';
+  return builder;
 };

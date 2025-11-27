@@ -2,13 +2,14 @@ import { createRouter, insertItem } from '@mapl/router/method';
 import type { Node } from '@mapl/router/tree/node.ts';
 
 import type { Subject } from '../../cases.ts';
+import { createMap } from './regexp.ts';
 
 const matchNode = <T>(
   node: Node<T>,
   path: string,
   params: string[],
   start: number,
-): T | null => {
+): T | null | undefined => {
   const part = node[0];
   const partLen = part.length;
 
@@ -104,7 +105,7 @@ export default {
       new Map();
     for (const method in router) {
       const methodRouter = router[method];
-      methodMap.set(method, [new Map(methodRouter[0]), methodRouter[1]]);
+      methodMap.set(method, [createMap(methodRouter), methodRouter[0]]);
     }
 
     return (method, path) => {
@@ -115,7 +116,7 @@ export default {
         if (match != null) return match();
 
         if (tmp[1] != null) {
-          const params = [];
+          const params: string[] = [];
           const dmatch = matchNode(tmp[1], path, params, 0);
           if (dmatch != null) return dmatch(params);
         }

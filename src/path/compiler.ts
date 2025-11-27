@@ -9,7 +9,7 @@ export default (router: Router<string>, startIndex: 0 | 1): string => {
       (str === '' ? 'if(' : 'else if(') +
       constants.PATH +
       '==="' +
-      router[i].slice(startIndex) +
+      router[i].slice(1 - startIndex) +
       '"){' +
       router[i + 1] +
       '}';
@@ -23,6 +23,6 @@ export default (router: Router<string>, startIndex: 0 | 1): string => {
         '=' +
         constants.PATH +
         '.length;' +
-        compile(router[0], 0, -startIndex, ''))
+        compile(router[0], 0, startIndex, ''))
   );
 };

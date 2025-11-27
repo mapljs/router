@@ -10,10 +10,7 @@ export type ParamNode<T = unknown> = [child: Node<T> | null, store: T | null];
 
 // Implementations
 export const isEmptyNode = (node: Node<any>): boolean =>
-  node[1] === null &&
-  node[2] === null &&
-  node[3] === null &&
-  node[4] === null;
+  node[1] === null && node[2] === null && node[3] === null && node[4] === null;
 
 export const createNode = <T>(part: string): Node<T> => [
   part,

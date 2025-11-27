@@ -1,5 +1,5 @@
 import { createRouter, insertItem } from '@mapl/router/method';
-import { countParams } from '@mapl/router/path';
+import { countParams } from '@mapl/router/utils';
 import compile from '@mapl/router/method/compiler';
 
 import type { Subject } from '../../cases.ts';
@@ -33,7 +33,7 @@ export default {
     insert('POST', '/event/*/comment', 10);
 
     return Function(
-      `'use strict';return(m,p)=>{${compile(router, 'm', '', 0)}return ""}`,
+      `'use strict';return(m,p)=>{${compile(router, 'm', '', 1)}return ""}`,
     )();
   },
 } satisfies Subject;

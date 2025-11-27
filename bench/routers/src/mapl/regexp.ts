@@ -2,6 +2,7 @@ import { createRouter, insertItem } from '@mapl/router/method';
 import type { Node } from '@mapl/router/tree/node';
 
 import type { Subject } from '../../cases.ts';
+import type { Router as PathRouter } from '@mapl/router/path';
 
 const state = [[], 1] as const;
 
@@ -68,6 +69,13 @@ const compileRegExpSource = (node: Node<any>, paramMap: number[]): string => {
   );
 };
 
+export const createMap = <T>(router: PathRouter<T>): Map<string, T> => {
+  const mp = new Map();
+  for (let i = 1; i < router.length; i += 2)
+    mp.set(router[i], router[i + 1]);
+  return mp;
+}
+
 export default {
   'basic-api': () => {
     type Handler = (match: RegExpExecArray, paramsMap: number[]) => string;
@@ -129,15 +137,13 @@ export default {
     > = new Map();
     for (const method in router) {
       const methodRouter = router[method];
-      const arr: any[] = [new Map(methodRouter[0])];
+      const arr: any[] = [createMap(methodRouter)];
 
-      if (methodRouter[1] != null) {
-        resetState();
-        arr.push(
-          new RegExp('^' + compileRegExpSource(methodRouter[1], [])),
-          state[0],
-        );
-      }
+      resetState();
+      arr.push(
+        new RegExp('^' + compileRegExpSource(methodRouter[0], [])),
+        state[0],
+      );
 
       methodMap.set(method, arr as any);
     }
@@ -150,9 +156,9 @@ export default {
         if (match != null) return match();
 
         if (tmp.length > 2) {
-          const dmatch = tmp[1].exec(path);
+          const dmatch = tmp[1]!.exec(path);
           if (dmatch !== null) {
-            const store = tmp[2][dmatch.indexOf('', 1)];
+            const store = tmp[2]![dmatch.indexOf('', 1)];
             return store[0](dmatch, store[1]);
           }
         }

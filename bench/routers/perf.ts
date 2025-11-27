@@ -13,7 +13,7 @@ for (const cat in categories) {
 
   // Validation
   const validHandlers: {
-    [k: string]: ReturnType<(typeof categories)[string][string]>;
+    [k: string]: ReturnType<((typeof categories)[string] & {})[string]>;
   } = {};
 
   for (const name in handlers) {
@@ -60,10 +60,10 @@ for (const cat in categories) {
         name: bench.alias,
         runs: bench.runs.map(({ stats }) => ({
           // Need sorting first before formatting
-          avg: stats.avg,
-          p99: time(stats.p99),
-          p999: time(stats.p999),
-          mem: stats.heap && byte(stats.heap.avg),
+          avg: stats!.avg,
+          p99: time(stats!.p99),
+          p999: time(stats!.p999),
+          mem: stats!.heap && byte(stats!.heap.avg),
         })),
       }) as const,
   );

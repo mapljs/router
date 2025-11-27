@@ -8,7 +8,7 @@ import buildRouter from '@mapl/router/path/compiler';
 // eslint-disable-next-line
 const compileRouter = (root: Router<string>): ((path: string) => any) =>
   // eslint-disable-next-line
-  Function(`return (${PATH})=>{${buildRouter(root, 0)}}`)();
+  Function(`return (${PATH})=>{${buildRouter(root, 1)}}`)();
 
 const runTest = (samplePaths: string[], label: string) => {
   // Build the tree
@@ -22,6 +22,7 @@ const runTest = (samplePaths: string[], label: string) => {
   );
 
   const compiled = compileRouter(router);
+  console.log(label, compiled.toString(), '\n');
 
   describe(label, () => {
     for (let i = 0; i < samplePaths.length; i++) {

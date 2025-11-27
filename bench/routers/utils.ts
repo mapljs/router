@@ -31,7 +31,7 @@ export const rand = {
         pattern.slice(0, -2) +
         list(rand.int(1, 3), () => rand.string(rand.int(3, 5))).join('/');
 
-    const params = [];
+    const params: string[] = [];
     pattern = pattern.replace(/\*/g, () => {
       const item = rand.string(rand.int(2, 10));
       params.push(item);

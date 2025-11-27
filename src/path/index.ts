@@ -11,7 +11,7 @@ import {
 export type Router<T = unknown> = [
   root: Node<T>,
   // TS can't represent this type
-  ...staticMap: any[]
+  ...staticMap: any[],
 ];
 
 export const createRouter = <T>(): Router<T> => [createNode('/')];
@@ -21,5 +21,7 @@ export const insertItem = <T>(
   path: string,
   item: T,
 ): void => {
-  path.includes('*') ? nodeInsertItem(router[0], path, item) : router.push(path, item);
+  path.includes('*')
+    ? nodeInsertItem(router[0], path, item)
+    : router.push(path, item);
 };
