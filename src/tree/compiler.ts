@@ -15,13 +15,14 @@ export const compile = (
 
   if (node[2] != null)
     for (
-      let i = 0, children = Object.values(node[2]);
+      let i = 0,
+        children = Object.values(node[2]);
       i < children.length;
       i++
     ) {
       const childNode = children[i];
-      const nodePath = childNode[0];
 
+      const nodePath = childNode[0];
       const nextIdx = idx + nodePath.length;
 
       builder +=
@@ -82,9 +83,8 @@ export const compile = (
         paramCount +
         '=' +
         (currentIdx === '0'
-          ? constants.PATH
-          : constants.PATH + '.slice(' + currentIdx + ')') +
-        ';' +
+          ? constants.PATH + ';'
+          : constants.PATH + '.slice(' + currentIdx + ');') +
         params[1] +
         '}');
 

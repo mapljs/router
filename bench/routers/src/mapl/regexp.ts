@@ -71,10 +71,9 @@ const compileRegExpSource = (node: Node<any>, paramMap: number[]): string => {
 
 export const createMap = <T>(router: PathRouter<T>): Map<string, T> => {
   const mp = new Map();
-  for (let i = 1; i < router.length; i += 2)
-    mp.set(router[i], router[i + 1]);
+  for (let i = 1; i < router.length; i += 2) mp.set(router[i], router[i + 1]);
   return mp;
-}
+};
 
 export default {
   'basic-api': () => {

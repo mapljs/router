@@ -29,7 +29,17 @@ for (const cat in categories) {
           const fn = validHandlers[name];
 
           yield {
-            [0]: () => testCases.routes[testRoute],
+            [0]: () => testCases.routes[testRoute].map((route) => {
+              const req = new Request('http://localhost:3000' + route.path, { method: route.method });
+              const url = req.url;
+              const pathStart = url.indexOf('/', 12);
+              const pathEnd = url.indexOf('?', pathStart + 1);
+
+              return {
+                method: req.method,
+                path: pathEnd === -1 ? url.slice(pathStart) : url.slice(pathStart, pathEnd)
+              }
+            }),
             bench: (tests: Test[]) => {
               for (let i = 0; i < tests.length; i++)
                 do_not_optimize(fn(tests[i].method, tests[i].path));

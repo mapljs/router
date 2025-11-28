@@ -25,3 +25,9 @@ export const insertItem = <T>(
     ? nodeInsertItem(router[0], path, item)
     : router.push(path, item);
 };
+
+export const createStaticMap = <T>(router: Router<T>): Map<string, T> => {
+  const mp = new Map();
+  for (let i = 1; i < router.length; i += 2) mp.set(router[i], router[i + 1]);
+  return mp;
+};

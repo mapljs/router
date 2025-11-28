@@ -2,6 +2,10 @@ import type { Router } from './index.js';
 import { compile } from '../tree/compiler.js';
 import { isEmptyNode } from '../tree/node.js';
 
+/**
+ * If `startIndex === 1`, input path should start with `/`.
+ * If `startIndex === 0`, input path should have sliced first `/`.
+ */
 export default (router: Router<string>, startIndex: 0 | 1): string => {
   let str = '';
   for (let i = 1; i < router.length; i += 2)
@@ -9,7 +13,7 @@ export default (router: Router<string>, startIndex: 0 | 1): string => {
       (str === '' ? 'if(' : 'else if(') +
       constants.PATH +
       '==="' +
-      router[i].slice(1 - startIndex) +
+      (startIndex === 1 ? router[i] : router[i].slice(1))  +
       '"){' +
       router[i + 1] +
       '}';
