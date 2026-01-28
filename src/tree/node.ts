@@ -44,30 +44,31 @@ export const resetNode = (
   node[1] = node[3] = node[4] = null;
 };
 
-// Travel until the end of the node (path should not include end param or wildcard)
-export const visitNode = (node: Node, parts: string[]): Node => {
+// Travel until the end of a root node (path should not include end param or wildcard)
+export const visitFromRoot = (root: Node, parts: string[]): Node => {
   // Split path by param separator
   for (let i = 0; i < parts.length; ++i) {
     let pathPart = parts[i];
 
-    // Set param node
+    // visit param node only for parts[i > 0]
+    // '/a/*/b/*/c' -> only visit param of '/b' and '/c'
     if (i !== 0) {
-      if (node[3] == null) {
+      if (root[3] == null) {
         const nextNode = createNode(pathPart);
-        node[3] = createParamNode(nextNode);
-        node = nextNode;
-      } else node = node[3][0] ??= createNode(pathPart);
+        root[3] = createParamNode(nextNode);
+        root = nextNode;
+      } else root = root[3][0] ??= createNode(pathPart);
     }
 
     for (let j = 0; ; ++j) {
-      const nodePart = node[0];
+      const nodePart = root[0];
 
       // Reach the end of the pathname but node still continues
       if (j === pathPart.length) {
         if (j < nodePart.length) {
           const children: Node[2] = [];
-          children[nodePart.charCodeAt(j)] = cloneNode(node, nodePart.slice(j));
-          resetNode(node, pathPart, children);
+          children[nodePart.charCodeAt(j)] = cloneNode(root, nodePart.slice(j));
+          resetNode(root, pathPart, children);
         }
 
         break;
@@ -75,15 +76,15 @@ export const visitNode = (node: Node, parts: string[]): Node => {
 
       // Add static child
       if (j === nodePart.length) {
-        if (node[2] == null) node[2] = [];
+        if (root[2] == null) root[2] = [];
         else {
-          const nextNode = node[2][pathPart.charCodeAt(j)] as
+          const nextNode = root[2][pathPart.charCodeAt(j)] as
             | Node<any>
             | undefined;
 
           // Re-run loop with existing static node
           if (nextNode != null) {
-            node = nextNode;
+            root = nextNode;
             pathPart = pathPart.slice(j);
             j = 0;
             continue;
@@ -92,8 +93,8 @@ export const visitNode = (node: Node, parts: string[]): Node => {
 
         // Create and add new node
         const nextNode = createNode(pathPart.slice(j));
-        node[2][pathPart.charCodeAt(j)] = nextNode;
-        node = nextNode;
+        root[2][pathPart.charCodeAt(j)] = nextNode;
+        root = nextNode;
 
         break;
       }
@@ -102,30 +103,34 @@ export const visitNode = (node: Node, parts: string[]): Node => {
       if (pathPart[j] !== nodePart[j]) {
         // Split the old path
         const children: Node[2] = [];
-        children[nodePart.charCodeAt(j)] = cloneNode(node, nodePart.slice(j));
+        children[nodePart.charCodeAt(j)] = cloneNode(root, nodePart.slice(j));
 
         const nextNode = createNode(pathPart.slice(j));
         children[pathPart.charCodeAt(j)] = nextNode;
 
-        resetNode(node, nodePart.substring(0, j), children);
+        resetNode(root, nodePart.slice(0, j), children);
 
-        node = nextNode;
+        root = nextNode;
         break;
       }
     }
   }
 
-  return node;
+  return root;
 };
 
 export const insertItem = <T>(node: Node<T>, path: string, item: T): void => {
-  if (path.endsWith('*')) {
+  if (path[path.length - 1] === '*') {
     // Ends with wildcard
     if (path[path.length - 2] === '*')
-      visitNode(node, path.slice(0, -2).split('*'))[4] = item;
+      visitFromRoot(node, path.slice(0, -2).split('*'))[4] = item;
     // End with params
-    else
-      (visitNode(node, path.slice(0, -1).split('*'))[3] ??= [null, null])[1] =
-        item;
-  } else visitNode(node, path.split('*'))[1] = item;
+    else {
+      const currentNode = visitFromRoot(node, path.slice(0, -1).split('*'));
+      if (currentNode[3] === null)
+        currentNode[3] = [null, item];
+      else
+        currentNode[3][1] = item;
+    }
+  } else visitFromRoot(node, path.split('*'))[1] = item;
 };
