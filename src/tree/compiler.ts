@@ -15,8 +15,7 @@ export const compile = (
 
   if (node[2] != null)
     for (
-      let i = 0,
-        children = Object.values(node[2]);
+      let i = 0, children = Object.values(node[2]);
       i < children.length;
       i++
     ) {

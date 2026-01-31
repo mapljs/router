@@ -1,8 +1,4 @@
-import {
-  createNode,
-  insertItem as nodeInsertItem,
-  type Node,
-} from '../tree/node.js';
+import { insert, type Node } from '../tree/node.js';
 
 /**
  * @example
@@ -14,7 +10,7 @@ export type Router<T = unknown> = [
   ...staticMap: any[],
 ];
 
-export const createRouter = <T>(): Router<T> => [createNode('/')];
+export const createRouter = <T>(): Router<T> => [['/', null, null, null, null]];
 
 export const insertItem = <T>(
   router: Router<T>,
@@ -22,7 +18,7 @@ export const insertItem = <T>(
   item: T,
 ): void => {
   path.includes('*')
-    ? nodeInsertItem(router[0], path, item)
+    ? insert(router[0], 1, path, 1, item)
     : router.push(path, item);
 };
 
