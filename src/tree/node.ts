@@ -88,10 +88,7 @@ export const insert = <T>(
     // * or **
     if (pathChar === 42) {
       // .../**
-      if (
-        pathIdx + 2 === path.length &&
-        path.charCodeAt(pathIdx + 1) === 42
-      ) {
+      if (pathIdx + 2 === path.length && path.charCodeAt(pathIdx + 1) === 42) {
         root[4] = value;
         return;
       }
@@ -186,7 +183,7 @@ export const insert = <T>(
 
     // Doesnt need to set root[1] to null bcuz it will later be set
     root[3] = root[4] = null;
-  };
+  }
 
   root[1] = value;
 };
