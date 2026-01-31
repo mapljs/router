@@ -75,12 +75,12 @@ export const insertNewBranch = <T>(
 // always start checking from index 1 instead of 0
 export const insert = <T>(
   root: Node<T>,
-  partIdx: number,
+  nodePartIdx: number,
   path: string,
   pathIdx: number,
   value: T,
 ): void => {
-  let part = root[0];
+  let nodePart = root[0];
 
   while (pathIdx < path.length) {
     const pathChar = path.charCodeAt(pathIdx);
@@ -110,15 +110,15 @@ export const insert = <T>(
       // .../*/...
       root = root[3][0]! ??= ['/', null, null, null, null];
 
-      partIdx = 1;
+      nodePartIdx = 1;
       // Always a root node
-      part = '/';
+      nodePart = '/';
 
       pathIdx += 2;
     }
 
     // (path) is longer than (currentPart)
-    else if (partIdx === part.length) {
+    else if (nodePartIdx === nodePart.length) {
       const children = root[2];
 
       // Add new children
@@ -136,25 +136,25 @@ export const insert = <T>(
       // Move to next child node
       root = nextNode;
 
-      partIdx = 1;
-      part = root[0];
+      nodePartIdx = 1;
+      nodePart = root[0];
 
       pathIdx++;
     }
 
     // Split the node
-    else if (pathChar !== part.charCodeAt(partIdx)) {
+    else if (pathChar !== nodePart.charCodeAt(nodePartIdx)) {
       // Split the old path
       const children: Node<T>[2] = [];
-      children[part.charCodeAt(partIdx)] = [
-        part.slice(partIdx),
+      children[nodePart.charCodeAt(nodePartIdx)] = [
+        nodePart.slice(nodePartIdx),
         root[1],
         root[2],
         root[3],
         root[4],
       ];
 
-      root[0] = part.slice(0, partIdx);
+      root[0] = nodePart.slice(0, nodePartIdx);
       root[2] = children;
       root[1] = root[3] = root[4] = null;
 
@@ -164,24 +164,24 @@ export const insert = <T>(
 
     // Check next char
     else {
-      partIdx++;
+      nodePartIdx++;
       pathIdx++;
     }
   }
 
   // End of path string but not node part string
-  if (partIdx < part.length) {
+  if (nodePartIdx < nodePart.length) {
     // Split the old path
     const children: Node<T>[2] = [];
-    children[part.charCodeAt(partIdx)] = [
-      part.slice(partIdx),
+    children[nodePart.charCodeAt(nodePartIdx)] = [
+      nodePart.slice(nodePartIdx),
       root[1],
       root[2],
       root[3],
       root[4],
     ];
 
-    root[0] = part.slice(0, partIdx);
+    root[0] = nodePart.slice(0, nodePartIdx);
     root[2] = children;
 
     // Doesnt need to set root[1] to null bcuz it will later be set
