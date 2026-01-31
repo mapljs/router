@@ -183,7 +183,9 @@ export const insert = <T>(
 
     root[0] = part.slice(0, partIdx);
     root[2] = children;
-    root[1] = root[3] = root[4] = null;
+
+    // Doesnt need to set root[1] to null bcuz it will later be set
+    root[3] = root[4] = null;
   };
 
   root[1] = value;
