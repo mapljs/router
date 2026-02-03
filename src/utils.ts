@@ -1,9 +1,11 @@
 export const countParams = (path: string): number => {
-  let cnt = path.endsWith('**') ? 2 : 0;
-  for (
-    let i = path.length - cnt;
-    (i = path.lastIndexOf('*', i - 1)) !== -1;
-    cnt++
-  );
-  return cnt;
+  let cnt = 0;
+  let i = path.lastIndexOf('*');
+
+  while (i > 2) {
+    cnt++;
+    i = path.lastIndexOf('*', i - 2);
+  }
+
+  return i > -1 ? cnt + 1 : cnt;
 };
