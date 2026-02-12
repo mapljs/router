@@ -39,4 +39,12 @@ if (import.meta.main) {
       '/event/*/comment': 10,
     },
   });
+
+  write(OUTDIR, 'Nested API', {
+    GET: {
+      '/user/*/dashboard': 0,
+      '/user/*/account': 1,
+      '/user/*/access': 2,
+    },
+  });
 }

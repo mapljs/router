@@ -19,9 +19,11 @@ export default (p: string, method: string) => {
         return 5;
       } else if (j > 7) {
         let q0 = p.slice(7, j);
-        if (p.startsWith('comments', j + 1)) {
-          if (l === j + 9) {
-            return 6;
+        if (l > j + 1) {
+          if (p.startsWith('comments', j + 1)) {
+            if (l === j + 9) {
+              return 6;
+            }
           }
         }
       }
@@ -29,20 +31,22 @@ export default (p: string, method: string) => {
       let j = p.indexOf('/', 5);
       if (j > 5) {
         let q0 = p.slice(5, j);
-        if (p.startsWith('events', j + 1)) {
-          if (l === j + 7) {
-            return 7;
+        if (l > j + 1) {
+          if (p.startsWith('events', j + 1)) {
+            if (l === j + 7) {
+              return 7;
+            }
           }
         }
       }
-    } else if (l > 13 && p.startsWith('user/lookup/', 1)) {
+    } else if (p.startsWith('user/lookup/', 1)) {
       if (l > 19 && p.startsWith('email/', 13)) {
-        if (p.indexOf('/', 19) === -1) {
+        if (!p.includes('/', 19)) {
           let q0 = p.slice(19);
           return 4;
         }
       } else if (l > 22 && p.startsWith('username/', 13)) {
-        if (p.indexOf('/', 22) === -1) {
+        if (!p.includes('/', 22)) {
           let q0 = p.slice(22);
           return 3;
         }
@@ -54,9 +58,11 @@ export default (p: string, method: string) => {
       let j = p.indexOf('/', 7);
       if (j > 7) {
         let q0 = p.slice(7, j);
-        if (p.startsWith('comment', j + 1)) {
-          if (l === j + 8) {
-            return 10;
+        if (l > j + 1) {
+          if (p.startsWith('comment', j + 1)) {
+            if (l === j + 8) {
+              return 10;
+            }
           }
         }
       }
