@@ -5,10 +5,15 @@ import { createRouter, insertItem, type Router } from '@mapl/router/path';
 import { PATH } from '@mapl/router/constants';
 import buildRouter from '@mapl/router/path/compiler';
 
-// eslint-disable-next-line
-const compileRouter = (root: Router<string>): ((path: string) => any) =>
-  // eslint-disable-next-line
-  (0, eval)(`(${PATH})=>{${buildRouter(root, 1)}}`);
+const compileRouter = (root: Router<string>): ((path: string) => any) => {
+  const content = buildRouter(root, 1);
+  try {
+    return (0, eval)(`(${PATH})=>{${content}}`);
+  } catch (e) {
+    console.error(content);
+    throw e;
+  }
+};
 
 const runTest = (samplePaths: string[], label: string) => {
   // Build the tree

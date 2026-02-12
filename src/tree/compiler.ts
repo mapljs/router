@@ -25,7 +25,8 @@ export const compile = (
       const nextIdx = idx + nodePath.length;
 
       builder +=
-        (childNode[1] == null
+        // Add bound checking if childNode doesn't have store and either has params or wildcard
+        (childNode[1] == null && (childNode[3] != null || childNode[4] != null)
           ? (i > 0 ? 'else if(' : 'if(') +
             constants.PATH_LEN +
             '>' +
@@ -56,28 +57,24 @@ export const compile = (
       currentIdx = constants.PREV_PARAM_IDX;
     }
 
-    let slashIndex =
-      constants.PATH +
-      '.indexOf("/"' +
-      (currentIdx === '0' ? '' : ',' + currentIdx) +
-      ')';
-
     // Need to save the current parameter index if the parameter node is not a leaf node
-    if (hasChild || !hasStore) {
-      builder +=
+    (hasChild || !hasStore) &&
+      (builder +=
         (paramCount > 0 ? '' : 'let ') +
         constants.CURRENT_PARAM_IDX +
         '=' +
-        slashIndex +
-        ';';
-      slashIndex = constants.CURRENT_PARAM_IDX;
-    }
+        constants.PATH +
+        '.indexOf("/",' +
+        currentIdx +
+        ');');
 
     hasStore &&
       (builder +=
         'if(' +
-        slashIndex +
-        '===-1){let ' +
+        (hasChild
+          ? constants.CURRENT_PARAM_IDX + '===-1){let '
+          : // Leaf node can use .includes instead of .indexOf
+            '!' + constants.PATH + '.includes("/",' + currentIdx + ')){let ') +
         constants.PARAMS +
         paramCount +
         '=' +
