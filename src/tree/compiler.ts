@@ -1,5 +1,8 @@
 import type { Node } from './node.js';
 
+export const shouldBoundCheck = (node: Node<string>): boolean =>
+  node[1] == null && (node[3] != null || node[4] != null);
+
 export const compile = (
   node: Node<string>,
   paramCount: number,
@@ -26,7 +29,7 @@ export const compile = (
 
       builder +=
         // Add bound checking if childNode doesn't have store and either has params or wildcard
-        (childNode[1] == null && (childNode[3] != null || childNode[4] != null)
+        (shouldBoundCheck(childNode)
           ? (i > 0 ? 'else if(' : 'if(') +
             constants.PATH_LEN +
             '>' +
@@ -86,7 +89,6 @@ export const compile = (
 
     if (hasChild) {
       const childNode = params[0]!;
-      const nodePath = childNode[0];
 
       builder +=
         (hasStore ? 'else if(' : 'if(') +
@@ -102,32 +104,27 @@ export const compile = (
         currentIdx +
         ',' +
         constants.CURRENT_PARAM_IDX +
-        ');' +
-        (childNode[1] == null
-          ? 'if(' +
+        (shouldBoundCheck(childNode)
+          ? ');if(' +
             constants.PATH_LEN +
             '>' +
             constants.CURRENT_PARAM_IDX +
-            '+' +
-            nodePath.length +
-            ')'
-          : '') +
-        (nodePath.length > 1
-          ? 'if(' +
-            constants.PATH +
-            '.startsWith("' +
-            nodePath.slice(1) +
-            '",' +
-            constants.CURRENT_PARAM_IDX +
-            '+1)){'
-          : '{') +
-        compile(
-          childNode,
-          paramCount + 1,
-          nodePath.length,
-          constants.CURRENT_PARAM_IDX + '+',
-        ) +
-        '}}';
+            '+1){' +
+            compile(
+              childNode,
+              paramCount + 1,
+              1,
+              constants.CURRENT_PARAM_IDX + '+',
+            ) +
+            '}}'
+          : ');' +
+            compile(
+              childNode,
+              paramCount + 1,
+              1,
+              constants.CURRENT_PARAM_IDX + '+',
+            ) +
+            '}');
     }
   }
 
