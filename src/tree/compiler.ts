@@ -1,7 +1,7 @@
 import type { Node } from './node.js';
 
 export const shouldBoundCheck = (node: Node<string>): boolean =>
-  node[1] == null && (node[3] != null || node[4] != null);
+  node[1] == null && node[4] != null;
 
 export const compile = (
   node: Node<string>,
