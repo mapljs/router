@@ -1,7 +1,7 @@
 export default (p: string, method: string) => {
   if (method === 'GET') {
     let l = p.length;
-    if (l > 6 && p.startsWith('user/', 1)) {
+    if (p.startsWith('user/', 1)) {
       let j = p.indexOf('/', 6);
       if (j > 6) {
         let q0 = p.slice(6, j);
