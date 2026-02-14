@@ -1,6 +1,0 @@
-{
-  "type": "module",
-  "scripts": {
-    "snap": "bun index.ts && biome format --write"
-  }
-}

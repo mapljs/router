@@ -1,7 +1,7 @@
 import type { Node } from './node.js';
 
 export const shouldBoundCheck = (node: Node<string>): boolean =>
-  node[1] == null && node[4] != null;
+  node[1] == null;
 
 export const compile = (
   node: Node<string>,
@@ -16,31 +16,55 @@ export const compile = (
     (builder +=
       'if(' + constants.PATH_LEN + '===' + currentIdx + '){' + node[1] + '}');
 
-  if (node[2] != null)
-    for (
-      let i = 0, children = Object.values(node[2]);
-      i < children.length;
-      i++
-    ) {
-      const childNode = children[i];
+  if (node[2] != null) {
+    const children = Object.values(node[2]);
 
+    if (children.length > 1) {
+      builder +=
+        'switch(' + constants.PATH + '.charCodeAt(' + currentIdx + ')){';
+
+      for (let i = 0; i < children.length; i++) {
+        const childNode = children[i];
+        const nodePath = childNode[0];
+        const nextIdx = idx + nodePath.length;
+
+        builder +=
+          'case ' +
+          nodePath.charCodeAt(0) +
+          (shouldBoundCheck(childNode)
+            ? ':if(' + constants.PATH_LEN + '>' + idxPrefix + nextIdx + ')'
+            : ':') +
+          (nodePath.length > 1
+            ? 'if(' +
+              constants.PATH +
+              '.startsWith("' +
+              nodePath.slice(1) +
+              '",' +
+              idxPrefix +
+              (idx + 1) +
+              ')){'
+            : '{') +
+          compile(childNode, paramCount, nextIdx, idxPrefix) +
+          '}';
+      }
+
+      builder += '}';
+    } else {
+      const childNode = children[0];
       const nodePath = childNode[0];
       const nextIdx = idx + nodePath.length;
 
       builder +=
-        // Add bound checking if childNode doesn't have store and either has params or wildcard
         (shouldBoundCheck(childNode)
-          ? (i > 0 ? 'else if(' : 'if(') +
+          ? 'if(' +
             constants.PATH_LEN +
             '>' +
             idxPrefix +
             nextIdx +
-            '&&'
-          : i > 0
-            ? 'else if('
-            : 'if(') +
-        constants.PATH +
-        '.startsWith("' +
+            ')if(' +
+            constants.PATH +
+            '.startsWith("'
+          : 'if(' + constants.PATH + '.startsWith("') +
         nodePath +
         '",' +
         currentIdx +
@@ -48,6 +72,7 @@ export const compile = (
         compile(childNode, paramCount, nextIdx, idxPrefix) +
         '}';
     }
+  }
 
   if (node[3] != null) {
     const params = node[3];
@@ -63,27 +88,34 @@ export const compile = (
     // Need to save the current parameter index if the parameter node is not a leaf node
     (hasChild || !hasStore) &&
       (builder +=
-        (paramCount > 0 ? '' : 'let ') +
-        constants.CURRENT_PARAM_IDX +
-        '=' +
-        constants.PATH +
-        '.indexOf("/",' +
+        (paramCount > 0
+          ? constants.CURRENT_PARAM_IDX + '=' + constants.PATH + '.indexOf("/",'
+          : 'let ' +
+            constants.CURRENT_PARAM_IDX +
+            '=' +
+            constants.PATH +
+            '.indexOf("/",') +
         currentIdx +
         ');');
 
     hasStore &&
       (builder +=
-        'if(' +
         (hasChild
-          ? constants.CURRENT_PARAM_IDX + '===-1){let '
+          ? 'if(' +
+            constants.CURRENT_PARAM_IDX +
+            '===-1){let ' +
+            constants.PARAMS
           : // Leaf node can use .includes instead of .indexOf
-            '!' + constants.PATH + '.includes("/",' + currentIdx + ')){let ') +
-        constants.PARAMS +
+            'if(!' +
+            constants.PATH +
+            '.includes("/",' +
+            currentIdx +
+            ')){let ' +
+            constants.PARAMS) +
         paramCount +
-        '=' +
         (currentIdx === '0'
-          ? constants.PATH + ';'
-          : constants.PATH + '.slice(' + currentIdx + ');') +
+          ? '=' + constants.PATH + ';'
+          : '=' + constants.PATH + '.slice(' + currentIdx + ');') +
         params[1] +
         '}');
 
@@ -91,9 +123,9 @@ export const compile = (
       const childNode = params[0]!;
 
       builder +=
-        (hasStore ? 'else if(' : 'if(') +
-        constants.CURRENT_PARAM_IDX +
-        '>' +
+        (hasStore
+          ? 'else if(' + constants.CURRENT_PARAM_IDX + '>'
+          : 'if(' + constants.CURRENT_PARAM_IDX + '>') +
         currentIdx +
         '){let ' +
         constants.PARAMS +
@@ -102,10 +134,10 @@ export const compile = (
         constants.PATH +
         '.slice(' +
         currentIdx +
-        ',' +
-        constants.CURRENT_PARAM_IDX +
         (shouldBoundCheck(childNode)
-          ? ');if(' +
+          ? ',' +
+            constants.CURRENT_PARAM_IDX +
+            ');if(' +
             constants.PATH_LEN +
             '>' +
             constants.CURRENT_PARAM_IDX +
@@ -117,7 +149,9 @@ export const compile = (
               constants.CURRENT_PARAM_IDX + '+',
             ) +
             '}}'
-          : ');' +
+          : ',' +
+            constants.CURRENT_PARAM_IDX +
+            ');' +
             compile(
               childNode,
               paramCount + 1,
@@ -133,11 +167,9 @@ export const compile = (
       'let ' +
       constants.PARAMS +
       paramCount +
-      '=' +
       (currentIdx === '0'
-        ? constants.PATH
-        : constants.PATH + '.slice(' + currentIdx + ')') +
-      ';' +
+        ? '=' + constants.PATH + ';'
+        : '=' + constants.PATH + '.slice(' + currentIdx + ');') +
       node[4]);
 
   return builder;

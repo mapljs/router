@@ -1,6 +1,6 @@
 {
   "name": "@mapl/router",
-  "version": "0.8.7",
+  "version": "0.8.8",
   "description": "The fastest possible JS router",
   "repository": {
     "type": "git",
@@ -11,7 +11,8 @@
   "scripts": {
     "task": "bun scripts/task.ts",
     "fmt": "biome format .",
-    "build:test": "bun task build && bun test",
+    "snap": "bun snapshots/index.ts && biome format ./snapshots/out --write",
+    "build:test": "bun task build && bun test && bun snap",
     "build:publish": "bun task build && bun task report-size && bun task publish"
   },
   "devDependencies": {
