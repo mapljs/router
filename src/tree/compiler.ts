@@ -1,7 +1,7 @@
 import type { Node } from './node.js';
 
 export const shouldBoundCheck = (node: Node<string>): boolean =>
-  node[1] == null;
+  node[1] == null && (node[2].length !== 1 || node[4] !== null || node[5] !== null);
 
 export const compile = (
   node: Node<string>,
@@ -16,21 +16,21 @@ export const compile = (
     (builder +=
       'if(' + constants.PATH_LEN + '===' + currentIdx + '){' + node[1] + '}');
 
-  if (node[2] != null) {
-    const children = Object.values(node[2]);
+  if (node[2].length > 0) {
+    const children = node[3];
 
     if (children.length > 1) {
       builder +=
         'switch(' + constants.PATH + '.charCodeAt(' + currentIdx + ')){';
 
-      for (let i = 0; i < children.length; i++) {
+      for (let i = 0, childrenFirstChar = node[2]; i < children.length; i++) {
         const childNode = children[i];
         const nodePath = childNode[0];
         const nextIdx = idx + nodePath.length;
 
         builder +=
           'case ' +
-          nodePath.charCodeAt(0) +
+          childrenFirstChar[i] +
           (shouldBoundCheck(childNode)
             ? ':if(' + constants.PATH_LEN + '>' + idxPrefix + nextIdx + ')'
             : ':') +
@@ -74,8 +74,8 @@ export const compile = (
     }
   }
 
-  if (node[3] != null) {
-    const params = node[3];
+  if (node[4] != null) {
+    const params = node[4];
     const hasStore = params[1] != null;
     const hasChild = params[0] != null;
 
@@ -162,7 +162,7 @@ export const compile = (
     }
   }
 
-  node[4] == null ||
+  node[5] == null ||
     (builder +=
       'let ' +
       constants.PARAMS +
@@ -170,7 +170,7 @@ export const compile = (
       (currentIdx === '0'
         ? '=' + constants.PATH + ';'
         : '=' + constants.PATH + '.slice(' + currentIdx + ');') +
-      node[4]);
+      node[5]);
 
   return builder;
 };

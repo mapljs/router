@@ -5,23 +5,32 @@ export default (
   router: Router<string>,
   methodInput: string,
   parsePath: string,
-  startIndex: 0 | 1,
+  startIdx: 0 | 1,
 ): string => {
-  const allRouter = router[''];
-  let str = '';
+  const pathRouters = router[1];
+  const methods = router[0];
 
-  for (const key in router)
-    key !== '' &&
-      (str +=
-        (str === '' ? 'if(' : 'else if(') +
-        methodInput +
-        '==="' +
-        key +
-        '"){' +
-        (allRouter == null ? parsePath : '') +
-        compilePath(router[key]!, startIndex) +
-        '}');
-  return allRouter == null
-    ? str
-    : parsePath + str + compilePath(allRouter, startIndex);
+  const hasAllMethodHandler = router.length === 3;
+
+  const parsePathStr = hasAllMethodHandler ? '"){' + parsePath : '"){';
+  let str =
+    (hasAllMethodHandler ? parsePath + 'if(' : 'if(') +
+    methodInput +
+    '==="' +
+    methods[0] +
+    parsePathStr +
+    compilePath(pathRouters[0], startIdx) +
+    '}';
+
+  for (let i = 1; i < pathRouters.length; i++)
+    str +=
+      'else if(' +
+      methodInput +
+      '==="' +
+      methods[i] +
+      parsePathStr +
+      compilePath(pathRouters[i], startIdx) +
+      '}';
+
+  return hasAllMethodHandler ? str + compilePath(router[2], startIdx) : str;
 };

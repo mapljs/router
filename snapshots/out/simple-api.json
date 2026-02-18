@@ -1,0 +1,102 @@
+[
+  ["GET", "POST"],
+  [
+    [
+      [
+        "/",
+        null,
+        [117, 101, 109],
+        [
+          [
+            "user/lookup/",
+            null,
+            [117, 101],
+            [
+              ["username/", null, [], [], [null, "return 3"], null],
+              ["email/", null, [], [], [null, "return 4"], null]
+            ],
+            null,
+            null
+          ],
+          [
+            "event/",
+            null,
+            [],
+            [],
+            [
+              [
+                "/",
+                null,
+                [99],
+                [["comments", "return 6", [], [], null, null]],
+                null,
+                null
+              ],
+              "return 5"
+            ],
+            null
+          ],
+          [
+            "map/",
+            null,
+            [],
+            [],
+            [
+              [
+                "/",
+                null,
+                [101],
+                [["events", "return 7", [], [], null, null]],
+                null,
+                null
+              ],
+              null
+            ],
+            null
+          ]
+        ],
+        null,
+        null
+      ],
+      "/user",
+      "return 0",
+      "/user/comments",
+      "return 1",
+      "/user/avatar",
+      "return 2",
+      "/status",
+      "return 8",
+      "/very/deeply/nested/route/hello/there",
+      "return 9"
+    ],
+    [
+      [
+        "/",
+        null,
+        [101],
+        [
+          [
+            "event/",
+            null,
+            [],
+            [],
+            [
+              [
+                "/",
+                null,
+                [99],
+                [["comment", "return 10", [], [], null, null]],
+                null,
+                null
+              ],
+              null
+            ],
+            null
+          ]
+        ],
+        null,
+        null
+      ]
+    ]
+  ]
+]

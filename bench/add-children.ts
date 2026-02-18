@@ -1,14 +1,24 @@
 import { summary, run, bench, do_not_optimize } from 'mitata';
 
 summary(() => {
-  const paths = ['abc', 'bca', 'aab', 'aac', 'cix', 'bicop', 'detod', 'duei', 'ckahb'];
+  const paths = [
+    'abc',
+    'bca',
+    'aab',
+    'aac',
+    'cix',
+    'bicop',
+    'detod',
+    'duei',
+    'ckahb',
+  ];
 
   const register = (name: string, fn: (paths: string[]) => void) => {
     bench('add-children - ' + name, function* () {
       yield {
         [0]: () => paths,
-        bench: fn
-      }
+        bench: fn,
+      };
     });
   };
 
@@ -19,10 +29,8 @@ summary(() => {
         const path = paths[i];
         const c = path.charCodeAt(0);
 
-        if (arr[c] == null)
-          arr[c] = path;
-        else
-          arr[c] += path;
+        if (arr[c] == null) arr[c] = path;
+        else arr[c] += path;
       }
       do_not_optimize(arr);
     });
@@ -37,8 +45,7 @@ summary(() => {
 
         const id = arr[0].indexOf(c);
 
-        if (id > 1)
-          arr[1][id] += path;
+        if (id > 1) arr[1][id] += path;
         else {
           arr[0].push(id);
           arr[1].push(path);

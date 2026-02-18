@@ -10,7 +10,9 @@ export type Router<T = unknown> = [
   ...staticMap: any[],
 ];
 
-export const createRouter = <T>(): Router<T> => [['/', null, null, null, null]];
+export const createRouter = <T>(): Router<T> => [
+  ['/', null, [], [], null, null],
+];
 
 export const insertItem = <T>(
   router: Router<T>,

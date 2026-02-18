@@ -1,0 +1,47 @@
+[
+  ["GET"],
+  [
+    [
+      [
+        "/",
+        null,
+        [117],
+        [
+          [
+            "user/",
+            null,
+            [],
+            [],
+            [
+              [
+                "/",
+                null,
+                [100, 97],
+                [
+                  ["dashboard", "return 0", [], [], null, null],
+                  [
+                    "acc",
+                    null,
+                    [111, 101],
+                    [
+                      ["ount", "return 1", [], [], null, null],
+                      ["ess", "return 2", [], [], null, null]
+                    ],
+                    null,
+                    null
+                  ]
+                ],
+                null,
+                null
+              ],
+              null
+            ],
+            null
+          ]
+        ],
+        null,
+        null
+      ]
+    ]
+  ]
+]

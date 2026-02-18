@@ -13,10 +13,14 @@ export const write = (
     for (const path in routes)
       insertItem(router, method, path, `return ${routes[path]}`);
   }
+
+  const filename = outdir + name.toLowerCase().replaceAll(' ', '-');
   Bun.write(
-    outdir + name.toLowerCase().replaceAll(' ', '-') + '.ts',
+    filename + '.ts',
     `export default(${PATH}: string, method: string)=>{${compile(router, 'method', '', 1)}};`,
   );
+
+  Bun.write(filename + '.json', JSON.stringify(router, null, 2));
 };
 
 if (import.meta.main) {
@@ -41,6 +45,15 @@ if (import.meta.main) {
   });
 
   write(OUTDIR, 'Nested API', {
+    GET: {
+      '/user/*/dashboard': 0,
+      '/user/*': 1,
+      '/user': 2,
+      '/user/*/dashboard/edit': 3
+    },
+  });
+
+  write(OUTDIR, 'Mutiple branch API', {
     GET: {
       '/user/*/dashboard': 0,
       '/user/*/account': 1,
