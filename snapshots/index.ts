@@ -45,10 +45,11 @@ export const write = (outdir: string, name: string, routes: Routes) => {
   console.log('  routes:', routeList.length);
 
   // Measure comptime
-  let start, end;
+  let s1, s2, s3;
 
   Bun.gc(true);
-  start = Bun.nanoseconds();
+  s1 = Bun.nanoseconds();
+  s2 = Bun.nanoseconds();
 
   const router = createRouter<string>();
   for (let i = 0; i < routeList.length; i++)
@@ -56,10 +57,10 @@ export const write = (outdir: string, name: string, routes: Routes) => {
   const code = `(${PATH},m)=>{${compile(router, 'm', '', 1)}return -1}`;
   do_not_optimize(eval(code));
 
-  end = Bun.nanoseconds();
+  s3 = Bun.nanoseconds();
 
   {
-    let time = end - start,
+    let time = s3 - s2 - (s2 - s1),
       i = 0;
     for (; i < TIME_UNITS.length - 1 && time > 1500; i++) time /= 1000;
     console.log(
