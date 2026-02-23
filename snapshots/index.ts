@@ -10,30 +10,28 @@ type Method = 'GET' | 'POST' | 'PUT' | 'DELETE' | 'PATCH';
 type Routes = {
   [key: string]: Routes | Method | [Method, ...Method[]];
 };
+type RouteList = [method: string, path: string, item: string][];
 
 export const addRoutes = (
-  router: Router<string>,
+  router: RouteList,
   routes: Routes,
   log: typeof console.log,
   path: string = '/',
-  idx: number = 0,
-): number => {
+): void => {
   for (const key in routes) {
     const route = routes[key];
     const subpath = key === '/' ? path : path === '/' ? key : path + key;
 
     if (Array.isArray(route))
       for (const method of route) {
-        log('  route:', method, subpath, idx);
-        insertItem(router, method, subpath, `return ${idx++}`);
+        log('  route:', method, subpath, router.length);
+        router.push([method, subpath, `return ${router.length}`]);
       }
     else if (typeof route === 'string') {
-      log('  route:', route, subpath, idx);
-      insertItem(router, route, subpath, `return ${idx++}`);
-    } else idx = addRoutes(router, route, log, subpath, idx);
+      log('  route:', route, subpath, router.length);
+      router.push([route, subpath, `return ${router.length}`]);
+    } else addRoutes(router, route, log, subpath);
   }
-
-  return idx;
 };
 
 const TIME_UNITS = ['ns', 'μs', 'ms', 's'];
@@ -42,30 +40,42 @@ const BYTE_UNITS = ['b', 'kb'];
 export const write = (outdir: string, name: string, routes: Routes) => {
   console.log('API:', pc.bold(name));
 
-  const router = createRouter<string>();
-  console.log('  routes:', addRoutes(router, routes, process.env.DEBUG ? console.log : () => { }));
+  const routeList: RouteList = [];
+  addRoutes(routeList, routes, process.env.DEBUG ? console.log : () => {});
+  console.log('  routes:', routeList.length);
 
   // Measure comptime
   let start, end;
 
   Bun.gc(true);
   start = Bun.nanoseconds();
+
+  const router = createRouter<string>();
+  for (let i = 0; i < routeList.length; i++)
+    insertItem(router, ...routeList[i]);
   const code = `(${PATH},m)=>{${compile(router, 'm', '', 1)}return -1}`;
   do_not_optimize(eval(code));
+
   end = Bun.nanoseconds();
 
   {
-    let time = end - start, i = 0;
-    for (; i < TIME_UNITS.length - 1 && time > 1500; i++)
-      time /= 1000;
-    console.log('  compile time:', pc.yellowBright(Math.round(time * 100) / 100 + TIME_UNITS[i]));
+    let time = end - start,
+      i = 0;
+    for (; i < TIME_UNITS.length - 1 && time > 1500; i++) time /= 1000;
+    console.log(
+      '  build time (add & compile routes):',
+      pc.yellowBright(Math.round(time * 100) / 100 + TIME_UNITS[i]),
+    );
   }
 
   {
-    let size = code.length, i = 0;
-    for (; i < BYTE_UNITS.length - 1 && size > 1500; i++)
-      size /= 1000;
-    console.log('  size:', pc.yellowBright(Math.round(size * 100) / 100 + BYTE_UNITS[i]));
+    let size = code.length,
+      i = 0;
+    for (; i < BYTE_UNITS.length - 1 && size > 1500; i++) size /= 1000;
+    console.log(
+      '  size:',
+      pc.yellowBright(Math.round(size * 100) / 100 + BYTE_UNITS[i]),
+    );
   }
 
   const filename = outdir + name.toLowerCase().replaceAll(' ', '-');

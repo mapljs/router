@@ -16,7 +16,12 @@ export const isEmptyNode = (node: Node<any>): boolean =>
   node[4] === null &&
   node[5] === null;
 
-export const insertNewParam = <T>(root: Node<T>, path: string, currentIdx: number, value: T): void => {
+export const insertNewParam = <T>(
+  root: Node<T>,
+  path: string,
+  currentIdx: number,
+  value: T,
+): void => {
   // ends with **
   if (
     currentIdx + 2 === path.length &&
@@ -39,7 +44,7 @@ export const insertNewParam = <T>(root: Node<T>, path: string, currentIdx: numbe
 
   // Skip `*/`
   insertNewBranch(root, path, currentIdx + 2, value);
-}
+};
 
 // Fast path for inserting new branch
 export const insertNewBranch = <T>(

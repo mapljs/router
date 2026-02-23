@@ -107,8 +107,8 @@ export const compile = (
     params[1] != null &&
       (builder +=
         (hasChild
-          // CURRENT_PARAM_IDX has already been initialized
-          ? `else if(${constants.CURRENT_PARAM_IDX}===-1){let ${constants.PARAMS}`
+          ? // CURRENT_PARAM_IDX has already been initialized
+            `else if(${constants.CURRENT_PARAM_IDX}===-1){let ${constants.PARAMS}`
           : // Leaf node can use .includes instead of .indexOf
             `if(!${constants.PATH}.includes("/",${currentIdx})){let ${constants.PARAMS}`) +
         paramCount +
