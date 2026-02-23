@@ -13,7 +13,7 @@ type Routes = {
 type RouteList = [method: string, path: string, item: string][];
 
 export const addRoutes = (
-  router: RouteList,
+  routeList: RouteList,
   routes: Routes,
   log: typeof console.log,
   path: string = '/',
@@ -24,13 +24,13 @@ export const addRoutes = (
 
     if (Array.isArray(route))
       for (const method of route) {
-        log('  route:', method, subpath, router.length);
-        router.push([method, subpath, `return ${router.length}`]);
+        log('  route:', method, subpath, routeList.length);
+        routeList.push([method, subpath, `return ${routeList.length}`]);
       }
     else if (typeof route === 'string') {
-      log('  route:', route, subpath, router.length);
-      router.push([route, subpath, `return ${router.length}`]);
-    } else addRoutes(router, route, log, subpath);
+      log('  route:', route, subpath, routeList.length);
+      routeList.push([route, subpath, `return ${routeList.length}`]);
+    } else addRoutes(routeList, route, log, subpath);
   }
 };
 
