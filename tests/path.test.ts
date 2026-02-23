@@ -61,6 +61,8 @@ runTest(['/*/file', '/*'], 'Edge case 1');
 
 runTest(['/api/works/*/lock', '/api/staff/*'], 'Edge case 2');
 
+runTest(['/*/nested/a', '/*/nested/*'], 'Edge case 3');
+
 runTest(['/api/*/sub/*', '/api/*/sub/**'], 'Reuse index tracker');
 
 runTest(['/*/ab', '/*/bc'], 'Single character check');

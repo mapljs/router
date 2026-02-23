@@ -1,5 +1,5 @@
-export default (p: string, method: string) => {
-  if (method === 'GET') {
+const d: (path: string, method: string) => number = (p, m) => {
+  if (m === 'GET') {
     if (p === '/user') {
       return 0;
     } else if (p === '/user/comments') {
@@ -7,9 +7,9 @@ export default (p: string, method: string) => {
     } else if (p === '/user/avatar') {
       return 2;
     } else if (p === '/status') {
-      return 8;
-    } else if (p === '/very/deeply/nested/route/hello/there') {
       return 9;
+    } else if (p === '/very/deeply/nested/route/hello/there') {
+      return 10;
     }
     let l = p.length;
     switch (p.charCodeAt(1)) {
@@ -39,16 +39,16 @@ export default (p: string, method: string) => {
         if (l > 7)
           if (p.startsWith('vent/', 2)) {
             let j = p.indexOf('/', 7);
-            if (j === -1) {
-              let q0 = p.slice(7);
-              return 5;
-            } else if (j > 7) {
+            if (j > 7) {
               let q0 = p.slice(7, j);
               if (p.startsWith('comments', j + 1)) {
                 if (l === j + 9) {
                   return 6;
                 }
               }
+            } else if (j === -1) {
+              let q0 = p.slice(7);
+              return 5;
             }
           }
       case 109:
@@ -59,13 +59,19 @@ export default (p: string, method: string) => {
               let q0 = p.slice(5, j);
               if (p.startsWith('events', j + 1)) {
                 if (l === j + 7) {
-                  return 7;
+                  return 8;
                 }
               }
             }
           }
+      case 115:
+        if (l > 8)
+          if (p.startsWith('tatic/', 2)) {
+            let q0 = p.slice(8);
+            return 11;
+          }
     }
-  } else if (method === 'POST') {
+  } else if (m === 'POST') {
     let l = p.length;
     if (l > 7)
       if (p.startsWith('event/', 1)) {
@@ -74,10 +80,12 @@ export default (p: string, method: string) => {
           let q0 = p.slice(7, j);
           if (p.startsWith('comment', j + 1)) {
             if (l === j + 8) {
-              return 10;
+              return 7;
             }
           }
         }
       }
   }
+  return -1;
 };
+export default d;

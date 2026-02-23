@@ -16,6 +16,31 @@ export const isEmptyNode = (node: Node<any>): boolean =>
   node[4] === null &&
   node[5] === null;
 
+export const insertNewParam = <T>(root: Node<T>, path: string, currentIdx: number, value: T): void => {
+  // ends with **
+  if (
+    currentIdx + 2 === path.length &&
+    path.charCodeAt(currentIdx + 1) === 42
+  ) {
+    root[5] = value;
+    return;
+  }
+
+  // ends with *
+  if (currentIdx + 1 === path.length) {
+    root[4] = [null, value];
+    return;
+  }
+
+  // */other/part
+  const nextNode: Node<T> = ['/', null, [], [], null, null];
+  root[4] = [nextNode, null];
+  root = nextNode;
+
+  // Skip `*/`
+  insertNewBranch(root, path, currentIdx + 2, value);
+}
+
 // Fast path for inserting new branch
 export const insertNewBranch = <T>(
   root: Node<T>,
@@ -26,7 +51,7 @@ export const insertNewBranch = <T>(
   let startIdx = currentIdx;
   currentIdx = path.indexOf('*', startIdx);
 
-  while (currentIdx > -1) {
+  if (currentIdx > -1) {
     // Add previous path part
     if (startIdx < currentIdx) {
       const nextNode: Node<T> = [
@@ -44,33 +69,12 @@ export const insertNewBranch = <T>(
       root = nextNode;
     }
 
-    // ends with **
-    if (
-      currentIdx + 2 === path.length &&
-      path.charCodeAt(currentIdx + 1) === 42
-    ) {
-      root[5] = value;
-      return;
-    }
-
-    // ends with *
-    if (currentIdx + 1 === path.length) {
-      root[4] = [null, value];
-      return;
-    }
-
-    // */other/part
-    const nextNode: Node<T> = ['/', null, [], [], null, null];
-    root[4] = [nextNode, null];
-    root = nextNode;
-
-    // Skip */
-    startIdx = currentIdx + 2;
-    currentIdx = path.indexOf('*', startIdx);
+    insertNewParam(root, path, currentIdx, value);
+  } else {
+    // Add the rest of the path
+    root[2].push(path.charCodeAt(startIdx));
+    root[3].push([path.slice(startIdx), value, [], [], null, null]);
   }
-
-  root[2].push(path.charCodeAt(startIdx));
-  root[3].push([path.slice(startIdx), value, [], [], null, null]);
 };
 
 // insertToRoot(root, 1 path, 1, value)
@@ -85,64 +89,60 @@ export const insert = <T>(
   let nodePart = root[0];
 
   while (pathIdx < path.length) {
-    const pathChar = path.charCodeAt(pathIdx);
-
-    // * or **
-    if (pathChar === 42) {
-      // .../**
-      if (pathIdx + 2 === path.length && path.charCodeAt(pathIdx + 1) === 42) {
-        root[5] = value;
-        return;
-      }
-
-      if (root[4] === null) {
-        insertNewBranch(root, path, pathIdx, value);
-        return;
-      }
-
-      // .../*
-      if (pathIdx + 1 === path.length) {
-        root[4]![1] = value;
-        return;
-      }
-
-      // .../*/...
-      root = root[4]![0] ??= ['/', null, [], [], null, null];
-
-      nodePartIdx = 1;
-      // Always a root node
-      nodePart = '/';
-
-      pathIdx += 2;
-    }
-
     // (path) is longer than (currentPart)
-    else if (nodePartIdx === nodePart.length) {
-      const childrenFirstChar = root[2];
+    if (nodePartIdx === nodePart.length) {
+      // * or **
+      if (path.charCodeAt(pathIdx) === 42) {
+        // .../**
+        if (
+          pathIdx + 2 === path.length &&
+          path.charCodeAt(pathIdx + 1) === 42
+        ) {
+          root[5] = value;
+          return;
+        }
 
-      // Add new children
-      if (childrenFirstChar.length === 0) {
-        insertNewBranch(root, path, pathIdx, value);
-        return;
+        if (root[4] === null) {
+          insertNewParam(root, path, pathIdx, value);
+          return;
+        }
+
+        // .../*
+        if (pathIdx + 1 === path.length) {
+          root[4]![1] = value;
+          return;
+        }
+
+        // .../*/...
+        root = root[4]![0] ??= ['/', null, [], [], null, null];
+
+        nodePartIdx = 1;
+        // Always a root node
+        nodePart = '/';
+
+        pathIdx += 2;
+      } else {
+        const childrenFirstChar = root[2];
+
+        // Add new children
+        const nextNodeId = childrenFirstChar.indexOf(path.charCodeAt(pathIdx));
+        if (nextNodeId === -1) {
+          insertNewBranch(root, path, pathIdx, value);
+          return;
+        }
+
+        // Move to next child node
+        root = root[3][nextNodeId];
+
+        nodePartIdx = 1;
+        nodePart = root[0];
+
+        pathIdx++;
       }
-
-      const nextNodeId = childrenFirstChar.indexOf(pathChar);
-      if (nextNodeId === -1) {
-        insertNewBranch(root, path, pathIdx, value);
-        return;
-      }
-
-      // Move to next child node
-      root = root[3][nextNodeId];
-
-      nodePartIdx = 1;
-      nodePart = root[0];
-
-      pathIdx++;
     }
 
     // Split the node
-    else if (pathChar !== nodePart.charCodeAt(nodePartIdx)) {
+    else if (path.charCodeAt(pathIdx) !== nodePart.charCodeAt(nodePartIdx)) {
       // Split the old path
       root[3] = [
         [
@@ -154,8 +154,8 @@ export const insert = <T>(
           root[5],
         ],
       ];
-
       root[2] = [nodePart.charCodeAt(nodePartIdx)];
+
       root[0] = nodePart.slice(0, nodePartIdx);
       root[1] = root[4] = root[5] = null;
 
@@ -183,8 +183,8 @@ export const insert = <T>(
         root[5],
       ],
     ];
-
     root[2] = [nodePart.charCodeAt(nodePartIdx)];
+
     root[0] = nodePart.slice(0, nodePartIdx);
     root[4] = root[5] = null; // Doesnt need to set root[1] to null bcuz it will later be set
   }

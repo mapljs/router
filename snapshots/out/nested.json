@@ -20,9 +20,9 @@
                 [
                   [
                     "dashboard",
-                    "return 0",
+                    "return 1",
                     [47],
-                    [["/edit", "return 3", [], [], null, null]],
+                    [["/edit", "return 2", [], [], null, null]],
                     null,
                     null
                   ]
@@ -30,7 +30,7 @@
                 null,
                 null
               ],
-              "return 1"
+              null
             ],
             null
           ]
@@ -39,7 +39,7 @@
         null
       ],
       "/user",
-      "return 2"
+      "return 0"
     ]
   ]
 ]

@@ -1,5 +1,6 @@
 {
   "lockfileVersion": 1,
+  "configVersion": 0,
   "workspaces": {
     "": {
       "name": "@mapl/router",
@@ -9,6 +10,7 @@
         "mitata": "^1.0.34",
         "oxc-minify": "^0.64.0",
         "oxc-transform": "^0.65.0",
+        "picocolors": "^1.1.1",
         "tsx": "^4.20.3",
         "typescript": "^5.8.3",
       },
@@ -153,6 +155,8 @@
     "oxc-minify": ["oxc-minify@0.64.0", "", { "optionalDependencies": { "@oxc-minify/binding-darwin-arm64": "0.64.0", "@oxc-minify/binding-darwin-x64": "0.64.0", "@oxc-minify/binding-linux-arm-gnueabihf": "0.64.0", "@oxc-minify/binding-linux-arm64-gnu": "0.64.0", "@oxc-minify/binding-linux-arm64-musl": "0.64.0", "@oxc-minify/binding-linux-x64-gnu": "0.64.0", "@oxc-minify/binding-linux-x64-musl": "0.64.0", "@oxc-minify/binding-wasm32-wasi": "0.64.0", "@oxc-minify/binding-win32-arm64-msvc": "0.64.0", "@oxc-minify/binding-win32-x64-msvc": "0.64.0" } }, "sha512-nyQ4qGRlr210mVSkS9whn+ghhe2o6ba22ksTBWMj4CHUhNJWfY0S/h1yEUvDZxNFtuxSReLSlQATUzUyo7/wzQ=="],
 
     "oxc-transform": ["oxc-transform@0.65.0", "", { "optionalDependencies": { "@oxc-transform/binding-darwin-arm64": "0.65.0", "@oxc-transform/binding-darwin-x64": "0.65.0", "@oxc-transform/binding-linux-arm-gnueabihf": "0.65.0", "@oxc-transform/binding-linux-arm64-gnu": "0.65.0", "@oxc-transform/binding-linux-arm64-musl": "0.65.0", "@oxc-transform/binding-linux-x64-gnu": "0.65.0", "@oxc-transform/binding-linux-x64-musl": "0.65.0", "@oxc-transform/binding-wasm32-wasi": "0.65.0", "@oxc-transform/binding-win32-arm64-msvc": "0.65.0", "@oxc-transform/binding-win32-x64-msvc": "0.65.0" } }, "sha512-TWAMi8zVvORQw545O1/1irpbMPDQGD6ernen5QyY5PCL9nj3RqgR1ULlQiHVDXEl2rW+OtHF8KS0ItAUyOfQ+Q=="],
+
+    "picocolors": ["picocolors@1.1.1", "", {}, "sha512-xceH2snhtb5M9liqDsmEw56le376mTZkEX/jEb/RxNFyegNul7eNslCXP9FDj/Lcu0X8KEyMceP2ntpaHrDEVA=="],
 
     "resolve-pkg-maps": ["resolve-pkg-maps@1.0.0", "", {}, "sha512-seS2Tj26TBVOC2NIc2rOe2y2ZO7efxITtLZcGSOnHHNOQ7CkiUBfw0Iw2ck6xkIhPwLhKNLS8BO+hEpngQlqzw=="],
 

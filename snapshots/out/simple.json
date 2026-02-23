@@ -5,7 +5,7 @@
       [
         "/",
         null,
-        [117, 101, 109],
+        [117, 101, 109, 115],
         [
           [
             "user/lookup/",
@@ -46,14 +46,15 @@
                 "/",
                 null,
                 [101],
-                [["events", "return 7", [], [], null, null]],
+                [["events", "return 8", [], [], null, null]],
                 null,
                 null
               ],
               null
             ],
             null
-          ]
+          ],
+          ["static/", null, [], [], null, "return 11"]
         ],
         null,
         null
@@ -65,9 +66,9 @@
       "/user/avatar",
       "return 2",
       "/status",
-      "return 8",
+      "return 9",
       "/very/deeply/nested/route/hello/there",
-      "return 9"
+      "return 10"
     ],
     [
       [
@@ -85,7 +86,7 @@
                 "/",
                 null,
                 [99],
-                [["comment", "return 10", [], [], null, null]],
+                [["comment", "return 7", [], [], null, null]],
                 null,
                 null
               ],

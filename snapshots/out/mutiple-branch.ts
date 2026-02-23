@@ -1,5 +1,5 @@
-export default (p: string, method: string) => {
-  if (method === 'GET') {
+const d: (path: string, method: string) => number = (p, m) => {
+  if (m === 'GET') {
     let l = p.length;
     if (l > 6)
       if (p.startsWith('user/', 1)) {
@@ -37,4 +37,6 @@ export default (p: string, method: string) => {
         }
       }
   }
+  return -1;
 };
+export default d;
