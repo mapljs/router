@@ -1,6 +1,6 @@
 {
   "name": "@mapl/router",
-  "version": "0.9.1",
+  "version": "0.9.2",
   "description": "The fastest possible JS router",
   "repository": {
     "type": "git",

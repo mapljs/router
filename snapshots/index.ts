@@ -1,4 +1,4 @@
-import { createRouter, insertItem, type Router } from '@mapl/router/method';
+import { createRouter, insertItem } from '@mapl/router/method';
 import compile from '@mapl/router/method/compiler';
 import { PATH } from '@mapl/router/constants';
 
@@ -44,24 +44,31 @@ export const write = (outdir: string, name: string, routes: Routes) => {
   addRoutes(routeList, routes, process.env.DEBUG ? console.log : () => {});
   console.log('  routes:', routeList.length);
 
-  // Measure comptime
-  let s1, s2, s3;
+  let { time, router, code } = Function(
+    'createRouter',
+    'insertItem',
+    'compile',
+    `
+    'use strict';
+    Bun.gc(true);
 
-  Bun.gc(true);
-  s1 = Bun.nanoseconds();
-  s2 = Bun.nanoseconds();
+    let s1, s2, s3;
+    s1 = Bun.nanoseconds();
+    s2 = Bun.nanoseconds();
 
-  const router = createRouter<string>();
-  for (let i = 0; i < routeList.length; i++)
-    insertItem(router, ...routeList[i]);
-  const code = `(${PATH},m)=>{${compile(router, 'm', '', 1)}return -1}`;
-  do_not_optimize(eval(code));
+    let router = createRouter();
+    ${routeList.map((route) => `insertItem(router,${route.map((x) => JSON.stringify(x)).join()})`).join(';')};
+    let code=\`(${PATH},m)=>{\${compile(router,'m','',1)}return -1}\`;
+    (0, eval)(code);
 
-  s3 = Bun.nanoseconds();
+    s3 = Bun.nanoseconds();
+
+    return { time: s3 - s2 - (s2 - s1), router, code };
+  `,
+  )(createRouter, insertItem, compile);
 
   {
-    let time = s3 - s2 - (s2 - s1),
-      i = 0;
+    let i = 0;
     for (; i < TIME_UNITS.length - 1 && time > 1500; i++) time /= 1000;
     console.log(
       '  build time (add & compile routes):',
@@ -79,12 +86,16 @@ export const write = (outdir: string, name: string, routes: Routes) => {
     );
   }
 
-  const filename = outdir + name.toLowerCase().replaceAll(' ', '-');
-  Bun.write(
-    filename + '.ts',
-    `const d: (path: string, method: string) => number = ${code}; export default d;`,
-  );
-  Bun.write(filename + '.json', JSON.stringify(router, null, 2));
+  console.log('  tree size:', JSON.stringify(router).length);
+
+  {
+    const filename = outdir + name.toLowerCase().replaceAll(' ', '-');
+    Bun.write(
+      filename + '.ts',
+      `const d: (path: string, method: string) => number = ${code}; export default d;`,
+    );
+    Bun.write(filename + '.json', JSON.stringify(router, null, 2));
+  }
 };
 
 if (import.meta.main) {
