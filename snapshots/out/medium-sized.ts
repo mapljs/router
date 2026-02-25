@@ -61,9 +61,9 @@ const d: (path: string, method: string) => number = (p, m) => {
                   if (p.charCodeAt(j + 8) === 47) {
                     let i = j + 9;
                     j = p.indexOf('/', i);
-                    if (j > i) {
-                      let q1 = p.slice(i, j);
+                    if (j > i)
                       if (l > j + 1) {
+                        let q1 = p.slice(i, j);
                         switch (p.charCodeAt(j + 1)) {
                           case 97:
                             if (p.startsWith('ccept', j + 2)) {
@@ -79,7 +79,6 @@ const d: (path: string, method: string) => number = (p, m) => {
                             }
                         }
                       }
-                    }
                   }
               }
             } else if (j === -1) {
@@ -91,9 +90,9 @@ const d: (path: string, method: string) => number = (p, m) => {
         if (l > 5)
           if (p.startsWith('rg/', 2)) {
             let j = p.indexOf('/', 5);
-            if (j > 5) {
-              let q0 = p.slice(5, j);
+            if (j > 5)
               if (l > j + 1) {
+                let q0 = p.slice(5, j);
                 switch (p.charCodeAt(j + 1)) {
                   case 109:
                     if (p.startsWith('embers', j + 2)) {
@@ -143,9 +142,9 @@ const d: (path: string, method: string) => number = (p, m) => {
                         if (p.charCodeAt(j + 9) === 47) {
                           let i = j + 10;
                           j = p.indexOf('/', i);
-                          if (j > i) {
-                            let q1 = p.slice(i, j);
+                          if (j > i)
                             if (l > j + 1) {
+                              let q1 = p.slice(i, j);
                               switch (p.charCodeAt(j + 1)) {
                                 case 109:
                                   if (p.startsWith('embers', j + 2)) {
@@ -222,7 +221,6 @@ const d: (path: string, method: string) => number = (p, m) => {
                                   }
                               }
                             }
-                          }
                         }
                     }
                   case 116:
@@ -230,9 +228,9 @@ const d: (path: string, method: string) => number = (p, m) => {
                       if (p.startsWith('asks/', j + 2)) {
                         let i = j + 7;
                         j = p.indexOf('/', i);
-                        if (j > i) {
-                          let q1 = p.slice(i, j);
+                        if (j > i)
                           if (l > j + 1) {
+                            let q1 = p.slice(i, j);
                             switch (p.charCodeAt(j + 1)) {
                               case 97:
                                 if (l > j + 2) {
@@ -295,7 +293,6 @@ const d: (path: string, method: string) => number = (p, m) => {
                                 }
                             }
                           }
-                        }
                       }
                   case 98:
                     if (l > j + 9)
@@ -342,7 +339,6 @@ const d: (path: string, method: string) => number = (p, m) => {
                     }
                 }
               }
-            }
           }
       case 97:
         if (l > 15)
@@ -394,9 +390,9 @@ const d: (path: string, method: string) => number = (p, m) => {
         if (l > 6)
           if (p.startsWith('ser/', 2)) {
             let j = p.indexOf('/', 6);
-            if (j > 6) {
-              let q0 = p.slice(6, j);
+            if (j > 6)
               if (l > j + 1) {
+                let q0 = p.slice(6, j);
                 switch (p.charCodeAt(j + 1)) {
                   case 110:
                     if (p.startsWith('otifications', j + 2)) {
@@ -413,19 +409,18 @@ const d: (path: string, method: string) => number = (p, m) => {
                         }
                       }
                 }
+              } else if (j === -1) {
+                let q0 = p.slice(6);
+                return 9;
               }
-            } else if (j === -1) {
-              let q0 = p.slice(6);
-              return 9;
-            }
           }
       case 111:
         if (l > 5)
           if (p.startsWith('rg/', 2)) {
             let j = p.indexOf('/', 5);
-            if (j > 5) {
-              let q0 = p.slice(5, j);
+            if (j > 5)
               if (l > j + 1) {
+                let q0 = p.slice(5, j);
                 switch (p.charCodeAt(j + 1)) {
                   case 109:
                     if (p.startsWith('embers', j + 2)) {
@@ -450,9 +445,9 @@ const d: (path: string, method: string) => number = (p, m) => {
                       if (p.startsWith('rojects/', j + 2)) {
                         let i = j + 10;
                         j = p.indexOf('/', i);
-                        if (j > i) {
-                          let q1 = p.slice(i, j);
+                        if (j > i)
                           if (l > j + 1) {
+                            let q1 = p.slice(i, j);
                             switch (p.charCodeAt(j + 1)) {
                               case 109:
                                 if (p.startsWith('embers', j + 2)) {
@@ -494,11 +489,10 @@ const d: (path: string, method: string) => number = (p, m) => {
                                     }
                                 }
                             }
+                          } else if (j === -1) {
+                            let q1 = p.slice(i);
+                            return 39;
                           }
-                        } else if (j === -1) {
-                          let q1 = p.slice(i);
-                          return 39;
-                        }
                       }
                   case 116:
                     if (p.startsWith('asks', j + 2)) {
@@ -509,9 +503,9 @@ const d: (path: string, method: string) => number = (p, m) => {
                         if (p.charCodeAt(j + 6) === 47) {
                           let i = j + 7;
                           j = p.indexOf('/', i);
-                          if (j > i) {
-                            let q1 = p.slice(i, j);
+                          if (j > i)
                             if (l > j + 1) {
+                              let q1 = p.slice(i, j);
                               switch (p.charCodeAt(j + 1)) {
                                 case 99:
                                   if (p.startsWith('omments', j + 2)) {
@@ -532,11 +526,10 @@ const d: (path: string, method: string) => number = (p, m) => {
                                     }
                                   }
                               }
+                            } else if (j === -1) {
+                              let q1 = p.slice(i);
+                              return 57;
                             }
-                          } else if (j === -1) {
-                            let q1 = p.slice(i);
-                            return 57;
-                          }
                         }
                     }
                   case 98:
@@ -614,11 +607,10 @@ const d: (path: string, method: string) => number = (p, m) => {
                         }
                     }
                 }
+              } else if (j === -1) {
+                let q0 = p.slice(5);
+                return 26;
               }
-            } else if (j === -1) {
-              let q0 = p.slice(5);
-              return 26;
-            }
           }
       case 102:
         if (l > 7)
@@ -685,9 +677,9 @@ const d: (path: string, method: string) => number = (p, m) => {
         if (l > 5)
           if (p.startsWith('rg/', 2)) {
             let j = p.indexOf('/', 5);
-            if (j > 5) {
-              let q0 = p.slice(5, j);
+            if (j > 5)
               if (l > j + 1) {
+                let q0 = p.slice(5, j);
                 switch (p.charCodeAt(j + 1)) {
                   case 112:
                     if (l > j + 10)
@@ -714,11 +706,10 @@ const d: (path: string, method: string) => number = (p, m) => {
                         }
                       }
                 }
+              } else if (j === -1) {
+                let q0 = p.slice(5);
+                return 27;
               }
-            } else if (j === -1) {
-              let q0 = p.slice(5);
-              return 27;
-            }
           }
       case 115:
         if (l > 16)
@@ -752,9 +743,9 @@ const d: (path: string, method: string) => number = (p, m) => {
         if (l > 5)
           if (p.startsWith('rg/', 2)) {
             let j = p.indexOf('/', 5);
-            if (j > 5) {
-              let q0 = p.slice(5, j);
+            if (j > 5)
               if (l > j + 1) {
+                let q0 = p.slice(5, j);
                 switch (p.charCodeAt(j + 1)) {
                   case 112:
                     if (l > j + 10)
@@ -792,9 +783,9 @@ const d: (path: string, method: string) => number = (p, m) => {
                       if (p.startsWith('asks/', j + 2)) {
                         let i = j + 7;
                         j = p.indexOf('/', i);
-                        if (j > i) {
-                          let q1 = p.slice(i, j);
+                        if (j > i)
                           if (l > j + 1) {
+                            let q1 = p.slice(i, j);
                             switch (p.charCodeAt(j + 1)) {
                               case 116:
                                 if (p.startsWith('ags', j + 2)) {
@@ -811,11 +802,10 @@ const d: (path: string, method: string) => number = (p, m) => {
                                     }
                                   }
                             }
+                          } else if (j === -1) {
+                            let q1 = p.slice(i);
+                            return 59;
                           }
-                        } else if (j === -1) {
-                          let q1 = p.slice(i);
-                          return 59;
-                        }
                       }
                   case 98:
                     if (l > j + 25)
@@ -842,11 +832,10 @@ const d: (path: string, method: string) => number = (p, m) => {
                         }
                       }
                 }
+              } else if (j === -1) {
+                let q0 = p.slice(5);
+                return 28;
               }
-            } else if (j === -1) {
-              let q0 = p.slice(5);
-              return 28;
-            }
           }
       case 102:
         if (l > 7)
@@ -878,9 +867,9 @@ const d: (path: string, method: string) => number = (p, m) => {
     if (l > 5)
       if (p.startsWith('org/', 1)) {
         let j = p.indexOf('/', 5);
-        if (j > 5) {
-          let q0 = p.slice(5, j);
+        if (j > 5)
           if (l > j + 1) {
+            let q0 = p.slice(5, j);
             switch (p.charCodeAt(j + 1)) {
               case 112:
                 if (l > j + 10)
@@ -916,7 +905,6 @@ const d: (path: string, method: string) => number = (p, m) => {
                   }
             }
           }
-        }
       }
   }
   return -1;

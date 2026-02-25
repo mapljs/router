@@ -87,21 +87,16 @@ export const compile = (
       } else builder += 'let ';
 
       builder +=
-        `${constants.CURRENT_PARAM_IDX}=${constants.PATH}.indexOf("/",${currentIdx});if(${constants.CURRENT_PARAM_IDX}>${currentIdx}){let ${constants.PARAMS}${paramCount}=${constants.PATH}.slice(` +
-        currentIdx +
-        (shouldBoundCheck(childNode)
-          ? `,${constants.CURRENT_PARAM_IDX});if(${constants.PATH_LEN}>${constants.CURRENT_PARAM_IDX}+1){${compile(
-              childNode,
-              paramCount + 1,
-              1,
-              constants.CURRENT_PARAM_IDX + '+',
-            )}}}`
-          : `,${constants.CURRENT_PARAM_IDX});${compile(
-              childNode,
-              paramCount + 1,
-              1,
-              constants.CURRENT_PARAM_IDX + '+',
-            )}}`);
+        `${constants.CURRENT_PARAM_IDX}=${constants.PATH}.indexOf("/",${currentIdx});if(${constants.CURRENT_PARAM_IDX}>${
+          shouldBoundCheck(childNode)
+            ? currentIdx + `)if(${constants.PATH_LEN}>${constants.CURRENT_PARAM_IDX}+1`
+            : currentIdx
+        }){let ${constants.PARAMS}${paramCount}=${constants.PATH}.slice(${currentIdx},${constants.CURRENT_PARAM_IDX});${compile(
+            childNode,
+            paramCount + 1,
+            1,
+            constants.CURRENT_PARAM_IDX + '+',
+          )}}`
     }
 
     params[1] != null &&
