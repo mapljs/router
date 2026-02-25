@@ -42,12 +42,12 @@ export const compile = (
             ? `:if(${constants.PATH_LEN}>${idxPrefix + nextIdx})`
             : ':') +
           (nodePath.length > 1
-            ? `if(${constants.PATH}` +
+            ? `if(${constants.PATH}.` +
               (nodePath.length > 2
-                ? `.startsWith("${nodePath.slice(1)}",${
+                ? `startsWith("${nodePath.slice(1)}",${
                     idxPrefix + (idx + 1)
                   })){`
-                : `.charCodeAt(${
+                : `charCodeAt(${
                     idxPrefix + (idx + 1)
                   })===${nodePath.charCodeAt(1)}){`)
             : '{') +
@@ -59,16 +59,15 @@ export const compile = (
     } else {
       const childNode = children[0];
       const nodePath = childNode[0];
-      const nextIdx = idx + nodePath.length;
 
       builder +=
         (shouldBoundCheck(childNode)
-          ? `if(${constants.PATH_LEN}>${idxPrefix + nextIdx})if(${constants.PATH}`
-          : `if(${constants.PATH}`) +
+          ? `if(${constants.PATH_LEN}>${idxPrefix + (idx + nodePath.length)})if(${constants.PATH}.`
+          : `if(${constants.PATH}.`) +
         (nodePath.length > 1
-          ? `.startsWith("${nodePath}",${currentIdx})){`
-          : `.charCodeAt(${currentIdx})===${childrenFirstChar[0]}){`) +
-        compile(childNode, paramCount, nextIdx, idxPrefix) +
+          ? `startsWith("${nodePath}",${currentIdx})){`
+          : `charCodeAt(${currentIdx})===${childrenFirstChar[0]}){`) +
+        compile(childNode, paramCount, idx + nodePath.length, idxPrefix) +
         '}';
     }
   }
@@ -82,21 +81,29 @@ export const compile = (
 
       // Declare a variable to save previous param index
       if (paramCount > 0) {
-        builder += `let ${constants.PREV_PARAM_IDX}=${currentIdx};`;
+        builder += `let ${constants.PREV_PARAM_IDX}=${currentIdx};${constants.CURRENT_PARAM_IDX}=${constants.PATH}.indexOf("/",`;
         currentIdx = constants.PREV_PARAM_IDX;
-      } else builder += 'let ';
+      } else
+        builder += `let ${constants.CURRENT_PARAM_IDX}=${constants.PATH}.indexOf("/",`;
+
+      const needBoundCheck = shouldBoundCheck(childNode);
 
       builder +=
-        `${constants.CURRENT_PARAM_IDX}=${constants.PATH}.indexOf("/",${currentIdx});if(${constants.CURRENT_PARAM_IDX}>${
-          shouldBoundCheck(childNode)
-            ? currentIdx + `)if(${constants.PATH_LEN}>${constants.CURRENT_PARAM_IDX}+1`
-            : currentIdx
-        }){let ${constants.PARAMS}${paramCount}=${constants.PATH}.slice(${currentIdx},${constants.CURRENT_PARAM_IDX});${compile(
-            childNode,
-            paramCount + 1,
-            1,
-            constants.CURRENT_PARAM_IDX + '+',
-          )}}`
+        currentIdx +
+        `);if(${constants.CURRENT_PARAM_IDX}>` +
+        currentIdx +
+        (needBoundCheck
+          ? `){if(${constants.PATH_LEN}>${constants.CURRENT_PARAM_IDX}+1){let ${constants.PARAMS}`
+          : `){let ${constants.PARAMS}`) +
+        paramCount +
+        `=${constants.PATH}.slice(${currentIdx},${constants.CURRENT_PARAM_IDX});` +
+        compile(
+          childNode,
+          paramCount + 1,
+          1,
+          constants.CURRENT_PARAM_IDX + '+',
+        ) +
+        (needBoundCheck ? '}}' : '}');
     }
 
     params[1] != null &&

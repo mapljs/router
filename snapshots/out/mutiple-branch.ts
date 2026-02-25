@@ -4,7 +4,7 @@ const d: (path: string, method: string) => number = (p, m) => {
     if (l > 6)
       if (p.startsWith('user/', 1)) {
         let j = p.indexOf('/', 6);
-        if (j > 6)
+        if (j > 6) {
           if (l > j + 1) {
             let q0 = p.slice(6, j);
             switch (p.charCodeAt(j + 1)) {
@@ -34,6 +34,7 @@ const d: (path: string, method: string) => number = (p, m) => {
                   }
             }
           }
+        }
       }
   }
   return -1;
