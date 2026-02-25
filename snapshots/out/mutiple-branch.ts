@@ -1,5 +1,7 @@
 const d: (path: string, method: string) => number = (p, m) => {
   if (m === 'GET') {
+    {
+    }
     let l = p.length;
     if (l > 6)
       if (p.startsWith('user/', 1)) {
@@ -36,6 +38,7 @@ const d: (path: string, method: string) => number = (p, m) => {
           }
         }
       }
+  } else {
   }
   return -1;
 };

@@ -1,17 +1,52 @@
-export type Node<T = unknown> = [
-  part: string,
-  store: T | null,
-  childrenFirstChar: number[],
-  children: Node<T>[],
-  params: ParamNode<T> | null,
-  wildcardStore: T | null,
-];
+export interface Node<out T = unknown> {
+  /**
+   * Part
+   */
+  0: string;
 
-export type ParamNode<T = unknown> = [child: Node<T> | null, store: T | null];
+  /**
+   * Store
+   */
+  1: T | null;
+
+  /**
+   * Children first chars
+   */
+  2: number[];
+
+  /**
+   * Children nodes
+   */
+  3: Node<T>[];
+
+  /**
+   * Parameter node
+   */
+  4: ParamNode<T> | null;
+
+  /**
+   * Wildcard store
+   */
+  5: T | null;
+}
+
+export interface ParamNode<out T = unknown> {
+  /**
+   * Child node
+   */
+  0: Node<T> | null;
+
+  /**
+   * Store
+   */
+  1: T | null;
+}
 
 // Implementations
 export const isEmptyNode = (node: Node<any>): boolean =>
   node[1] == null && node[2].length === 0 && node[4] == null && node[5] == null;
+
+export const createRoot = <T>(): Node<T> => ['/', null, [], [], null, null];
 
 // Fast path for inserting new branch
 export const insertNewBranch = <T>(
@@ -55,7 +90,7 @@ export const insertNewBranch = <T>(
     }
 
     // */other/part
-    const nextNode: Node<T> = ['/', null, [], [], null, null];
+    const nextNode: Node<T> = createRoot();
     root[4] = [nextNode, null];
     root = nextNode;
 
@@ -105,7 +140,7 @@ export const insert = <T>(
         }
 
         // .../*/...
-        root = root[4]![0] ??= ['/', null, [], [], null, null];
+        root = root[4]![0] ??= createRoot();
 
         nodePartIdx = 1;
         // Always a root node

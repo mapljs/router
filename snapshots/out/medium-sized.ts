@@ -32,6 +32,7 @@ const d: (path: string, method: string) => number = (p, m) => {
       return 112;
     } else if (p === '/admin/exports') {
       return 113;
+    } else {
     }
     let l = p.length;
     switch (p.charCodeAt(1)) {
@@ -387,6 +388,7 @@ const d: (path: string, method: string) => number = (p, m) => {
       return 110;
     } else if (p === '/admin/stats') {
       return 111;
+    } else {
     }
     let l = p.length;
     switch (p.charCodeAt(1)) {
@@ -678,6 +680,7 @@ const d: (path: string, method: string) => number = (p, m) => {
   } else if (m === 'PATCH') {
     if (p === '/user/me/preferences') {
       return 19;
+    } else {
     }
     let l = p.length;
     switch (p.charCodeAt(1)) {
@@ -738,6 +741,8 @@ const d: (path: string, method: string) => number = (p, m) => {
           }
     }
   } else if (m === 'DELETE') {
+    {
+    }
     let l = p.length;
     switch (p.charCodeAt(1)) {
       case 117:
@@ -874,6 +879,8 @@ const d: (path: string, method: string) => number = (p, m) => {
           }
     }
   } else if (m === 'PUT') {
+    {
+    }
     let l = p.length;
     if (l > 5)
       if (p.startsWith('org/', 1)) {
@@ -918,6 +925,7 @@ const d: (path: string, method: string) => number = (p, m) => {
           }
         }
       }
+  } else {
   }
   return -1;
 };

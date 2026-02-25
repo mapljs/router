@@ -35,9 +35,8 @@
         ]
       ],
       null,
-      null,
-      "/user",
-      "return 0"
+      null
     ]
-  ]
+  ],
+  [{}]
 ]

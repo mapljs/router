@@ -1,14 +1,14 @@
 import { describe, test, expect } from 'bun:test';
 
-import { createRouter, insertItem, type Router } from '@mapl/router/path';
+import { createRoot, insert, type Node } from '@mapl/router/tree/node';
+import { compile } from '@mapl/router/tree/compiler';
 
-import { PATH } from '@mapl/router/constants';
-import buildRouter from '@mapl/router/path/compiler';
+import { PATH, PATH_LEN } from '@mapl/router/constants';
 
-const compileRouter = (root: Router<string>): ((path: string) => any) => {
-  const content = buildRouter(root, 1);
+const compileRouter = (root: Node<any>): ((path: string) => any) => {
+  const content = compile(root, 0, 1, '');
   try {
-    return (0, eval)(`(${PATH})=>{${content}}`);
+    return (0, eval)(`(${PATH})=>{let ${PATH_LEN}=${PATH}.length;${content}}`);
   } catch (e) {
     console.error(content);
     throw e;
@@ -17,9 +17,9 @@ const compileRouter = (root: Router<string>): ((path: string) => any) => {
 
 const runTest = (samplePaths: string[], label: string) => {
   // Build the tree
-  const router = createRouter<string>();
+  const router = createRoot<string>();
   for (let i = 0; i < samplePaths.length; i++)
-    insertItem(router, samplePaths[i], `return ${i}`);
+    insert(router, 1, samplePaths[i], 1, `return ${i}`);
 
   // Build result paths
   const resultPaths = samplePaths.map((pattern) =>

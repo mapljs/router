@@ -2,8 +2,6 @@ import { createRouter, insertItem } from '@mapl/router/method';
 import compile from '@mapl/router/method/compiler';
 import { PATH } from '@mapl/router/constants';
 
-import { do_not_optimize } from 'mitata';
-
 import pc from 'picocolors';
 
 type Method = 'GET' | 'POST' | 'PUT' | 'DELETE' | 'PATCH';
@@ -58,7 +56,7 @@ export const write = (outdir: string, name: string, routes: Routes) => {
 
     let router = createRouter();
     ${routeList.map((route) => `insertItem(router,${route.map((x) => JSON.stringify(x)).join()})`).join(';')};
-    let code=\`(${PATH},m)=>{\${compile(router,'m','',1)}return -1}\`;
+    let code=\`(${PATH},m)=>{\${compile(router,'m',1)}return -1}\`;
     (0, eval)(code);
 
     s3 = Bun.nanoseconds();

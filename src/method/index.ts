@@ -1,14 +1,10 @@
-import type { Router as PathRouter } from '../path/index.js';
-import {
-  createRouter as createPathRouter,
-  insertItem as insertItemToPath,
-} from '../path/index.js';
+import { createRoot, insert, type Node } from '../tree/node.js';
 
 export type Router<T = unknown> =
-  | [string[], PathRouter<T>[]]
-  | [string[], PathRouter<T>[], PathRouter<T>];
+  | [string[], Node<T>[], Map<string, T>[]]
+  | [string[], Node<T>[], Map<string, T>[], Node<T>, Map<string, T>];
 
-export const createRouter = <T>(): Router<T> => [[], []];
+export const createRouter = <T>(): Router<T> => [[], [], []];
 
 export const insertItem = <T>(
   router: Router<T>,
@@ -16,18 +12,31 @@ export const insertItem = <T>(
   path: string,
   item: T,
 ): void => {
-  if (method.length > 0) {
+  if (method !== '') {
     const idx = router[0].indexOf(method);
-    if (idx > -1) insertItemToPath(router[1][idx], path, item);
-    else {
-      const newRouter = createPathRouter<T>();
-      insertItemToPath(newRouter, path, item);
-
+    if (idx > -1) {
+      path.includes('*')
+        ? insert(router[1][idx], 1, path, 1, item)
+        : router[2][idx].set(path, item);
+    } else {
       router[0].push(method);
-      router[1].push(newRouter);
+
+      const node = createRoot<T>();
+      router[1].push(node);
+
+      const mp = new Map<string, T>();
+      router[2].push(mp);
+
+      path.includes('*')
+        ? insert(node, 1, path, 1, item)
+        : mp.set(path, item);
     }
   } else {
-    router.length === 2 && router.push(createPathRouter());
-    insertItemToPath(router[2]!, path, item);
+    router.length === 3 &&
+      router.push(createRoot() as any, new Map<string, T>() as any);
+
+    path.includes('*')
+      ? insert(router[3]!, 1, path, 1, item)
+      : router[4]!.set(path, item);
   }
 };

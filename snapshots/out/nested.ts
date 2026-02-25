@@ -2,6 +2,7 @@ const d: (path: string, method: string) => number = (p, m) => {
   if (m === 'GET') {
     if (p === '/user') {
       return 0;
+    } else {
     }
     let l = p.length;
     if (l > 6)
@@ -21,6 +22,7 @@ const d: (path: string, method: string) => number = (p, m) => {
           }
         }
       }
+  } else {
   }
   return -1;
 };

@@ -10,6 +10,7 @@ const d: (path: string, method: string) => number = (p, m) => {
       return 9;
     } else if (p === '/very/deeply/nested/route/hello/there') {
       return 10;
+    } else {
     }
     let l = p.length;
     switch (p.charCodeAt(1)) {
@@ -72,6 +73,8 @@ const d: (path: string, method: string) => number = (p, m) => {
           }
     }
   } else if (m === 'POST') {
+    {
+    }
     let l = p.length;
     if (l > 7)
       if (p.startsWith('event/', 1)) {
@@ -85,6 +88,7 @@ const d: (path: string, method: string) => number = (p, m) => {
           }
         }
       }
+  } else {
   }
   return -1;
 };
