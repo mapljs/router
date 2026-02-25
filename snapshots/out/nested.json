@@ -2,42 +2,40 @@
   ["GET"],
   [
     [
+      "/",
+      null,
+      [117],
       [
-        "/",
-        null,
-        [117],
         [
+          "user/",
+          null,
+          [],
+          [],
           [
-            "user/",
-            null,
-            [],
-            [],
             [
+              "/",
+              null,
+              [100],
               [
-                "/",
-                null,
-                [100],
                 [
-                  [
-                    "dashboard",
-                    "return 1",
-                    [47],
-                    [["/edit", "return 2", [], [], null, null]],
-                    null,
-                    null
-                  ]
-                ],
-                null,
-                null
+                  "dashboard",
+                  "return 1",
+                  [47],
+                  [["/edit", "return 2", [], [], null, null]],
+                  null,
+                  null
+                ]
               ],
+              null,
               null
             ],
             null
-          ]
-        ],
-        null,
-        null
+          ],
+          null
+        ]
       ],
+      null,
+      null,
       "/user",
       "return 0"
     ]

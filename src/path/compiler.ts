@@ -9,34 +9,15 @@ import { isEmptyNode } from '../tree/node.js';
 export default (router: Router<string>, startIndex: 0 | 1): string => {
   let str = '';
 
-  if (router.length > 1) {
-    str =
-      'if(' +
-      constants.PATH +
-      '==="' +
-      (startIndex === 1 ? router[1] : router[1].slice(1)) +
-      '"){' +
-      router[2] +
-      '}';
-
-    for (let i = 3; i < router.length; i += 2)
-      str +=
-        'else if(' +
-        constants.PATH +
-        '==="' +
-        (startIndex === 1 ? router[i] : router[i].slice(1)) +
-        '"){' +
-        router[i + 1] +
-        '}';
+  if (router.length > 6) {
+    str = `if(${constants.PATH}==="${startIndex === 1 ? router[6] : router[6].slice(1)}"){${router[7]}}`;
+    for (let i = 8; i < router.length; i += 2)
+      str += `else if(${constants.PATH}==="${startIndex === 1 ? router[i] : router[i].slice(1)}"){${router[i + 1]}}`;
   }
 
-  return isEmptyNode(router[0])
+  return isEmptyNode(router as any)
     ? str
     : str +
-        'let ' +
-        constants.PATH_LEN +
-        '=' +
-        constants.PATH +
-        '.length;' +
-        compile(router[0], 0, startIndex, '');
+        `let ${constants.PATH_LEN}=${constants.PATH}.length;` +
+        compile(router as any, 0, startIndex, '');
 };

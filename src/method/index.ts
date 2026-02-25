@@ -22,6 +22,7 @@ export const insertItem = <T>(
     else {
       const newRouter = createPathRouter<T>();
       insertItemToPath(newRouter, path, item);
+
       router[0].push(method);
       router[1].push(newRouter);
     }

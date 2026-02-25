@@ -11,10 +11,7 @@ export type ParamNode<T = unknown> = [child: Node<T> | null, store: T | null];
 
 // Implementations
 export const isEmptyNode = (node: Node<any>): boolean =>
-  node[1] === null &&
-  node[2].length === 0 &&
-  node[4] === null &&
-  node[5] === null;
+  node[1] == null && node[2].length === 0 && node[4] == null && node[5] == null;
 
 // Fast path for inserting new branch
 export const insertNewBranch = <T>(
@@ -116,10 +113,8 @@ export const insert = <T>(
 
         pathIdx += 2;
       } else {
-        const childrenFirstChar = root[2];
-
         // Add new children
-        const nextNodeId = childrenFirstChar.indexOf(path.charCodeAt(pathIdx));
+        const nextNodeId = root[2].indexOf(path.charCodeAt(pathIdx));
         if (nextNodeId === -1) {
           insertNewBranch(
             root,

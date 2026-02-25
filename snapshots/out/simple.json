@@ -2,63 +2,61 @@
   ["GET", "POST"],
   [
     [
+      "/",
+      null,
+      [117, 101, 109, 115],
       [
-        "/",
-        null,
-        [117, 101, 109, 115],
         [
+          "user/lookup/",
+          null,
+          [117, 101],
           [
-            "user/lookup/",
-            null,
-            [117, 101],
-            [
-              ["username/", null, [], [], [null, "return 3"], null],
-              ["email/", null, [], [], [null, "return 4"], null]
-            ],
-            null,
-            null
+            ["username/", null, [], [], [null, "return 3"], null],
+            ["email/", null, [], [], [null, "return 4"], null]
           ],
+          null,
+          null
+        ],
+        [
+          "event/",
+          null,
+          [],
+          [],
           [
-            "event/",
-            null,
-            [],
-            [],
             [
-              [
-                "/",
-                null,
-                [99],
-                [["comments", "return 6", [], [], null, null]],
-                null,
-                null
-              ],
-              "return 5"
+              "/",
+              null,
+              [99],
+              [["comments", "return 6", [], [], null, null]],
+              null,
+              null
             ],
-            null
+            "return 5"
           ],
+          null
+        ],
+        [
+          "map/",
+          null,
+          [],
+          [],
           [
-            "map/",
-            null,
-            [],
-            [],
             [
-              [
-                "/",
-                null,
-                [101],
-                [["events", "return 8", [], [], null, null]],
-                null,
-                null
-              ],
+              "/",
+              null,
+              [101],
+              [["events", "return 8", [], [], null, null]],
+              null,
               null
             ],
             null
           ],
-          ["static/", null, [], [], null, "return 11"]
+          null
         ],
-        null,
-        null
+        ["static/", null, [], [], null, "return 11"]
       ],
+      null,
+      null,
       "/user",
       "return 0",
       "/user/comments",
@@ -71,33 +69,31 @@
       "return 10"
     ],
     [
+      "/",
+      null,
+      [101],
       [
-        "/",
-        null,
-        [101],
         [
+          "event/",
+          null,
+          [],
+          [],
           [
-            "event/",
-            null,
-            [],
-            [],
             [
-              [
-                "/",
-                null,
-                [99],
-                [["comment", "return 7", [], [], null, null]],
-                null,
-                null
-              ],
+              "/",
+              null,
+              [99],
+              [["comment", "return 7", [], [], null, null]],
+              null,
               null
             ],
             null
-          ]
-        ],
-        null,
-        null
-      ]
+          ],
+          null
+        ]
+      ],
+      null,
+      null
     ]
   ]
 ]
