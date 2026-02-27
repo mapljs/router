@@ -1,6 +1,7 @@
 import { describe, test, expect } from 'bun:test';
 
 import { createRoot, insert, type Node } from '@mapl/router/tree/node';
+import { match, init } from '@mapl/router/tree/match';
 import { compile } from '@mapl/router/tree/compiler';
 
 import { PATH, PATH_LEN } from '@mapl/router/constants';
@@ -17,22 +18,32 @@ const compileRouter = (root: Node<any>): ((path: string) => any) => {
 
 const runTest = (samplePaths: string[], label: string) => {
   // Build the tree
-  const router = createRoot<string>();
-  for (let i = 0; i < samplePaths.length; i++)
-    insert(router, 1, samplePaths[i], 1, `return ${i}`);
+  const compiledRouter = createRoot<string>();
+  const router = createRoot<number>();
+  for (let i = 0; i < samplePaths.length; i++) {
+    insert(router, 1, samplePaths[i], 1, i);
+    insert(compiledRouter, 1, samplePaths[i], 1, `return ${i}`);
+  }
 
   // Build result paths
   const resultPaths = samplePaths.map((pattern) =>
     pattern.endsWith('**') ? pattern.slice(0, -2) + '1/2/3/4' : pattern,
   );
 
-  const compiled = compileRouter(router);
+  const compiled = compileRouter(compiledRouter);
   console.log(label, compiled.toString(), '\n');
 
   describe(label, () => {
     for (let i = 0; i < samplePaths.length; i++) {
-      test(`${samplePaths[i]}`, () => {
-        expect(compiled(resultPaths[i])).toBe(i);
+      describe(`${samplePaths[i]}`, () => {
+        test('compiled match', () => {
+          expect(compiled(resultPaths[i])).toBe(i);
+        });
+
+        test('match', () => {
+          init(resultPaths[i]);
+          expect(match(router, 1)).toBe(i);
+        });
       });
     }
   });
