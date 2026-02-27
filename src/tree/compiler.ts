@@ -20,7 +20,7 @@ export const compile = (
   let builder = '';
   let currentIdx = idxPrefix + idx;
 
-  node[1] == null ||
+  node[1] === null ||
     (builder += `if(${constants.PATH_LEN}===${currentIdx}){${node[1]}}`);
 
   if (node[2].length > 0) {
@@ -30,10 +30,14 @@ export const compile = (
     if (children.length > 1) {
       builder += `switch(${constants.PATH}.charCodeAt(${currentIdx})){`;
 
-      for (let i = 0; i < children.length; i++) {
-        const childNode = children[i];
-        const nodePath = childNode[0];
-        const nextIdx = idx + nodePath.length;
+      for (
+        let i = 0, checkIdx = idxPrefix + (idx + 1);
+        i < children.length;
+        i++
+      ) {
+        const childNode = children[i],
+          nodePart = childNode[0],
+          nextIdx = idx + nodePart.length;
 
         builder +=
           'case ' +
@@ -41,40 +45,36 @@ export const compile = (
           (shouldBoundCheck(childNode)
             ? `:if(${constants.PATH_LEN}>${idxPrefix + nextIdx})`
             : ':') +
-          (nodePath.length > 1
-            ? `if(${constants.PATH}.` +
-              (nodePath.length > 2
-                ? `startsWith("${nodePath.slice(1)}",${
-                    idxPrefix + (idx + 1)
-                  })){`
-                : `charCodeAt(${
-                    idxPrefix + (idx + 1)
-                  })===${nodePath.charCodeAt(1)}){`)
-            : '{') +
+          (nodePart.length > 2
+            ? `if(${constants.PATH}.startsWith("${nodePart.slice(1)}",${checkIdx})){`
+            : nodePart.length > 1
+              ? `if(${constants.PATH}.charCodeAt(${checkIdx})===${nodePart.charCodeAt(1)}){`
+              : '{') +
           compile(childNode, paramCount, nextIdx, idxPrefix) +
           '}';
       }
 
       builder += '}';
     } else {
-      const childNode = children[0];
-      const nodePath = childNode[0];
+      const childNode = children[0],
+        nodePart = childNode[0],
+        nodePartLen = nodePart.length;
+
+      shouldBoundCheck(childNode) &&
+        (builder += `if(${constants.PATH_LEN}>${idxPrefix + (idx + nodePartLen)})`);
 
       builder +=
-        (shouldBoundCheck(childNode)
-          ? `if(${constants.PATH_LEN}>${idxPrefix + (idx + nodePath.length)})if(${constants.PATH}.`
-          : `if(${constants.PATH}.`) +
-        (nodePath.length > 1
-          ? `startsWith("${nodePath}",${currentIdx})){`
-          : `charCodeAt(${currentIdx})===${childrenFirstChar[0]}){`) +
-        compile(childNode, paramCount, idx + nodePath.length, idxPrefix) +
+        (nodePartLen > 1
+          ? `if(${constants.PATH}.startsWith("${nodePart}",${currentIdx})){`
+          : `if(${constants.PATH}.charCodeAt(${currentIdx})===${childrenFirstChar[0]}){`) +
+        compile(childNode, paramCount, idx + nodePartLen, idxPrefix) +
         '}';
     }
   }
 
-  if (node[4] != null) {
-    const params = node[4];
-    const hasChild = params[0] != null;
+  if (node[4] !== null) {
+    const params = node[4],
+      hasChild = params[0] !== null;
 
     if (hasChild) {
       const childNode = params[0]!;
@@ -106,7 +106,7 @@ export const compile = (
         (needBoundCheck ? '}}' : '}');
     }
 
-    params[1] != null &&
+    params[1] !== null &&
       (builder +=
         (hasChild
           ? // CURRENT_PARAM_IDX has already been initialized
@@ -121,7 +121,7 @@ export const compile = (
         '}');
   }
 
-  node[5] == null ||
+  node[5] === null ||
     (builder +=
       `let ${constants.PARAMS}` +
       paramCount +
