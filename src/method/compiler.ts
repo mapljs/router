@@ -5,18 +5,22 @@ import { compile } from '../tree/compiler.js';
 let STR!: string, START_IDX!: 0 | 1;
 
 const each = (value: string, path: string) => {
-  STR += `if(${constants.PATH}==="${START_IDX === 1 ? path : path.slice(1)}"){${value}}else `;
-}
+  STR += `case"${START_IDX === 1 ? path : path.slice(1)}":{${value}}`;
+};
 
-const compileSubrouter = (mp: Map<string, string>, node: Node<string>): void => {
-  mp.forEach(each);
+const compileSubrouter = (
+  mp: Map<string, string>,
+  node: Node<string>,
+): void => {
+  if (mp.size > 0) {
+    STR += `switch(${constants.PATH}){`;
+    mp.forEach(each);
+    STR += '}';
+  }
 
-  isEmptyNode(node) ?
-    STR += '{}' :
-    (STR += `{}let ${constants.PATH_LEN}=${constants.PATH}.length;` +
-      compile(node, 0, START_IDX, '')
-    );
-}
+  isEmptyNode(node) ||
+    (STR += `{let ${constants.PATH_LEN}=${constants.PATH}.length;${compile(node, 0, START_IDX, '')}}`);
+};
 
 export default (
   router: Router<string>,
@@ -32,15 +36,12 @@ export default (
     const nodes = router[1];
     const maps = router[2];
 
-    methodInput = `if(${methodInput}==="`;
-
+    STR += `switch(${methodInput}){`;
     for (let i = 0; i < methods.length; i++) {
-      STR += methodInput + methods[i] + '"){';
+      STR += `case"${methods[i]}":`;
       compileSubrouter(maps[i], nodes[i]);
-      STR += '}else ';
     }
-
-    STR += '{}';
+    STR += '}';
   }
 
   router.length === 3 || compileSubrouter(router[4], router[3]);

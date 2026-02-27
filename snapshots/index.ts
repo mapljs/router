@@ -35,6 +35,12 @@ export const addRoutes = (
 const TIME_UNITS = ['ns', 'μs', 'ms', 's'];
 const BYTE_UNITS = ['b', 'kb'];
 
+const autoConvert = (val: number, units: string[]) => {
+  let i = 0;
+  for (; i < units.length - 1 && val > 1500; i++) val /= 1000;
+  return Math.round(val * 100) / 100 + units[i];
+};
+
 export const write = (outdir: string, name: string, routes: Routes) => {
   console.log('API:', pc.bold(name));
 
@@ -42,7 +48,7 @@ export const write = (outdir: string, name: string, routes: Routes) => {
   addRoutes(routeList, routes, process.env.DEBUG ? console.log : () => {});
   console.log('  routes:', routeList.length);
 
-  let { time, router, code } = Function(
+  let { addTime, compileTime, runTime, router, code } = Function(
     'createRouter',
     'insertItem',
     'compile',
@@ -50,41 +56,74 @@ export const write = (outdir: string, name: string, routes: Routes) => {
     'use strict';
     Bun.gc(true);
 
-    let s1, s2, s3;
-    s1 = Bun.nanoseconds();
-    s2 = Bun.nanoseconds();
+    let t_mock, t_start_add, t_end_add, t_end_compile, t_end_run;
+
+    t_mock = Bun.nanoseconds();
+    t_start_add = Bun.nanoseconds();
 
     let router = createRouter();
     ${routeList.map((route) => `insertItem(router,${route.map((x) => JSON.stringify(x)).join()})`).join(';')};
+
+    t_end_add = Bun.nanoseconds();
+
     let code=\`(${PATH},m)=>{\${compile(router,'m',1)}return -1}\`;
+
+    t_end_compile = Bun.nanoseconds();
+
     (0, eval)(code);
 
-    s3 = Bun.nanoseconds();
+    t_end_run = Bun.nanoseconds();
 
-    return { time: s3 - s2 - (s2 - s1), router, code };
+    let t_variation = t_start_add - t_mock;
+
+    return {
+      addTime: t_end_add - t_start_add - t_variation,
+      compileTime: t_end_compile - t_end_add - t_variation,
+      runTime: t_end_run - t_end_compile - t_variation,
+      router,
+      code
+    };
   `,
   )(createRouter, insertItem, compile);
 
   {
-    let i = 0;
-    for (; i < TIME_UNITS.length - 1 && time > 1500; i++) time /= 1000;
     console.log(
-      '  build time (add & compile routes):',
-      pc.yellowBright(Math.round(time * 100) / 100 + TIME_UNITS[i]),
+      '  add time:',
+      pc.yellowBright(autoConvert(addTime, TIME_UNITS)),
+    );
+
+    console.log(
+      '  compile time:',
+      pc.yellowBright(autoConvert(compileTime, TIME_UNITS)),
+    );
+
+    console.log(
+      '  run time:',
+      pc.yellowBright(autoConvert(runTime, TIME_UNITS)),
+    );
+
+    console.log(
+      '  total time:',
+      pc.yellowBright(autoConvert(addTime + compileTime + runTime, TIME_UNITS)),
     );
   }
 
   {
-    let size = code.length,
-      i = 0;
-    for (; i < BYTE_UNITS.length - 1 && size > 1500; i++) size /= 1000;
     console.log(
       '  size:',
-      pc.yellowBright(Math.round(size * 100) / 100 + BYTE_UNITS[i]),
+      pc.yellowBright(autoConvert(code.length, BYTE_UNITS)),
     );
   }
 
-  console.log('  tree size:', JSON.stringify(router).length);
+  const replacer = (_: any, v: any) =>
+    v instanceof Map ? Object.fromEntries(v.entries().toArray()) : v;
+
+  console.log(
+    '  tree size:',
+    pc.yellowBright(
+      autoConvert(JSON.stringify(router, replacer).length, BYTE_UNITS),
+    ),
+  );
 
   {
     const filename = outdir + name.toLowerCase().replaceAll(' ', '-');
@@ -92,7 +131,7 @@ export const write = (outdir: string, name: string, routes: Routes) => {
       filename + '.ts',
       `const d: (path: string, method: string) => number = ${code}; export default d;`,
     );
-    Bun.write(filename + '.json', JSON.stringify(router, null, 2));
+    Bun.write(filename + '.json', JSON.stringify(router, replacer, 2));
   }
 };
 

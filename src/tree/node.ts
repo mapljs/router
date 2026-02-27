@@ -74,28 +74,22 @@ export const insertNewBranch = <T>(
       root = nextNode;
     }
 
-    // ends with **
-    if (
-      nextParamIdx + 2 === path.length &&
-      path.charCodeAt(nextParamIdx + 1) === 42
-    ) {
-      root[5] = value;
-      return;
-    }
-
+    // must ends with **
+    if (nextParamIdx + 2 === path.length) root[5] = value;
     // ends with *
-    if (nextParamIdx + 1 === path.length) {
-      root[4] = [null, value];
-      return;
+    else if (nextParamIdx + 1 === path.length) root[4] = [null, value];
+    // */other/part
+    else {
+      const nextNode: Node<T> = createRoot();
+      root[4] = [nextNode, null];
+      root = nextNode;
+
+      startIdx = nextParamIdx + 2;
+      nextParamIdx = path.indexOf('*', startIdx);
+      continue;
     }
 
-    // */other/part
-    const nextNode: Node<T> = createRoot();
-    root[4] = [nextNode, null];
-    root = nextNode;
-
-    startIdx = nextParamIdx + 2;
-    nextParamIdx = path.indexOf('*', startIdx);
+    return;
   }
 
   // Add the rest of the path
@@ -120,33 +114,24 @@ export const insert = <T>(
       // * or **
       if (path.charCodeAt(pathIdx) === 42) {
         // .../**
-        if (
-          pathIdx + 2 === path.length &&
-          path.charCodeAt(pathIdx + 1) === 42
-        ) {
-          root[5] = value;
-          return;
-        }
-
-        if (root[4] === null) {
+        if (pathIdx + 2 === path.length) root[5] = value;
+        else if (root[4] === null)
           insertNewBranch(root, path, pathIdx, pathIdx, value);
-          return;
-        }
-
         // .../*
-        if (pathIdx + 1 === path.length) {
-          root[4]![1] = value;
-          return;
+        else if (pathIdx + 1 === path.length) root[4]![1] = value;
+        else {
+          // .../*/...
+          root = root[4]![0] ??= createRoot();
+
+          nodePartIdx = 1;
+          // Always a root node
+          nodePart = '/';
+
+          pathIdx += 2;
+          continue;
         }
 
-        // .../*/...
-        root = root[4]![0] ??= createRoot();
-
-        nodePartIdx = 1;
-        // Always a root node
-        nodePart = '/';
-
-        pathIdx += 2;
+        return;
       } else {
         // Add new children
         const nextNodeId = root[2].indexOf(path.charCodeAt(pathIdx));

@@ -8,7 +8,7 @@ export const init = (path: string): void => {
   PATH = path;
   PATH_LEN = path.length;
   PARAMS = [];
-}
+};
 
 export const match = <T>(node: Node<T>, start: number): T | null => {
   if (start === PATH_LEN) return node[1];

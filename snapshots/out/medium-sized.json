@@ -815,5 +815,45 @@
       null
     ]
   ],
-  [{}, {}, {}, {}, {}]
+  [
+    {
+      "/auth/register": "return 0",
+      "/auth/login": "return 1",
+      "/auth/logout": "return 2",
+      "/auth/refresh": "return 3",
+      "/auth/password/forgot": "return 4",
+      "/auth/password/reset": "return 5",
+      "/auth/sso": "return 6",
+      "/user": "return 8",
+      "/user/me": "return 17",
+      "/user/notifications/read-all": "return 23",
+      "/org": "return 25",
+      "/files/upload": "return 92",
+      "/search/filters": "return 97",
+      "/tags": "return 101",
+      "/admin/impersonate": "return 112",
+      "/admin/exports": "return 113"
+    },
+    {
+      "/auth/sso/providers": "return 7",
+      "/user/me": "return 16",
+      "/user/me/preferences": "return 18",
+      "/user/me/sessions": "return 20",
+      "/user/notifications": "return 22",
+      "/search": "return 95",
+      "/search/filters": "return 96",
+      "/tags": "return 100",
+      "/status": "return 104",
+      "/admin/reports/time": "return 105",
+      "/admin/users": "return 108",
+      "/admin/projects": "return 109",
+      "/admin/audit-logs": "return 110",
+      "/admin/stats": "return 111"
+    },
+    {
+      "/user/me/preferences": "return 19"
+    },
+    {},
+    {}
+  ]
 ]

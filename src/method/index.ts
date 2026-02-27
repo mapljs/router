@@ -27,9 +27,7 @@ export const insertItem = <T>(
       const mp = new Map<string, T>();
       router[2].push(mp);
 
-      path.includes('*')
-        ? insert(node, 1, path, 1, item)
-        : mp.set(path, item);
+      path.includes('*') ? insert(node, 1, path, 1, item) : mp.set(path, item);
     }
   } else {
     router.length === 3 &&
