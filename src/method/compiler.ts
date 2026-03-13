@@ -1,6 +1,6 @@
 import type { Router } from './index.js';
 import { isEmptyNode, type Node } from '../tree/node.js';
-import { compile } from '../tree/compiler.js';
+import { compile, shouldBoundCheck } from '../tree/compiler.js';
 
 let STR!: string, START_IDX!: 0 | 1;
 
@@ -19,7 +19,9 @@ const compileSubrouter = (
   }
 
   isEmptyNode(node) ||
-    (STR += `{let ${constants.PATH_LEN}=${constants.PATH}.length;${compile(node, 0, START_IDX, '')}}`);
+    (STR += mp.has('/') || !shouldBoundCheck(node)
+      ? `{let ${constants.PATH_LEN}=${constants.PATH}.length;${compile(node, 0, START_IDX, '')}}`
+      : `{let ${constants.PATH_LEN}=${constants.PATH}.length;if(${constants.PATH_LEN}>${START_IDX}){${compile(node, 0, START_IDX, '')}}}`);
 };
 
 export default (
