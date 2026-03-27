@@ -1,12 +1,12 @@
 import { describe, it, expect } from 'bun:test';
 
-import { createRoot, insert, type Node } from '#self/tree/node';
-import { match, init } from '#self/tree/match';
-import { compile } from '#self/tree/compiler';
+import { createRoot, insert, type Node } from '$/tree/node';
+import { match, init } from '$/tree/match';
+import { compile } from '$/tree/compiler';
 
 import { routesList } from '../routes.ts';
 
-import { PATH, PATH_LEN } from '#self/constants';
+import { PATH, PATH_LEN } from '$/constants';
 
 describe('path', () => {
   const compileRouter = (root: Node<any>) => {

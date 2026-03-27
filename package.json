@@ -7,10 +7,6 @@
   "license": "MIT",
   "repository": "mapljs/router",
   "type": "module",
-  "imports": {
-    "#self/*": "./lib/*.js",
-    "#self": "./lib"
-  },
   "scripts": {
     "task": "bun scripts/task.ts",
     "fmt": "oxfmt",

@@ -1,5 +1,5 @@
 import { describe, it } from 'node:test';
-import assert from 'node:assert'
+import assert from 'node:assert';
 
 // Describe a group of tests
 describe('Number', () => {

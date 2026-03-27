@@ -1,8 +1,8 @@
 import { describe, it, expect } from 'bun:test';
 
-import { createRouter, insertItem } from '#self/method/index';
-import compile from '#self/method/compiler';
-import { PATH } from '#self/constants';
+import { createRouter, insertItem } from '$/method';
+import compile from '$/method/compiler';
+import { PATH } from '$/constants';
 
 import { routesList, type RouteList } from '../routes.ts';
 

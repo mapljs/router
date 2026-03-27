@@ -11,10 +11,14 @@ import {
 import { minifySync, type JsMinifyOptions } from '@swc/core';
 import { transformSync, type TransformOptions } from 'oxc-transform';
 
-import { LIB, PACKAGE_JSON, ROOT, SOURCE } from './constants.ts';
+import pkg from '../../package.json';
+
+import { LIB, NODE_MODULES, ROOT, SOURCE } from './constants.ts';
 import { fmt } from './fmt.ts';
 
 import { build as CONFIG } from '../config.ts';
+
+type Evaluate<T> = { [K in keyof T]: T[K] } & {};
 
 //
 // CONFIG
@@ -81,10 +85,12 @@ export const buildSourceSync = (
     if (hasCode || hasDecl) {
       const isRuntimeKey = pathName.startsWith('_');
 
-      const exportPath =
+      let exportPath =
         pathName === 'index' || isRuntimeKey // Runtime key
           ? dirname(pathNoExt)
           : pathNoExt;
+      exportPath === '.' || exportPath.startsWith('./') || (exportPath = './' + exportPath);
+
       const sourcePath = './' + pathNoExt + (hasCode ? '.js' : '.d.ts');
 
       if (isRuntimeKey) {
@@ -105,13 +111,13 @@ export const buildSourceSync = (
 };
 
 export const linkSync = (file: string) => {
-  if (file.includes('/')) {
-    console.log(fmt.warn('~ ignored: ' + fmt.relativePath(file)));
-    return;
-  }
-
   const fromFile = join(ROOT, file);
   const toFile = join(LIB, file);
+
+  if (file.includes('/'))
+    try {
+      mkdirSync(dirname(toFile), { recursive: true });
+    } catch {}
 
   let time = Bun.nanoseconds();
   try {
@@ -195,23 +201,25 @@ export const removeSourceSync = (
   }
 };
 
-let cachedPackageJson: any;
-let lastModified = 0;
+// @ts-ignore
+pkg.exports = {};
+// @ts-ignore
+pkg.devDependencies = pkg.trustedDependencies = pkg.scripts = pkg.imports = void 0;
+export const LIB_PKG: Evaluate<
+  Omit<
+    typeof pkg,
+    'devDependencies' | 'trustedDependencies' | 'scripts' | 'imports' | 'exports'
+  > & { exports: Record<string, string | Record<string, string>> }
+> = pkg as any;
 
 const LIB_PACKAGE_JSON = join(LIB, 'package.json');
+export const updatePackageJson = () => {
+  writeFileSync(LIB_PACKAGE_JSON, JSON.stringify(LIB_PKG));
+};
 
-export const modifyPackageJson = (modifiers: Record<string, any>) => {
-  const fileLastModified = Bun.file(PACKAGE_JSON).lastModified;
-  if (!cachedPackageJson || fileLastModified > lastModified) {
-    cachedPackageJson = JSON.parse(readFileSync(PACKAGE_JSON, { encoding: 'utf8' }));
-    lastModified = fileLastModified;
-  }
-
-  writeFileSync(
-    LIB_PACKAGE_JSON,
-    JSON.stringify({
-      ...cachedPackageJson,
-      ...modifiers,
-    }),
-  );
+export const initLib = () => {
+  try {
+    rmSync(LIB, { recursive: true });
+  } catch {}
+  mkdirSync(LIB, { recursive: true });
 };
