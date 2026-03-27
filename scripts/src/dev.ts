@@ -26,10 +26,18 @@ for (const path of globSync(BUILD_CONFIG.symlinks, {
 }))
   linkSync(path);
 
+// Build files and add exports to lib/package.json
+for (const path of globSync(BUILD_CONFIG.files, {
+  cwd: SOURCE,
+}))
+  buildSourceSync(true, path, LIB_PKG.exports);
+updatePackageJson();
+
 watch('.', {
   ignored: (path, stats) => !!stats?.isFile() && !matchesGlobs(path, BUILD_CONFIG.files),
   cwd: SOURCE,
   interval: 100,
+  ignoreInitial: true
 })
   .on('add', (path) => {
     buildSourceSync(true, path, LIB_PKG.exports);
