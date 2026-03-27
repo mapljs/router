@@ -1,0 +1,15 @@
+{
+  "$schema": "./node_modules/oxfmt/configuration_schema.json",
+  "singleQuote": true,
+  "ignorePatterns": [
+    // Dev
+    "lib/**/*",
+    "bench/**/*",
+
+    // Other file types
+    "**/*.json",
+    "**/*.jsonc",
+    "**/*.md",
+    "**/bun.lock",
+  ],
+}

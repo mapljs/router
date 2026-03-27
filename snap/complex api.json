@@ -21,7 +21,7 @@
                   "/",
                   null,
                   [114],
-                  [["read", "return 24", [], [], null, null]],
+                  [["read", "return \"POST /user/notifications/*/read\"", [], [], null, null]],
                   null,
                   null
                 ],
@@ -38,7 +38,7 @@
               [
                 [
                   "invites",
-                  "return 12",
+                  "return \"POST /user/*/invites\"",
                   [47],
                   [
                     [
@@ -52,8 +52,22 @@
                           null,
                           [97, 114],
                           [
-                            ["accept", "return 14", [], [], null, null],
-                            ["resend", "return 15", [], [], null, null]
+                            [
+                              "accept",
+                              "return \"POST /user/*/invites/*/accept\"",
+                              [],
+                              [],
+                              null,
+                              null
+                            ],
+                            [
+                              "resend",
+                              "return \"POST /user/*/invites/*/resend\"",
+                              [],
+                              [],
+                              null,
+                              null
+                            ]
                           ],
                           null,
                           null
@@ -70,7 +84,7 @@
               null,
               null
             ],
-            "return 10"
+            "return \"POST /user/*\""
           ],
           null
         ],
@@ -87,31 +101,31 @@
               [
                 [
                   "members",
-                  "return 30",
+                  "return \"POST /org/*/members\"",
                   [47],
-                  [["/", null, [], [], [null, "return 31"], null]],
+                  [["/", null, [], [], [null, "return \"POST /org/*/members/*\""], null]],
                   null,
                   null
                 ],
                 [
                   "roles",
-                  "return 33",
+                  "return \"POST /org/*/roles\"",
                   [47],
-                  [["/", null, [], [], [null, "return 34"], null]],
+                  [["/", null, [], [], [null, "return \"POST /org/*/roles/*\""], null]],
                   null,
                   null
                 ],
                 [
                   "domains",
-                  "return 36",
+                  "return \"POST /org/*/domains\"",
                   [47],
-                  [["/", null, [], [], [null, "return 37"], null]],
+                  [["/", null, [], [], [null, "return \"POST /org/*/domains/*\""], null]],
                   null,
                   null
                 ],
                 [
                   "projects",
-                  "return 38",
+                  "return \"POST /org/*/projects\"",
                   [47],
                   [
                     [
@@ -125,10 +139,17 @@
                           null,
                           [109, 116],
                           [
-                            ["members", "return 43", [], [], null, null],
+                            [
+                              "members",
+                              "return \"POST /org/*/projects/*/members\"",
+                              [],
+                              [],
+                              null,
+                              null
+                            ],
                             [
                               "tasks",
-                              "return 46",
+                              "return \"POST /org/*/projects/*/tasks\"",
                               [47],
                               [
                                 [
@@ -143,7 +164,7 @@
                                       [
                                         [
                                           "ime-entries",
-                                          "return 48",
+                                          "return \"POST /org/*/projects/*/tasks/time-entries\"",
                                           [47],
                                           [
                                             [
@@ -159,7 +180,7 @@
                                                   [
                                                     [
                                                       "stop",
-                                                      "return 49",
+                                                      "return \"POST /org/*/projects/*/tasks/time-entries/*/stop\"",
                                                       [],
                                                       [],
                                                       null,
@@ -177,14 +198,21 @@
                                           null,
                                           null
                                         ],
-                                        ["ags", "return 52", [], [], null, null]
+                                        [
+                                          "ags",
+                                          "return \"POST /org/*/projects/*/tasks/tags\"",
+                                          [],
+                                          [],
+                                          null,
+                                          null
+                                        ]
                                       ],
                                       null,
                                       null
                                     ],
                                     [
                                       "attachments",
-                                      "return 51",
+                                      "return \"POST /org/*/projects/*/tasks/attachments\"",
                                       [],
                                       [],
                                       null,
@@ -226,14 +254,21 @@
                           null,
                           [115, 116],
                           [
-                            ["ssign", "return 60", [], [], null, null],
-                            ["ttachments", "return 68", [], [], null, null]
+                            ["ssign", "return \"POST /org/*/tasks/*/assign\"", [], [], null, null],
+                            [
+                              "ttachments",
+                              "return \"POST /org/*/tasks/*/attachments\"",
+                              [],
+                              [],
+                              null,
+                              null
+                            ]
                           ],
                           null,
                           null
                         ],
-                        ["status", "return 61", [], [], null, null],
-                        ["comments", "return 63", [], [], null, null],
+                        ["status", "return \"POST /org/*/tasks/*/status\"", [], [], null, null],
+                        ["comments", "return \"POST /org/*/tasks/*/comments\"", [], [], null, null],
                         [
                           "t",
                           null,
@@ -241,7 +276,7 @@
                           [
                             [
                               "ime-entries",
-                              "return 65",
+                              "return \"POST /org/*/tasks/*/time-entries\"",
                               [47],
                               [
                                 [
@@ -257,7 +292,7 @@
                                       [
                                         [
                                           "stop",
-                                          "return 66",
+                                          "return \"POST /org/*/tasks/*/time-entries/*/stop\"",
                                           [],
                                           [],
                                           null,
@@ -275,7 +310,7 @@
                               null,
                               null
                             ],
-                            ["ags", "return 69", [], [], null, null]
+                            ["ags", "return \"POST /org/*/tasks/*/tags\"", [], [], null, null]
                           ],
                           null,
                           null
@@ -295,20 +330,43 @@
                   [
                     [
                       "subscription",
-                      "return 75",
+                      "return \"POST /org/*/billing/subscription\"",
                       [47],
-                      [["/cancel", "return 76", [], [], null, null]],
+                      [
+                        [
+                          "/cancel",
+                          "return \"POST /org/*/billing/subscription/cancel\"",
+                          [],
+                          [],
+                          null,
+                          null
+                        ]
+                      ],
                       null,
                       null
                     ],
-                    ["invoices/", null, [], [], [null, "return 79"], null],
-                    ["payment-methods", "return 81", [], [], null, null]
+                    [
+                      "invoices/",
+                      null,
+                      [],
+                      [],
+                      [null, "return \"POST /org/*/billing/invoices/*\""],
+                      null
+                    ],
+                    [
+                      "payment-methods",
+                      "return \"POST /org/*/billing/payment-methods\"",
+                      [],
+                      [],
+                      null,
+                      null
+                    ]
                   ],
                   null,
                   null
                 ],
-                ["api-keys", "return 84", [], [], null, null],
-                ["webhooks", "return 87", [], [], null, null]
+                ["api-keys", "return \"POST /org/*/api-keys\"", [], [], null, null],
+                ["webhooks", "return \"POST /org/*/webhooks\"", [], [], null, null]
               ],
               null,
               null
@@ -327,7 +385,7 @@
               "/",
               null,
               [99],
-              [["cancel", "return 115", [], [], null, null]],
+              [["cancel", "return \"POST /admin/exports/*/cancel\"", [], [], null, null]],
               null,
               null
             ],
@@ -355,13 +413,13 @@
               null,
               [110, 105],
               [
-                ["notifications", "return 11", [], [], null, null],
-                ["invites/", null, [], [], [null, "return 13"], null]
+                ["notifications", "return \"GET /user/*/notifications\"", [], [], null, null],
+                ["invites/", null, [], [], [null, "return \"GET /user/*/invites/*\""], null]
               ],
               null,
               null
             ],
-            "return 9"
+            "return \"GET /user/*\""
           ],
           null
         ],
@@ -376,9 +434,9 @@
               null,
               [109, 114, 100, 112, 116, 98, 97, 119],
               [
-                ["members", "return 29", [], [], null, null],
-                ["roles", "return 32", [], [], null, null],
-                ["domains", "return 35", [], [], null, null],
+                ["members", "return \"GET /org/*/members\"", [], [], null, null],
+                ["roles", "return \"GET /org/*/roles\"", [], [], null, null],
+                ["domains", "return \"GET /org/*/domains\"", [], [], null, null],
                 [
                   "projects/",
                   null,
@@ -390,11 +448,18 @@
                       null,
                       [109, 97, 116],
                       [
-                        ["members", "return 42", [], [], null, null],
-                        ["activity", "return 44", [], [], null, null],
+                        ["members", "return \"GET /org/*/projects/*/members\"", [], [], null, null],
+                        [
+                          "activity",
+                          "return \"GET /org/*/projects/*/activity\"",
+                          [],
+                          [],
+                          null,
+                          null
+                        ],
                         [
                           "tasks",
-                          "return 45",
+                          "return \"GET /org/*/projects/*/tasks\"",
                           [47],
                           [
                             [
@@ -404,13 +469,20 @@
                               [
                                 [
                                   "time-entries",
-                                  "return 47",
+                                  "return \"GET /org/*/projects/*/tasks/time-entries\"",
                                   [],
                                   [],
                                   null,
                                   null
                                 ],
-                                ["attachments", "return 50", [], [], null, null]
+                                [
+                                  "attachments",
+                                  "return \"GET /org/*/projects/*/tasks/attachments\"",
+                                  [],
+                                  [],
+                                  null,
+                                  null
+                                ]
                               ],
                               null,
                               null
@@ -423,13 +495,13 @@
                       null,
                       null
                     ],
-                    "return 39"
+                    "return \"GET /org/*/projects/*\""
                   ],
                   null
                 ],
                 [
                   "tasks",
-                  "return 56",
+                  "return \"GET /org/*/tasks\"",
                   [47],
                   [
                     [
@@ -443,14 +515,35 @@
                           null,
                           [99, 116, 97],
                           [
-                            ["comments", "return 62", [], [], null, null],
-                            ["time-entries", "return 64", [], [], null, null],
-                            ["attachments", "return 67", [], [], null, null]
+                            [
+                              "comments",
+                              "return \"GET /org/*/tasks/*/comments\"",
+                              [],
+                              [],
+                              null,
+                              null
+                            ],
+                            [
+                              "time-entries",
+                              "return \"GET /org/*/tasks/*/time-entries\"",
+                              [],
+                              [],
+                              null,
+                              null
+                            ],
+                            [
+                              "attachments",
+                              "return \"GET /org/*/tasks/*/attachments\"",
+                              [],
+                              [],
+                              null,
+                              null
+                            ]
                           ],
                           null,
                           null
                         ],
-                        "return 57"
+                        "return \"GET /org/*/tasks/*\""
                       ],
                       null
                     ]
@@ -468,18 +561,41 @@
                       null,
                       [108, 97],
                       [
-                        ["lans", "return 73", [], [], null, null],
-                        ["ayment-methods", "return 80", [], [], null, null]
+                        ["lans", "return \"GET /org/*/billing/plans\"", [], [], null, null],
+                        [
+                          "ayment-methods",
+                          "return \"GET /org/*/billing/payment-methods\"",
+                          [],
+                          [],
+                          null,
+                          null
+                        ]
                       ],
                       null,
                       null
                     ],
-                    ["subscription", "return 74", [], [], null, null],
+                    [
+                      "subscription",
+                      "return \"GET /org/*/billing/subscription\"",
+                      [],
+                      [],
+                      null,
+                      null
+                    ],
                     [
                       "invoices",
-                      "return 77",
+                      "return \"GET /org/*/billing/invoices\"",
                       [47],
-                      [["/", null, [], [], [null, "return 78"], null]],
+                      [
+                        [
+                          "/",
+                          null,
+                          [],
+                          [],
+                          [null, "return \"GET /org/*/billing/invoices/*\""],
+                          null
+                        ]
+                      ],
                       null,
                       null
                     ]
@@ -487,10 +603,10 @@
                   null,
                   null
                 ],
-                ["api-keys", "return 83", [], [], null, null],
+                ["api-keys", "return \"GET /org/*/api-keys\"", [], [], null, null],
                 [
                   "webhooks",
-                  "return 86",
+                  "return \"GET /org/*/webhooks\"",
                   [47],
                   [
                     [
@@ -506,9 +622,18 @@
                           [
                             [
                               "deliveries",
-                              "return 90",
+                              "return \"GET /org/*/webhooks/*/deliveries\"",
                               [47],
-                              [["/", null, [], [], [null, "return 91"], null]],
+                              [
+                                [
+                                  "/",
+                                  null,
+                                  [],
+                                  [],
+                                  [null, "return \"GET /org/*/webhooks/*/deliveries/*\""],
+                                  null
+                                ]
+                              ],
                               null,
                               null
                             ]
@@ -528,11 +653,11 @@
               null,
               null
             ],
-            "return 26"
+            "return \"GET /org/*\""
           ],
           null
         ],
-        ["files/", null, [], [], [null, "return 93"], null],
+        ["files/", null, [], [], [null, "return \"GET /files/*\""], null],
         [
           "admin/",
           null,
@@ -553,7 +678,16 @@
                       "/",
                       null,
                       [115],
-                      [["summary", "return 106", [], [], null, null]],
+                      [
+                        [
+                          "summary",
+                          "return \"GET /admin/reports/projects/*/summary\"",
+                          [],
+                          [],
+                          null,
+                          null
+                        ]
+                      ],
                       null,
                       null
                     ],
@@ -571,7 +705,16 @@
                       "/",
                       null,
                       [97],
-                      [["activity", "return 107", [], [], null, null]],
+                      [
+                        [
+                          "activity",
+                          "return \"GET /admin/reports/users/*/activity\"",
+                          [],
+                          [],
+                          null,
+                          null
+                        ]
+                      ],
                       null,
                       null
                     ],
@@ -583,7 +726,7 @@
               null,
               null
             ],
-            ["exports/", null, [], [], [null, "return 114"], null]
+            ["exports/", null, [], [], [null, "return \"GET /admin/exports/*\""], null]
           ],
           null,
           null
@@ -608,19 +751,19 @@
               null,
               [112, 116, 119],
               [
-                ["projects/", null, [], [], [null, "return 40"], null],
-                ["tasks/", null, [], [], [null, "return 58"], null],
-                ["webhooks/", null, [], [], [null, "return 88"], null]
+                ["projects/", null, [], [], [null, "return \"PATCH /org/*/projects/*\""], null],
+                ["tasks/", null, [], [], [null, "return \"PATCH /org/*/tasks/*\""], null],
+                ["webhooks/", null, [], [], [null, "return \"PATCH /org/*/webhooks/*\""], null]
               ],
               null,
               null
             ],
-            "return 27"
+            "return \"PATCH /org/*\""
           ],
           null
         ],
-        ["search/filters/", null, [], [], [null, "return 98"], null],
-        ["tags/", null, [], [], [null, "return 102"], null]
+        ["search/filters/", null, [], [], [null, "return \"PATCH /search/filters/*\""], null],
+        ["tags/", null, [], [], [null, "return \"PATCH /tags/*\""], null]
       ],
       null,
       null
@@ -630,7 +773,7 @@
       null,
       [117, 111, 102, 115, 116],
       [
-        ["user/me/sessions/", null, [], [], [null, "return 21"], null],
+        ["user/me/sessions/", null, [], [], [null, "return \"DELETE /user/me/sessions/*\""], null],
         [
           "org/",
           null,
@@ -658,13 +801,20 @@
                           null,
                           [116, 99],
                           [
-                            ["tags", "return 53", [], [], null, null],
+                            [
+                              "tags",
+                              "return \"DELETE /org/*/projects/*/tasks/tags\"",
+                              [],
+                              [],
+                              null,
+                              null
+                            ],
                             [
                               "custom-fields/",
                               null,
                               [],
                               [],
-                              [null, "return 55"],
+                              [null, "return \"DELETE /org/*/projects/*/tasks/custom-fields/*\""],
                               null
                             ]
                           ],
@@ -675,7 +825,7 @@
                       null,
                       null
                     ],
-                    "return 41"
+                    "return \"DELETE /org/*/projects/*\""
                   ],
                   null
                 ],
@@ -690,20 +840,20 @@
                       null,
                       [116, 99],
                       [
-                        ["tags", "return 70", [], [], null, null],
+                        ["tags", "return \"DELETE /org/*/tasks/*/tags\"", [], [], null, null],
                         [
                           "custom-fields/",
                           null,
                           [],
                           [],
-                          [null, "return 72"],
+                          [null, "return \"DELETE /org/*/tasks/*/custom-fields/*\""],
                           null
                         ]
                       ],
                       null,
                       null
                     ],
-                    "return 59"
+                    "return \"DELETE /org/*/tasks/*\""
                   ],
                   null
                 ],
@@ -712,22 +862,22 @@
                   null,
                   [],
                   [],
-                  [null, "return 82"],
+                  [null, "return \"DELETE /org/*/billing/payment-methods/*\""],
                   null
                 ],
-                ["api-keys/", null, [], [], [null, "return 85"], null],
-                ["webhooks/", null, [], [], [null, "return 89"], null]
+                ["api-keys/", null, [], [], [null, "return \"DELETE /org/*/api-keys/*\""], null],
+                ["webhooks/", null, [], [], [null, "return \"DELETE /org/*/webhooks/*\""], null]
               ],
               null,
               null
             ],
-            "return 28"
+            "return \"DELETE /org/*\""
           ],
           null
         ],
-        ["files/", null, [], [], [null, "return 94"], null],
-        ["search/filters/", null, [], [], [null, "return 99"], null],
-        ["tags/", null, [], [], [null, "return 103"], null]
+        ["files/", null, [], [], [null, "return \"DELETE /files/*\""], null],
+        ["search/filters/", null, [], [], [null, "return \"DELETE /search/filters/*\""], null],
+        ["tags/", null, [], [], [null, "return \"DELETE /tags/*\""], null]
       ],
       null,
       null
@@ -764,7 +914,7 @@
                           null,
                           [],
                           [],
-                          [null, "return 54"],
+                          [null, "return \"PUT /org/*/projects/*/tasks/custom-fields/*\""],
                           null
                         ]
                       ],
@@ -791,7 +941,7 @@
                           null,
                           [],
                           [],
-                          [null, "return 71"],
+                          [null, "return \"PUT /org/*/tasks/*/custom-fields/*\""],
                           null
                         ]
                       ],
@@ -815,45 +965,5 @@
       null
     ]
   ],
-  [
-    {
-      "/auth/register": "return 0",
-      "/auth/login": "return 1",
-      "/auth/logout": "return 2",
-      "/auth/refresh": "return 3",
-      "/auth/password/forgot": "return 4",
-      "/auth/password/reset": "return 5",
-      "/auth/sso": "return 6",
-      "/user": "return 8",
-      "/user/me": "return 17",
-      "/user/notifications/read-all": "return 23",
-      "/org": "return 25",
-      "/files/upload": "return 92",
-      "/search/filters": "return 97",
-      "/tags": "return 101",
-      "/admin/impersonate": "return 112",
-      "/admin/exports": "return 113"
-    },
-    {
-      "/auth/sso/providers": "return 7",
-      "/user/me": "return 16",
-      "/user/me/preferences": "return 18",
-      "/user/me/sessions": "return 20",
-      "/user/notifications": "return 22",
-      "/search": "return 95",
-      "/search/filters": "return 96",
-      "/tags": "return 100",
-      "/status": "return 104",
-      "/admin/reports/time": "return 105",
-      "/admin/users": "return 108",
-      "/admin/projects": "return 109",
-      "/admin/audit-logs": "return 110",
-      "/admin/stats": "return 111"
-    },
-    {
-      "/user/me/preferences": "return 19"
-    },
-    {},
-    {}
-  ]
+  [{}, {}, {}, {}, {}]
 ]

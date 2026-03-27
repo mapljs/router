@@ -1,4 +1,4 @@
-import type { Node } from './node.js';
+import type { Node } from './node.ts';
 
 export let PARAMS!: string[];
 let PATH!: string;

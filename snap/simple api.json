@@ -11,8 +11,8 @@
           null,
           [117, 101],
           [
-            ["username/", null, [], [], [null, "return 3"], null],
-            ["email/", null, [], [], [null, "return 4"], null]
+            ["username/", null, [], [], [null, "return \"GET /user/lookup/username/*\""], null],
+            ["email/", null, [], [], [null, "return \"GET /user/lookup/email/*\""], null]
           ],
           null,
           null
@@ -27,11 +27,11 @@
               "/",
               null,
               [99],
-              [["comments", "return 6", [], [], null, null]],
+              [["comments", "return \"GET /event/*/comments\"", [], [], null, null]],
               null,
               null
             ],
-            "return 5"
+            "return \"GET /event/*\""
           ],
           null
         ],
@@ -45,7 +45,7 @@
               "/",
               null,
               [101],
-              [["events", "return 8", [], [], null, null]],
+              [["events", "return \"GET /map/*/events\"", [], [], null, null]],
               null,
               null
             ],
@@ -53,7 +53,7 @@
           ],
           null
         ],
-        ["static/", null, [], [], null, "return 11"]
+        ["static/", null, [], [], null, "return \"GET /static/**\""]
       ],
       null,
       null
@@ -73,7 +73,7 @@
               "/",
               null,
               [99],
-              [["comment", "return 7", [], [], null, null]],
+              [["comment", "return \"POST /event/*/comment\"", [], [], null, null]],
               null,
               null
             ],
@@ -86,14 +86,5 @@
       null
     ]
   ],
-  [
-    {
-      "/user": "return 0",
-      "/user/comments": "return 1",
-      "/user/avatar": "return 2",
-      "/status": "return 9",
-      "/very/deeply/nested/route/hello/there": "return 10"
-    },
-    {}
-  ]
+  [{}, {}]
 ]

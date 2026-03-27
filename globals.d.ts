@@ -1,6 +1,5 @@
-import * as consts from './src/constants.js';
+import * as _ from './src/constants.ts';
 
-// Zero-cost constants at runtime
 declare global {
-  const constants: typeof consts;
+  const constants: typeof _;
 }

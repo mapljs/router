@@ -1,4 +1,4 @@
-import type { Node } from './node.js';
+import type { Node } from './node.ts';
 
 export const shouldBoundCheck = (node: Node<string>): boolean =>
   // Has no store
@@ -20,8 +20,7 @@ export const compile = (
   let builder = '';
   let currentIdx = idxPrefix + idx;
 
-  node[1] === null ||
-    (builder += `if(${constants.PATH_LEN}===${currentIdx}){${node[1]}}`);
+  node[1] === null || (builder += `if(${constants.PATH_LEN}===${currentIdx}){${node[1]}}`);
 
   if (node[2].length > 0) {
     const childrenFirstChar = node[2];
@@ -30,11 +29,7 @@ export const compile = (
     if (children.length > 1) {
       builder += `switch(${constants.PATH}.charCodeAt(${currentIdx})){`;
 
-      for (
-        let i = 0, checkIdx = idxPrefix + (idx + 1);
-        i < children.length;
-        i++
-      ) {
+      for (let i = 0, checkIdx = idxPrefix + (idx + 1); i < children.length; i++) {
         const childNode = children[i],
           nodePart = childNode[0],
           nextIdx = idx + nodePart.length;
@@ -83,8 +78,7 @@ export const compile = (
       if (paramCount > 0) {
         builder += `let ${constants.PREV_PARAM_IDX}=${currentIdx};${constants.CURRENT_PARAM_IDX}=${constants.PATH}.indexOf("/",`;
         currentIdx = constants.PREV_PARAM_IDX;
-      } else
-        builder += `let ${constants.CURRENT_PARAM_IDX}=${constants.PATH}.indexOf("/",`;
+      } else builder += `let ${constants.CURRENT_PARAM_IDX}=${constants.PATH}.indexOf("/",`;
 
       const needBoundCheck = shouldBoundCheck(childNode);
 
@@ -97,12 +91,7 @@ export const compile = (
           : `){let ${constants.PARAMS}`) +
         paramCount +
         `=${constants.PATH}.slice(${currentIdx},${constants.CURRENT_PARAM_IDX});` +
-        compile(
-          childNode,
-          paramCount + 1,
-          1,
-          constants.CURRENT_PARAM_IDX + '+',
-        ) +
+        compile(childNode, paramCount + 1, 1, constants.CURRENT_PARAM_IDX + '+') +
         (needBoundCheck ? '}}' : '}');
     }
 
@@ -114,9 +103,7 @@ export const compile = (
           : // Leaf node can use .includes instead of .indexOf
             `if(!${constants.PATH}.includes("/",${currentIdx})){let ${constants.PARAMS}`) +
         paramCount +
-        (currentIdx === '0'
-          ? `=${constants.PATH};`
-          : `=${constants.PATH}.slice(${currentIdx});`) +
+        (currentIdx === '0' ? `=${constants.PATH};` : `=${constants.PATH}.slice(${currentIdx});`) +
         params[1] +
         '}');
   }
@@ -125,9 +112,7 @@ export const compile = (
     (builder +=
       `let ${constants.PARAMS}` +
       paramCount +
-      (currentIdx === '0'
-        ? `=${constants.PATH};`
-        : `=${constants.PATH}.slice(${currentIdx});`) +
+      (currentIdx === '0' ? `=${constants.PATH};` : `=${constants.PATH}.slice(${currentIdx});`) +
       node[5]);
 
   return builder;

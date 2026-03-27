@@ -1,54 +1,54 @@
-const d: (path: string, method: string) => number = (p, m) => {
+(m, p) => {
   switch (m) {
     case 'POST':
       switch (p) {
         case '/auth/register': {
-          return 0;
+          return 'POST /auth/register';
         }
         case '/auth/login': {
-          return 1;
+          return 'POST /auth/login';
         }
         case '/auth/logout': {
-          return 2;
+          return 'POST /auth/logout';
         }
         case '/auth/refresh': {
-          return 3;
+          return 'POST /auth/refresh';
         }
         case '/auth/password/forgot': {
-          return 4;
+          return 'POST /auth/password/forgot';
         }
         case '/auth/password/reset': {
-          return 5;
+          return 'POST /auth/password/reset';
         }
         case '/auth/sso': {
-          return 6;
+          return 'POST /auth/sso';
         }
         case '/user': {
-          return 8;
+          return 'POST /user';
         }
         case '/user/me': {
-          return 17;
+          return 'POST /user/me';
         }
         case '/user/notifications/read-all': {
-          return 23;
+          return 'POST /user/notifications/read-all';
         }
         case '/org': {
-          return 25;
+          return 'POST /org';
         }
         case '/files/upload': {
-          return 92;
+          return 'POST /files/upload';
         }
         case '/search/filters': {
-          return 97;
+          return 'POST /search/filters';
         }
         case '/tags': {
-          return 101;
+          return 'POST /tags';
         }
         case '/admin/impersonate': {
-          return 112;
+          return 'POST /admin/impersonate';
         }
         case '/admin/exports': {
-          return 113;
+          return 'POST /admin/exports';
         }
       }
       {
@@ -65,7 +65,7 @@ const d: (path: string, method: string) => number = (p, m) => {
                         let q0 = p.slice(20, j);
                         if (p.startsWith('read', j + 1)) {
                           if (l === j + 5) {
-                            return 24;
+                            return 'POST /user/notifications/*/read';
                           }
                         }
                       }
@@ -75,7 +75,7 @@ const d: (path: string, method: string) => number = (p, m) => {
                     let q0 = p.slice(6, j);
                     if (p.startsWith('invites', j + 1)) {
                       if (l === j + 8) {
-                        return 12;
+                        return 'POST /user/*/invites';
                       }
                       if (l > j + 9)
                         if (p.charCodeAt(j + 8) === 47) {
@@ -88,13 +88,13 @@ const d: (path: string, method: string) => number = (p, m) => {
                                 case 97:
                                   if (p.startsWith('ccept', j + 2)) {
                                     if (l === j + 7) {
-                                      return 14;
+                                      return 'POST /user/*/invites/*/accept';
                                     }
                                   }
                                 case 114:
                                   if (p.startsWith('esend', j + 2)) {
                                     if (l === j + 7) {
-                                      return 15;
+                                      return 'POST /user/*/invites/*/resend';
                                     }
                                   }
                               }
@@ -104,7 +104,7 @@ const d: (path: string, method: string) => number = (p, m) => {
                     }
                   } else if (j === -1) {
                     let q0 = p.slice(6);
-                    return 10;
+                    return 'POST /user/*';
                   }
                 }
             case 111:
@@ -118,46 +118,46 @@ const d: (path: string, method: string) => number = (p, m) => {
                         case 109:
                           if (p.startsWith('embers', j + 2)) {
                             if (l === j + 8) {
-                              return 30;
+                              return 'POST /org/*/members';
                             }
                             if (l > j + 9)
                               if (p.charCodeAt(j + 8) === 47) {
                                 if (!p.includes('/', j + 9)) {
                                   let q1 = p.slice(j + 9);
-                                  return 31;
+                                  return 'POST /org/*/members/*';
                                 }
                               }
                           }
                         case 114:
                           if (p.startsWith('oles', j + 2)) {
                             if (l === j + 6) {
-                              return 33;
+                              return 'POST /org/*/roles';
                             }
                             if (l > j + 7)
                               if (p.charCodeAt(j + 6) === 47) {
                                 if (!p.includes('/', j + 7)) {
                                   let q1 = p.slice(j + 7);
-                                  return 34;
+                                  return 'POST /org/*/roles/*';
                                 }
                               }
                           }
                         case 100:
                           if (p.startsWith('omains', j + 2)) {
                             if (l === j + 8) {
-                              return 36;
+                              return 'POST /org/*/domains';
                             }
                             if (l > j + 9)
                               if (p.charCodeAt(j + 8) === 47) {
                                 if (!p.includes('/', j + 9)) {
                                   let q1 = p.slice(j + 9);
-                                  return 37;
+                                  return 'POST /org/*/domains/*';
                                 }
                               }
                           }
                         case 112:
                           if (p.startsWith('rojects', j + 2)) {
                             if (l === j + 9) {
-                              return 38;
+                              return 'POST /org/*/projects';
                             }
                             if (l > j + 10)
                               if (p.charCodeAt(j + 9) === 47) {
@@ -170,84 +170,51 @@ const d: (path: string, method: string) => number = (p, m) => {
                                       case 109:
                                         if (p.startsWith('embers', j + 2)) {
                                           if (l === j + 8) {
-                                            return 43;
+                                            return 'POST /org/*/projects/*/members';
                                           }
                                         }
                                       case 116:
                                         if (p.startsWith('asks', j + 2)) {
                                           if (l === j + 6) {
-                                            return 46;
+                                            return 'POST /org/*/projects/*/tasks';
                                           }
                                           if (l > j + 7)
                                             if (p.charCodeAt(j + 6) === 47) {
                                               switch (p.charCodeAt(j + 7)) {
                                                 case 116:
                                                   if (l > j + 8) {
-                                                    switch (
-                                                      p.charCodeAt(j + 8)
-                                                    ) {
+                                                    switch (p.charCodeAt(j + 8)) {
                                                       case 105:
-                                                        if (
-                                                          p.startsWith(
-                                                            'me-entries',
-                                                            j + 9,
-                                                          )
-                                                        ) {
+                                                        if (p.startsWith('me-entries', j + 9)) {
                                                           if (l === j + 19) {
-                                                            return 48;
+                                                            return 'POST /org/*/projects/*/tasks/time-entries';
                                                           }
                                                           if (l > j + 20)
-                                                            if (
-                                                              p.charCodeAt(
-                                                                j + 19,
-                                                              ) === 47
-                                                            ) {
+                                                            if (p.charCodeAt(j + 19) === 47) {
                                                               let i = j + 20;
-                                                              j = p.indexOf(
-                                                                '/',
-                                                                i,
-                                                              );
+                                                              j = p.indexOf('/', i);
                                                               if (j > i) {
-                                                                let q2 =
-                                                                  p.slice(i, j);
-                                                                if (
-                                                                  p.startsWith(
-                                                                    'stop',
-                                                                    j + 1,
-                                                                  )
-                                                                ) {
-                                                                  if (
-                                                                    l ===
-                                                                    j + 5
-                                                                  ) {
-                                                                    return 49;
+                                                                let q2 = p.slice(i, j);
+                                                                if (p.startsWith('stop', j + 1)) {
+                                                                  if (l === j + 5) {
+                                                                    return 'POST /org/*/projects/*/tasks/time-entries/*/stop';
                                                                   }
                                                                 }
                                                               }
                                                             }
                                                         }
                                                       case 97:
-                                                        if (
-                                                          p.startsWith(
-                                                            'gs',
-                                                            j + 9,
-                                                          )
-                                                        ) {
+                                                        if (p.startsWith('gs', j + 9)) {
                                                           if (l === j + 11) {
-                                                            return 52;
+                                                            return 'POST /org/*/projects/*/tasks/tags';
                                                           }
                                                         }
                                                     }
                                                   }
                                                 case 97:
-                                                  if (
-                                                    p.startsWith(
-                                                      'ttachments',
-                                                      j + 8,
-                                                    )
-                                                  ) {
+                                                  if (p.startsWith('ttachments', j + 8)) {
                                                     if (l === j + 18) {
-                                                      return 51;
+                                                      return 'POST /org/*/projects/*/tasks/attachments';
                                                     }
                                                   }
                                               }
@@ -273,15 +240,13 @@ const d: (path: string, method: string) => number = (p, m) => {
                                           case 115:
                                             if (p.startsWith('sign', j + 3)) {
                                               if (l === j + 7) {
-                                                return 60;
+                                                return 'POST /org/*/tasks/*/assign';
                                               }
                                             }
                                           case 116:
-                                            if (
-                                              p.startsWith('tachments', j + 3)
-                                            ) {
+                                            if (p.startsWith('tachments', j + 3)) {
                                               if (l === j + 12) {
-                                                return 68;
+                                                return 'POST /org/*/tasks/*/attachments';
                                               }
                                             }
                                         }
@@ -289,41 +254,32 @@ const d: (path: string, method: string) => number = (p, m) => {
                                     case 115:
                                       if (p.startsWith('tatus', j + 2)) {
                                         if (l === j + 7) {
-                                          return 61;
+                                          return 'POST /org/*/tasks/*/status';
                                         }
                                       }
                                     case 99:
                                       if (p.startsWith('omments', j + 2)) {
                                         if (l === j + 9) {
-                                          return 63;
+                                          return 'POST /org/*/tasks/*/comments';
                                         }
                                       }
                                     case 116:
                                       if (l > j + 2) {
                                         switch (p.charCodeAt(j + 2)) {
                                           case 105:
-                                            if (
-                                              p.startsWith('me-entries', j + 3)
-                                            ) {
+                                            if (p.startsWith('me-entries', j + 3)) {
                                               if (l === j + 13) {
-                                                return 65;
+                                                return 'POST /org/*/tasks/*/time-entries';
                                               }
                                               if (l > j + 14)
-                                                if (
-                                                  p.charCodeAt(j + 13) === 47
-                                                ) {
+                                                if (p.charCodeAt(j + 13) === 47) {
                                                   let i = j + 14;
                                                   j = p.indexOf('/', i);
                                                   if (j > i) {
                                                     let q2 = p.slice(i, j);
-                                                    if (
-                                                      p.startsWith(
-                                                        'stop',
-                                                        j + 1,
-                                                      )
-                                                    ) {
+                                                    if (p.startsWith('stop', j + 1)) {
                                                       if (l === j + 5) {
-                                                        return 66;
+                                                        return 'POST /org/*/tasks/*/time-entries/*/stop';
                                                       }
                                                     }
                                                   }
@@ -332,7 +288,7 @@ const d: (path: string, method: string) => number = (p, m) => {
                                           case 97:
                                             if (p.startsWith('gs', j + 3)) {
                                               if (l === j + 5) {
-                                                return 69;
+                                                return 'POST /org/*/tasks/*/tags';
                                               }
                                             }
                                         }
@@ -348,11 +304,11 @@ const d: (path: string, method: string) => number = (p, m) => {
                                 case 115:
                                   if (p.startsWith('ubscription', j + 10)) {
                                     if (l === j + 21) {
-                                      return 75;
+                                      return 'POST /org/*/billing/subscription';
                                     }
                                     if (p.startsWith('/cancel', j + 21)) {
                                       if (l === j + 28) {
-                                        return 76;
+                                        return 'POST /org/*/billing/subscription/cancel';
                                       }
                                     }
                                   }
@@ -361,13 +317,13 @@ const d: (path: string, method: string) => number = (p, m) => {
                                     if (p.startsWith('nvoices/', j + 10)) {
                                       if (!p.includes('/', j + 18)) {
                                         let q1 = p.slice(j + 18);
-                                        return 79;
+                                        return 'POST /org/*/billing/invoices/*';
                                       }
                                     }
                                 case 112:
                                   if (p.startsWith('ayment-methods', j + 10)) {
                                     if (l === j + 24) {
-                                      return 81;
+                                      return 'POST /org/*/billing/payment-methods';
                                     }
                                   }
                               }
@@ -375,13 +331,13 @@ const d: (path: string, method: string) => number = (p, m) => {
                         case 97:
                           if (p.startsWith('pi-keys', j + 2)) {
                             if (l === j + 9) {
-                              return 84;
+                              return 'POST /org/*/api-keys';
                             }
                           }
                         case 119:
                           if (p.startsWith('ebhooks', j + 2)) {
                             if (l === j + 9) {
-                              return 87;
+                              return 'POST /org/*/webhooks';
                             }
                           }
                       }
@@ -396,7 +352,7 @@ const d: (path: string, method: string) => number = (p, m) => {
                     let q0 = p.slice(15, j);
                     if (p.startsWith('cancel', j + 1)) {
                       if (l === j + 7) {
-                        return 115;
+                        return 'POST /admin/exports/*/cancel';
                       }
                     }
                   }
@@ -407,46 +363,46 @@ const d: (path: string, method: string) => number = (p, m) => {
     case 'GET':
       switch (p) {
         case '/auth/sso/providers': {
-          return 7;
+          return 'GET /auth/sso/providers';
         }
         case '/user/me': {
-          return 16;
+          return 'GET /user/me';
         }
         case '/user/me/preferences': {
-          return 18;
+          return 'GET /user/me/preferences';
         }
         case '/user/me/sessions': {
-          return 20;
+          return 'GET /user/me/sessions';
         }
         case '/user/notifications': {
-          return 22;
+          return 'GET /user/notifications';
         }
         case '/search': {
-          return 95;
+          return 'GET /search';
         }
         case '/search/filters': {
-          return 96;
+          return 'GET /search/filters';
         }
         case '/tags': {
-          return 100;
+          return 'GET /tags';
         }
         case '/status': {
-          return 104;
+          return 'GET /status';
         }
         case '/admin/reports/time': {
-          return 105;
+          return 'GET /admin/reports/time';
         }
         case '/admin/users': {
-          return 108;
+          return 'GET /admin/users';
         }
         case '/admin/projects': {
-          return 109;
+          return 'GET /admin/projects';
         }
         case '/admin/audit-logs': {
-          return 110;
+          return 'GET /admin/audit-logs';
         }
         case '/admin/stats': {
-          return 111;
+          return 'GET /admin/stats';
         }
       }
       {
@@ -464,7 +420,7 @@ const d: (path: string, method: string) => number = (p, m) => {
                         case 110:
                           if (p.startsWith('otifications', j + 2)) {
                             if (l === j + 14) {
-                              return 11;
+                              return 'GET /user/*/notifications';
                             }
                           }
                         case 105:
@@ -472,14 +428,14 @@ const d: (path: string, method: string) => number = (p, m) => {
                             if (p.startsWith('nvites/', j + 2)) {
                               if (!p.includes('/', j + 9)) {
                                 let q1 = p.slice(j + 9);
-                                return 13;
+                                return 'GET /user/*/invites/*';
                               }
                             }
                       }
                     }
                   } else if (j === -1) {
                     let q0 = p.slice(6);
-                    return 9;
+                    return 'GET /user/*';
                   }
                 }
             case 111:
@@ -493,19 +449,19 @@ const d: (path: string, method: string) => number = (p, m) => {
                         case 109:
                           if (p.startsWith('embers', j + 2)) {
                             if (l === j + 8) {
-                              return 29;
+                              return 'GET /org/*/members';
                             }
                           }
                         case 114:
                           if (p.startsWith('oles', j + 2)) {
                             if (l === j + 6) {
-                              return 32;
+                              return 'GET /org/*/roles';
                             }
                           }
                         case 100:
                           if (p.startsWith('omains', j + 2)) {
                             if (l === j + 8) {
-                              return 35;
+                              return 'GET /org/*/domains';
                             }
                           }
                         case 112:
@@ -520,43 +476,33 @@ const d: (path: string, method: string) => number = (p, m) => {
                                     case 109:
                                       if (p.startsWith('embers', j + 2)) {
                                         if (l === j + 8) {
-                                          return 42;
+                                          return 'GET /org/*/projects/*/members';
                                         }
                                       }
                                     case 97:
                                       if (p.startsWith('ctivity', j + 2)) {
                                         if (l === j + 9) {
-                                          return 44;
+                                          return 'GET /org/*/projects/*/activity';
                                         }
                                       }
                                     case 116:
                                       if (p.startsWith('asks', j + 2)) {
                                         if (l === j + 6) {
-                                          return 45;
+                                          return 'GET /org/*/projects/*/tasks';
                                         }
                                         if (l > j + 7)
                                           if (p.charCodeAt(j + 6) === 47) {
                                             switch (p.charCodeAt(j + 7)) {
                                               case 116:
-                                                if (
-                                                  p.startsWith(
-                                                    'ime-entries',
-                                                    j + 8,
-                                                  )
-                                                ) {
+                                                if (p.startsWith('ime-entries', j + 8)) {
                                                   if (l === j + 19) {
-                                                    return 47;
+                                                    return 'GET /org/*/projects/*/tasks/time-entries';
                                                   }
                                                 }
                                               case 97:
-                                                if (
-                                                  p.startsWith(
-                                                    'ttachments',
-                                                    j + 8,
-                                                  )
-                                                ) {
+                                                if (p.startsWith('ttachments', j + 8)) {
                                                   if (l === j + 18) {
-                                                    return 50;
+                                                    return 'GET /org/*/projects/*/tasks/attachments';
                                                   }
                                                 }
                                             }
@@ -566,13 +512,13 @@ const d: (path: string, method: string) => number = (p, m) => {
                                 }
                               } else if (j === -1) {
                                 let q1 = p.slice(i);
-                                return 39;
+                                return 'GET /org/*/projects/*';
                               }
                             }
                         case 116:
                           if (p.startsWith('asks', j + 2)) {
                             if (l === j + 6) {
-                              return 56;
+                              return 'GET /org/*/tasks';
                             }
                             if (l > j + 7)
                               if (p.charCodeAt(j + 6) === 47) {
@@ -585,28 +531,26 @@ const d: (path: string, method: string) => number = (p, m) => {
                                       case 99:
                                         if (p.startsWith('omments', j + 2)) {
                                           if (l === j + 9) {
-                                            return 62;
+                                            return 'GET /org/*/tasks/*/comments';
                                           }
                                         }
                                       case 116:
-                                        if (
-                                          p.startsWith('ime-entries', j + 2)
-                                        ) {
+                                        if (p.startsWith('ime-entries', j + 2)) {
                                           if (l === j + 13) {
-                                            return 64;
+                                            return 'GET /org/*/tasks/*/time-entries';
                                           }
                                         }
                                       case 97:
                                         if (p.startsWith('ttachments', j + 2)) {
                                           if (l === j + 12) {
-                                            return 67;
+                                            return 'GET /org/*/tasks/*/attachments';
                                           }
                                         }
                                     }
                                   }
                                 } else if (j === -1) {
                                   let q1 = p.slice(i);
-                                  return 57;
+                                  return 'GET /org/*/tasks/*';
                                 }
                               }
                           }
@@ -620,15 +564,13 @@ const d: (path: string, method: string) => number = (p, m) => {
                                       case 108:
                                         if (p.startsWith('ans', j + 11)) {
                                           if (l === j + 14) {
-                                            return 73;
+                                            return 'GET /org/*/billing/plans';
                                           }
                                         }
                                       case 97:
-                                        if (
-                                          p.startsWith('yment-methods', j + 11)
-                                        ) {
+                                        if (p.startsWith('yment-methods', j + 11)) {
                                           if (l === j + 24) {
-                                            return 80;
+                                            return 'GET /org/*/billing/payment-methods';
                                           }
                                         }
                                     }
@@ -636,19 +578,19 @@ const d: (path: string, method: string) => number = (p, m) => {
                                 case 115:
                                   if (p.startsWith('ubscription', j + 10)) {
                                     if (l === j + 21) {
-                                      return 74;
+                                      return 'GET /org/*/billing/subscription';
                                     }
                                   }
                                 case 105:
                                   if (p.startsWith('nvoices', j + 10)) {
                                     if (l === j + 17) {
-                                      return 77;
+                                      return 'GET /org/*/billing/invoices';
                                     }
                                     if (l > j + 18)
                                       if (p.charCodeAt(j + 17) === 47) {
                                         if (!p.includes('/', j + 18)) {
                                           let q1 = p.slice(j + 18);
-                                          return 78;
+                                          return 'GET /org/*/billing/invoices/*';
                                         }
                                       }
                                   }
@@ -657,13 +599,13 @@ const d: (path: string, method: string) => number = (p, m) => {
                         case 97:
                           if (p.startsWith('pi-keys', j + 2)) {
                             if (l === j + 9) {
-                              return 83;
+                              return 'GET /org/*/api-keys';
                             }
                           }
                         case 119:
                           if (p.startsWith('ebhooks', j + 2)) {
                             if (l === j + 9) {
-                              return 86;
+                              return 'GET /org/*/webhooks';
                             }
                             if (l > j + 10)
                               if (p.charCodeAt(j + 9) === 47) {
@@ -673,13 +615,13 @@ const d: (path: string, method: string) => number = (p, m) => {
                                   let q1 = p.slice(i, j);
                                   if (p.startsWith('deliveries', j + 1)) {
                                     if (l === j + 11) {
-                                      return 90;
+                                      return 'GET /org/*/webhooks/*/deliveries';
                                     }
                                     if (l > j + 12)
                                       if (p.charCodeAt(j + 11) === 47) {
                                         if (!p.includes('/', j + 12)) {
                                           let q2 = p.slice(j + 12);
-                                          return 91;
+                                          return 'GET /org/*/webhooks/*/deliveries/*';
                                         }
                                       }
                                   }
@@ -690,7 +632,7 @@ const d: (path: string, method: string) => number = (p, m) => {
                     }
                   } else if (j === -1) {
                     let q0 = p.slice(5);
-                    return 26;
+                    return 'GET /org/*';
                   }
                 }
             case 102:
@@ -698,7 +640,7 @@ const d: (path: string, method: string) => number = (p, m) => {
                 if (p.startsWith('iles/', 2)) {
                   if (!p.includes('/', 7)) {
                     let q0 = p.slice(7);
-                    return 93;
+                    return 'GET /files/*';
                   }
                 }
             case 97:
@@ -717,7 +659,7 @@ const d: (path: string, method: string) => number = (p, m) => {
                                     let q0 = p.slice(24, j);
                                     if (p.startsWith('summary', j + 1)) {
                                       if (l === j + 8) {
-                                        return 106;
+                                        return 'GET /admin/reports/projects/*/summary';
                                       }
                                     }
                                   }
@@ -730,7 +672,7 @@ const d: (path: string, method: string) => number = (p, m) => {
                                     let q0 = p.slice(21, j);
                                     if (p.startsWith('activity', j + 1)) {
                                       if (l === j + 9) {
-                                        return 107;
+                                        return 'GET /admin/reports/users/*/activity';
                                       }
                                     }
                                   }
@@ -742,7 +684,7 @@ const d: (path: string, method: string) => number = (p, m) => {
                         if (p.startsWith('xports/', 8)) {
                           if (!p.includes('/', 15)) {
                             let q0 = p.slice(15);
-                            return 114;
+                            return 'GET /admin/exports/*';
                           }
                         }
                   }
@@ -753,7 +695,7 @@ const d: (path: string, method: string) => number = (p, m) => {
     case 'PATCH':
       switch (p) {
         case '/user/me/preferences': {
-          return 19;
+          return 'PATCH /user/me/preferences';
         }
       }
       {
@@ -773,7 +715,7 @@ const d: (path: string, method: string) => number = (p, m) => {
                             if (p.startsWith('rojects/', j + 2)) {
                               if (!p.includes('/', j + 10)) {
                                 let q1 = p.slice(j + 10);
-                                return 40;
+                                return 'PATCH /org/*/projects/*';
                               }
                             }
                         case 116:
@@ -781,7 +723,7 @@ const d: (path: string, method: string) => number = (p, m) => {
                             if (p.startsWith('asks/', j + 2)) {
                               if (!p.includes('/', j + 7)) {
                                 let q1 = p.slice(j + 7);
-                                return 58;
+                                return 'PATCH /org/*/tasks/*';
                               }
                             }
                         case 119:
@@ -789,14 +731,14 @@ const d: (path: string, method: string) => number = (p, m) => {
                             if (p.startsWith('ebhooks/', j + 2)) {
                               if (!p.includes('/', j + 10)) {
                                 let q1 = p.slice(j + 10);
-                                return 88;
+                                return 'PATCH /org/*/webhooks/*';
                               }
                             }
                       }
                     }
                   } else if (j === -1) {
                     let q0 = p.slice(5);
-                    return 27;
+                    return 'PATCH /org/*';
                   }
                 }
             case 115:
@@ -804,7 +746,7 @@ const d: (path: string, method: string) => number = (p, m) => {
                 if (p.startsWith('earch/filters/', 2)) {
                   if (!p.includes('/', 16)) {
                     let q0 = p.slice(16);
-                    return 98;
+                    return 'PATCH /search/filters/*';
                   }
                 }
             case 116:
@@ -812,7 +754,7 @@ const d: (path: string, method: string) => number = (p, m) => {
                 if (p.startsWith('ags/', 2)) {
                   if (!p.includes('/', 6)) {
                     let q0 = p.slice(6);
-                    return 102;
+                    return 'PATCH /tags/*';
                   }
                 }
           }
@@ -827,7 +769,7 @@ const d: (path: string, method: string) => number = (p, m) => {
               if (p.startsWith('ser/me/sessions/', 2)) {
                 if (!p.includes('/', 18)) {
                   let q0 = p.slice(18);
-                  return 21;
+                  return 'DELETE /user/me/sessions/*';
                 }
               }
           case 111:
@@ -851,24 +793,22 @@ const d: (path: string, method: string) => number = (p, m) => {
                                     case 116:
                                       if (p.startsWith('ags', j + 8)) {
                                         if (l === j + 11) {
-                                          return 53;
+                                          return 'DELETE /org/*/projects/*/tasks/tags';
                                         }
                                       }
                                     case 99:
                                       if (l > j + 21)
-                                        if (
-                                          p.startsWith('ustom-fields/', j + 8)
-                                        ) {
+                                        if (p.startsWith('ustom-fields/', j + 8)) {
                                           if (!p.includes('/', j + 21)) {
                                             let q2 = p.slice(j + 21);
-                                            return 55;
+                                            return 'DELETE /org/*/projects/*/tasks/custom-fields/*';
                                           }
                                         }
                                   }
                                 }
                             } else if (j === -1) {
                               let q1 = p.slice(i);
-                              return 41;
+                              return 'DELETE /org/*/projects/*';
                             }
                           }
                       case 116:
@@ -883,24 +823,22 @@ const d: (path: string, method: string) => number = (p, m) => {
                                   case 116:
                                     if (p.startsWith('ags', j + 2)) {
                                       if (l === j + 5) {
-                                        return 70;
+                                        return 'DELETE /org/*/tasks/*/tags';
                                       }
                                     }
                                   case 99:
                                     if (l > j + 15)
-                                      if (
-                                        p.startsWith('ustom-fields/', j + 2)
-                                      ) {
+                                      if (p.startsWith('ustom-fields/', j + 2)) {
                                         if (!p.includes('/', j + 15)) {
                                           let q2 = p.slice(j + 15);
-                                          return 72;
+                                          return 'DELETE /org/*/tasks/*/custom-fields/*';
                                         }
                                       }
                                 }
                               }
                             } else if (j === -1) {
                               let q1 = p.slice(i);
-                              return 59;
+                              return 'DELETE /org/*/tasks/*';
                             }
                           }
                       case 98:
@@ -908,7 +846,7 @@ const d: (path: string, method: string) => number = (p, m) => {
                           if (p.startsWith('illing/payment-methods/', j + 2)) {
                             if (!p.includes('/', j + 25)) {
                               let q1 = p.slice(j + 25);
-                              return 82;
+                              return 'DELETE /org/*/billing/payment-methods/*';
                             }
                           }
                       case 97:
@@ -916,7 +854,7 @@ const d: (path: string, method: string) => number = (p, m) => {
                           if (p.startsWith('pi-keys/', j + 2)) {
                             if (!p.includes('/', j + 10)) {
                               let q1 = p.slice(j + 10);
-                              return 85;
+                              return 'DELETE /org/*/api-keys/*';
                             }
                           }
                       case 119:
@@ -924,14 +862,14 @@ const d: (path: string, method: string) => number = (p, m) => {
                           if (p.startsWith('ebhooks/', j + 2)) {
                             if (!p.includes('/', j + 10)) {
                               let q1 = p.slice(j + 10);
-                              return 89;
+                              return 'DELETE /org/*/webhooks/*';
                             }
                           }
                     }
                   }
                 } else if (j === -1) {
                   let q0 = p.slice(5);
-                  return 28;
+                  return 'DELETE /org/*';
                 }
               }
           case 102:
@@ -939,7 +877,7 @@ const d: (path: string, method: string) => number = (p, m) => {
               if (p.startsWith('iles/', 2)) {
                 if (!p.includes('/', 7)) {
                   let q0 = p.slice(7);
-                  return 94;
+                  return 'DELETE /files/*';
                 }
               }
           case 115:
@@ -947,7 +885,7 @@ const d: (path: string, method: string) => number = (p, m) => {
               if (p.startsWith('earch/filters/', 2)) {
                 if (!p.includes('/', 16)) {
                   let q0 = p.slice(16);
-                  return 99;
+                  return 'DELETE /search/filters/*';
                 }
               }
           case 116:
@@ -955,7 +893,7 @@ const d: (path: string, method: string) => number = (p, m) => {
               if (p.startsWith('ags/', 2)) {
                 if (!p.includes('/', 6)) {
                   let q0 = p.slice(6);
-                  return 103;
+                  return 'DELETE /tags/*';
                 }
               }
         }
@@ -981,7 +919,7 @@ const d: (path: string, method: string) => number = (p, m) => {
                           if (p.startsWith('tasks/custom-fields/', j + 1)) {
                             if (!p.includes('/', j + 21)) {
                               let q2 = p.slice(j + 21);
-                              return 54;
+                              return 'PUT /org/*/projects/*/tasks/custom-fields/*';
                             }
                           }
                       }
@@ -997,7 +935,7 @@ const d: (path: string, method: string) => number = (p, m) => {
                           if (p.startsWith('custom-fields/', j + 1)) {
                             if (!p.includes('/', j + 15)) {
                               let q2 = p.slice(j + 15);
-                              return 71;
+                              return 'PUT /org/*/tasks/*/custom-fields/*';
                             }
                           }
                       }
@@ -1008,6 +946,5 @@ const d: (path: string, method: string) => number = (p, m) => {
         }
     }
   }
-  return -1;
+  return '';
 };
-export default d;

@@ -59,14 +59,7 @@ export const insertNewBranch = <T>(
   while (nextParamIdx > -1) {
     // Add previous path part
     if (startIdx < nextParamIdx) {
-      const nextNode: Node<T> = [
-        path.slice(startIdx, nextParamIdx),
-        null,
-        [],
-        [],
-        null,
-        null,
-      ];
+      const nextNode: Node<T> = [path.slice(startIdx, nextParamIdx), null, [], [], null, null];
 
       root[2].push(path.charCodeAt(startIdx));
       root[3].push(nextNode);
@@ -115,8 +108,7 @@ export const insert = <T>(
       if (path.charCodeAt(pathIdx) === 42) {
         // .../**
         if (pathIdx + 2 === path.length) root[5] = value;
-        else if (root[4] === null)
-          insertNewBranch(root, path, pathIdx, pathIdx, value);
+        else if (root[4] === null) insertNewBranch(root, path, pathIdx, pathIdx, value);
         // .../*
         else if (pathIdx + 1 === path.length) root[4]![1] = value;
         else {
@@ -136,13 +128,7 @@ export const insert = <T>(
         // Add new children
         const nextNodeId = root[2].indexOf(path.charCodeAt(pathIdx));
         if (nextNodeId === -1) {
-          insertNewBranch(
-            root,
-            path,
-            pathIdx,
-            path.indexOf('*', pathIdx + 1),
-            value,
-          );
+          insertNewBranch(root, path, pathIdx, path.indexOf('*', pathIdx + 1), value);
           return;
         }
 
@@ -159,16 +145,7 @@ export const insert = <T>(
     // Split the node
     else if (path.charCodeAt(pathIdx) !== nodePart.charCodeAt(nodePartIdx)) {
       // Split the old path
-      root[3] = [
-        [
-          nodePart.slice(nodePartIdx),
-          root[1],
-          root[2],
-          root[3],
-          root[4],
-          root[5],
-        ],
-      ];
+      root[3] = [[nodePart.slice(nodePartIdx), root[1], root[2], root[3], root[4], root[5]]];
       root[2] = [nodePart.charCodeAt(nodePartIdx)];
 
       root[0] = nodePart.slice(0, nodePartIdx);
@@ -188,16 +165,7 @@ export const insert = <T>(
   // End of path string but not node part string
   if (nodePartIdx < nodePart.length) {
     // Split the old path
-    root[3] = [
-      [
-        nodePart.slice(nodePartIdx),
-        root[1],
-        root[2],
-        root[3],
-        root[4],
-        root[5],
-      ],
-    ];
+    root[3] = [[nodePart.slice(nodePartIdx), root[1], root[2], root[3], root[4], root[5]]];
     root[2] = [nodePart.charCodeAt(nodePartIdx)];
 
     root[0] = nodePart.slice(0, nodePartIdx);

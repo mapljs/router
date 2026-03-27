@@ -1,28 +1,35 @@
 {
   "compilerOptions": {
     // Enable latest features
-    "lib": ["ESNext", "DOM", "DOM.Iterable"],
+    "lib": [
+      "ESNext.AsyncIterable",
+      "ESNext",
+      "DOM",
+      "DOM.Iterable",
+      "DOM.AsyncIterable",
+      "WebWorker.ImportScripts",
+      "Webworker.Iterable",
+      "WebWorker.AsyncIterable"
+    ],
     "target": "ESNext",
-    "module": "ESNext",
+
+    // Module
+    "module": "Preserve",
     "moduleDetection": "force",
     "resolveJsonModule": true,
-    "isolatedModules": true,
-    // Bundler mode
     "moduleResolution": "Bundler",
+    "allowImportingTsExtensions": true,
+    "allowArbitraryExtensions": true,
     "verbatimModuleSyntax": true,
+
     // Best practices
     "strict": true,
     "skipLibCheck": true,
-    "noFallthroughCasesInSwitch": true,
-    // Some stricter flags
-    "noUnusedLocals": false,
-    "noImplicitAny": true,
-    "noImplicitOverride": true,
-    "noImplicitThis": true,
-    "noUnusedParameters": false,
-    "noPropertyAccessFromIndexSignature": false,
-    // Declaration options
+    "noUnusedLocals": true,
+    "allowUnreachableCode": false,
+
+    // Declaration
     "declaration": true,
-    "isolatedDeclarations": true
+    "noEmit": true
   }
 }

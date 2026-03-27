@@ -1,21 +1,21 @@
-const d: (path: string, method: string) => number = (p, m) => {
+(m, p) => {
   switch (m) {
     case 'GET':
       switch (p) {
         case '/user': {
-          return 0;
+          return 'GET /user';
         }
         case '/user/comments': {
-          return 1;
+          return 'GET /user/comments';
         }
         case '/user/avatar': {
-          return 2;
+          return 'GET /user/avatar';
         }
         case '/status': {
-          return 9;
+          return 'GET /status';
         }
         case '/very/deeply/nested/route/hello/there': {
-          return 10;
+          return 'GET /very/deeply/nested/route/hello/there';
         }
       }
       {
@@ -31,7 +31,7 @@ const d: (path: string, method: string) => number = (p, m) => {
                         if (p.startsWith('sername/', 14)) {
                           if (!p.includes('/', 22)) {
                             let q0 = p.slice(22);
-                            return 3;
+                            return 'GET /user/lookup/username/*';
                           }
                         }
                     case 101:
@@ -39,7 +39,7 @@ const d: (path: string, method: string) => number = (p, m) => {
                         if (p.startsWith('mail/', 14)) {
                           if (!p.includes('/', 19)) {
                             let q0 = p.slice(19);
-                            return 4;
+                            return 'GET /user/lookup/email/*';
                           }
                         }
                   }
@@ -52,12 +52,12 @@ const d: (path: string, method: string) => number = (p, m) => {
                     let q0 = p.slice(7, j);
                     if (p.startsWith('comments', j + 1)) {
                       if (l === j + 9) {
-                        return 6;
+                        return 'GET /event/*/comments';
                       }
                     }
                   } else if (j === -1) {
                     let q0 = p.slice(7);
-                    return 5;
+                    return 'GET /event/*';
                   }
                 }
             case 109:
@@ -68,7 +68,7 @@ const d: (path: string, method: string) => number = (p, m) => {
                     let q0 = p.slice(5, j);
                     if (p.startsWith('events', j + 1)) {
                       if (l === j + 7) {
-                        return 8;
+                        return 'GET /map/*/events';
                       }
                     }
                   }
@@ -77,7 +77,7 @@ const d: (path: string, method: string) => number = (p, m) => {
               if (l > 8)
                 if (p.startsWith('tatic/', 2)) {
                   let q0 = p.slice(8);
-                  return 11;
+                  return 'GET /static/**';
                 }
           }
         }
@@ -91,13 +91,12 @@ const d: (path: string, method: string) => number = (p, m) => {
             let q0 = p.slice(7, j);
             if (p.startsWith('comment', j + 1)) {
               if (l === j + 8) {
-                return 7;
+                return 'POST /event/*/comment';
               }
             }
           }
         }
     }
   }
-  return -1;
+  return '';
 };
-export default d;

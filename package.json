@@ -2,30 +2,34 @@
   "name": "@mapl/router",
   "version": "0.10.3",
   "description": "The fastest possible JS router",
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/mapljs/router.git"
-  },
+  "keywords": ["url", "router"],
+  "homepage": "",
   "license": "MIT",
+  "repository": "mapljs/router",
   "type": "module",
+  "imports": {
+    "#self/*": "./lib/*.js",
+    "#self": "./lib"
+  },
   "scripts": {
     "task": "bun scripts/task.ts",
-    "fmt": "biome format .",
-    "snap": "bun snapshots/index.ts && biome format ./snapshots/out --write",
-    "build:test": "bun task build && bun test && bun snap",
-    "build:publish": "bun task build && bun task report-size && bun task publish"
+    "fmt": "oxfmt",
+    "bench:node": "node --expose-gc --allow-natives-syntax",
+    "bench:deno": "deno run --allow-all --v8-flags=--expose-gc,--allow-natives-syntax"
   },
   "devDependencies": {
-    "@biomejs/biome": "^1.9.4",
-    "@types/bun": "^1.2.10",
+    "@swc/core": "^1.15.21",
+    "@types/bun": "^1.3.9",
+    "@types/deno": "^2.5.0",
+    "@types/node": "^25.5.0",
+    "chokidar": "^5.0.0",
     "mitata": "^1.0.34",
-    "oxc-minify": "^0.64.0",
-    "oxc-transform": "^0.65.0",
+    "oxc-transform": "^0.121.0",
+    "oxfmt": "^0.41.0",
     "picocolors": "^1.1.1",
-    "tsx": "^4.20.3",
-    "typescript": "^5.8.3"
+    "typescript": "^6.0.2"
   },
   "trustedDependencies": [
-    "@biomejs/biome"
+    "@swc/core"
   ]
 }
