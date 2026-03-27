@@ -50,15 +50,14 @@ export interface Config {
 //
 export const buildSourceSync = (
   dev: boolean,
+  autoUpdatePkg: boolean,
   pathFromSource: string,
-  exports: Record<string, string | Record<string, string>>,
 ) => {
   let time = Bun.nanoseconds();
 
   const fullPath = join(SOURCE, pathFromSource);
   try {
     const pathNoExt = pathFromSource.slice(0, pathFromSource.lastIndexOf('.') >>> 0);
-    const pathName = basename(pathNoExt);
     const pathDir = dirname(pathNoExt);
 
     const transformed = transformSync(
@@ -83,26 +82,29 @@ export const buildSourceSync = (
     (dev || hasDecl) && writeFileSync(join(LIB, pathNoExt + '.d.ts'), transformed.declaration!);
 
     if (hasCode || hasDecl) {
+      const pathName = basename(pathNoExt);
       const isRuntimeKey = pathName.startsWith('_');
 
-      let exportPath =
-        pathName === 'index' || isRuntimeKey // Runtime key
-          ? dirname(pathNoExt)
-          : pathNoExt;
-      exportPath === '.' || exportPath.startsWith('./') || (exportPath = './' + exportPath);
+      if (pathName === 'index' || isRuntimeKey) {
+        let exportPath = dirname(pathNoExt);
+        exportPath === '.' || exportPath.startsWith('./') || (exportPath = './' + exportPath);
 
-      const sourcePath = './' + pathNoExt + (hasCode ? '.js' : '.d.ts');
+        const sourcePath = './' + pathNoExt + (hasCode ? '.js' : '.d.ts');
 
-      if (isRuntimeKey) {
-        const runtimeKey = pathName.slice(1);
+        if (isRuntimeKey) {
+          const runtimeKey = pathName.slice(1);
 
-        if (typeof exports[exportPath] === 'string') {
-          console.error(`Change ${exportPath}/index to ${exportPath}/_default instead!`);
-          process.exit(1);
-        } else
-          // @ts-ignore
-          (exports[exportPath] ??= {})[runtimeKey] = sourcePath;
-      } else exports[exportPath] = sourcePath;
+          if (typeof LIB_PKG.exports[exportPath] === 'string') {
+            console.error(`Change ${exportPath}/index to ${exportPath}/_default instead!`);
+            process.exit(1);
+          } else
+            // @ts-ignore
+            (LIB_PKG.exports[exportPath] ??= {})[runtimeKey] = sourcePath;
+        } else LIB_PKG.exports[exportPath] = sourcePath;
+
+        if (autoUpdatePkg)
+          updatePackageJson();
+      }
     }
   } finally {
     time = Bun.nanoseconds() - time;
@@ -154,7 +156,6 @@ export const unlinkSync = (file: string) => {
 
 export const removeSourceSync = (
   pathFromSource: string,
-  exports: Record<string, string | Record<string, string>>,
 ) => {
   let time = Bun.nanoseconds();
 
@@ -181,16 +182,18 @@ export const removeSourceSync = (
     if (hasCode || hasDecl) {
       const isRuntimeKey = pathName.startsWith('_');
 
-      const exportPath =
-        pathName === 'index' || isRuntimeKey // Runtime key
-          ? dirname(pathNoExt)
-          : pathNoExt;
+      if (pathName === 'index' || isRuntimeKey) {
+        let exportPath = dirname(pathNoExt);
+        exportPath === '.' || exportPath.startsWith('./') || (exportPath = './' + exportPath);
 
-      if (isRuntimeKey && Object.keys(exports[exportPath]).length > 1) {
-        const runtimeKey = pathName.slice(1);
-        // @ts-ignore
-        delete exports[exportPath][runtimeKey];
-      } else delete exports[exportPath];
+        if (isRuntimeKey && Object.keys(LIB_PKG.exports[exportPath]).length > 1) {
+          const runtimeKey = pathName.slice(1);
+          // @ts-ignore
+          delete LIB_PKG.exports[exportPath][runtimeKey];
+        } else delete LIB_PKG.exports[exportPath];
+
+        updatePackageJson();
+      }
     }
   } finally {
     time = Bun.nanoseconds() - time;
@@ -202,10 +205,12 @@ export const removeSourceSync = (
 };
 
 // @ts-ignore
-pkg.exports = {};
+pkg.exports = {
+  './*': './*.js'
+};
 // @ts-ignore
 pkg.devDependencies = pkg.trustedDependencies = pkg.scripts = pkg.imports = void 0;
-export const LIB_PKG: Evaluate<
+const LIB_PKG: Evaluate<
   Omit<
     typeof pkg,
     'devDependencies' | 'trustedDependencies' | 'scripts' | 'imports' | 'exports'

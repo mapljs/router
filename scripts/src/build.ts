@@ -1,7 +1,7 @@
 import { globSync } from 'node:fs';
 
 import { ROOT, SOURCE } from '../lib/constants.ts';
-import { buildSourceSync, linkSync, updatePackageJson, LIB_PKG, initLib } from '../lib/build.ts';
+import { buildSourceSync, linkSync, updatePackageJson, initLib } from '../lib/build.ts';
 
 import { build as CONFIG } from '../config.ts';
 
@@ -20,5 +20,5 @@ for (const path of globSync(CONFIG.symlinks, {
 for (const path of globSync(CONFIG.files, {
   cwd: SOURCE,
 }))
-  buildSourceSync(false, path, LIB_PKG.exports);
+  buildSourceSync(false, false, path);
 updatePackageJson();
