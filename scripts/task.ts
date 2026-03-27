@@ -1,9 +1,9 @@
 import { fork } from 'node:child_process';
 import { join } from 'node:path';
 
-import { LIB, SCRIPTS, SNAPSHOTS, SOURCE, TESTS } from './lib/constants.ts';
+import { SCRIPTS } from './lib/constants.ts';
 import { fmt } from './lib/fmt.ts';
-import { build as BUILD_CONFIG } from './config.ts';
+import { task as CONFIG } from './config.ts';
 
 //
 // TYPES
@@ -28,55 +28,16 @@ interface Task {
   >;
 }
 
-//
-// CONFIG
-//
-const TASKS: Record<string, Task> = {
-  build: {
-    description: `Build files matching ${BUILD_CONFIG.files.map(fmt.glob).join(', ')} in ${fmt.relativePath(SOURCE)} to ${fmt.relativePath(LIB)}.`,
-    args: {},
-  },
-  test: {
-    description: `Run tests.`,
-    args: {
-      target: {
-        type: 'string[]',
-        description: 'Target tests to run. Run all tests by default.',
-      },
-    },
-  },
-  dev: {
-    description: 'Watch source files and tests.',
-    args: {},
-  },
-  publish: {
-    description: `Publish ${fmt.relativePath(LIB)} to npm.`,
-    args: {
-      otp: {
-        type: '?string',
-        description: 'OTP code to authenticate. Will be prompted if ignored.',
-      },
-    },
-  },
-  'report-size': {
-    description: `Report ${fmt.relativePath(LIB)} files size.`,
-    args: {
-      globs: {
-        type: 'string[]',
-        description: `Files to scan in ${fmt.relativePath(LIB)} to include in the build. Defaults to ${fmt.glob('**/*.js')}.`,
-      },
-    },
-  },
-  snap: {
-    description: `Print compiled code of routes in ${fmt.relativePath(join(TESTS, 'routes.ts'))} to ${fmt.relativePath(SNAPSHOTS)}.`,
-    args: {},
-  },
-};
+export interface Config {
+  tasks: Record<string, Task>;
+}
 
 {
   //
   // MAIN
   //
+  const TASKS = CONFIG.tasks;
+
   const printHelp = (name: string, task: Task) => {
     const entries = Object.entries(task.args);
 
