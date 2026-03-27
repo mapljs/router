@@ -40,14 +40,12 @@ watch('.', {
 })
   .on('add', (path) => {
     buildSourceSync(true, true, path);
-    updatePackageJson();
   })
   .on('change', (path) => {
     buildSourceSync(true, false, path);
   })
   .on('unlink', (path) => {
     removeSourceSync(path);
-    updatePackageJson();
   })
   .on('error', (e) => {
     console.error(e);
