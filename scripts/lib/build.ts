@@ -48,11 +48,7 @@ export interface Config {
 //
 // MAIN
 //
-export const buildSourceSync = (
-  dev: boolean,
-  autoUpdatePkg: boolean,
-  pathFromSource: string,
-) => {
+export const buildSourceSync = (dev: boolean, autoUpdatePkg: boolean, pathFromSource: string) => {
   let time = Bun.nanoseconds();
 
   const fullPath = join(SOURCE, pathFromSource);
@@ -102,8 +98,7 @@ export const buildSourceSync = (
             (LIB_PKG.exports[exportPath] ??= {})[runtimeKey] = sourcePath;
         } else LIB_PKG.exports[exportPath] = sourcePath;
 
-        if (autoUpdatePkg)
-          updatePackageJson();
+        autoUpdatePkg && updatePackageJson();
       }
     }
   } finally {
@@ -154,9 +149,7 @@ export const unlinkSync = (file: string) => {
   );
 };
 
-export const removeSourceSync = (
-  pathFromSource: string,
-) => {
+export const removeSourceSync = (pathFromSource: string, autoUpdatePkg: boolean) => {
   let time = Bun.nanoseconds();
 
   try {
@@ -192,7 +185,7 @@ export const removeSourceSync = (
           delete LIB_PKG.exports[exportPath][runtimeKey];
         } else delete LIB_PKG.exports[exportPath];
 
-        updatePackageJson();
+        autoUpdatePkg && updatePackageJson();
       }
     }
   } finally {
@@ -206,7 +199,7 @@ export const removeSourceSync = (
 
 // @ts-ignore
 pkg.exports = {
-  './*': './*.js'
+  './*': './*.js',
 };
 // @ts-ignore
 pkg.devDependencies = pkg.trustedDependencies = pkg.scripts = pkg.imports = void 0;

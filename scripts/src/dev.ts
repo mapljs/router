@@ -45,7 +45,7 @@ watch('.', {
     buildSourceSync(true, false, path);
   })
   .on('unlink', (path) => {
-    removeSourceSync(path);
+    removeSourceSync(path, true);
   })
   .on('error', (e) => {
     console.error(e);
