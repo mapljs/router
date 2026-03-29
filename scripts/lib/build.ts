@@ -1,9 +1,8 @@
-import { basename, dirname, join } from 'node:path';
+import { basename, dirname, join, sep } from 'node:path';
 import {
   readFileSync,
   rmSync,
   writeFileSync,
-  symlinkSync,
   unlinkSync as fsUnlinkSync,
   mkdirSync,
 } from 'node:fs';
