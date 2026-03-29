@@ -4,9 +4,9 @@ import { mkdirSync, writeFileSync } from 'node:fs';
 import { format } from 'oxfmt';
 import oxfmtrc from '../../.oxfmtrc.jsonc';
 
-import { createRouter, insertItem } from '#self/method/index';
-import compile from '#self/method/compiler';
-import { PATH } from '#self/constants';
+import { createRouter, insertItem } from '$/method/index';
+import compile from '$/method/compiler';
+import { PATH } from '$/constants';
 
 import { SNAPSHOTS } from '../lib/constants.ts';
 
