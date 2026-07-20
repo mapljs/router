@@ -1,6 +1,6 @@
 {
   "name": "@mapl/router",
-  "version": "0.10.3",
+  "version": "0.10.4",
   "description": "The fastest possible JS router",
   "keywords": ["url", "router"],
   "homepage": "",

@@ -2,21 +2,31 @@
   switch (m) {
     case 'GET':
       switch (p) {
-        case '/user': {
-          return 'GET /user';
-        }
-        case '/user/comments': {
-          return 'GET /user/comments';
-        }
-        case '/user/avatar': {
-          return 'GET /user/avatar';
-        }
-        case '/status': {
-          return 'GET /status';
-        }
-        case '/very/deeply/nested/route/hello/there': {
-          return 'GET /very/deeply/nested/route/hello/there';
-        }
+        case '/user':
+          {
+            return 'GET /user';
+          }
+          break;
+        case '/user/comments':
+          {
+            return 'GET /user/comments';
+          }
+          break;
+        case '/user/avatar':
+          {
+            return 'GET /user/avatar';
+          }
+          break;
+        case '/status':
+          {
+            return 'GET /status';
+          }
+          break;
+        case '/very/deeply/nested/route/hello/there':
+          {
+            return 'GET /very/deeply/nested/route/hello/there';
+          }
+          break;
       }
       {
         let l = p.length;
@@ -82,21 +92,24 @@
           }
         }
       }
-    case 'POST': {
-      let l = p.length;
-      if (l > 7)
-        if (p.startsWith('event/', 1)) {
-          let j = p.indexOf('/', 7);
-          if (j > 7) {
-            let q0 = p.slice(7, j);
-            if (p.startsWith('comment', j + 1)) {
-              if (l === j + 8) {
-                return 'POST /event/*/comment';
+      break;
+    case 'POST':
+      {
+        let l = p.length;
+        if (l > 7)
+          if (p.startsWith('event/', 1)) {
+            let j = p.indexOf('/', 7);
+            if (j > 7) {
+              let q0 = p.slice(7, j);
+              if (p.startsWith('comment', j + 1)) {
+                if (l === j + 8) {
+                  return 'POST /event/*/comment';
+                }
               }
             }
           }
-        }
-    }
+      }
+      break;
   }
   return '';
 };

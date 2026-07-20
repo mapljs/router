@@ -2,54 +2,86 @@
   switch (m) {
     case 'POST':
       switch (p) {
-        case '/auth/register': {
-          return 'POST /auth/register';
-        }
-        case '/auth/login': {
-          return 'POST /auth/login';
-        }
-        case '/auth/logout': {
-          return 'POST /auth/logout';
-        }
-        case '/auth/refresh': {
-          return 'POST /auth/refresh';
-        }
-        case '/auth/password/forgot': {
-          return 'POST /auth/password/forgot';
-        }
-        case '/auth/password/reset': {
-          return 'POST /auth/password/reset';
-        }
-        case '/auth/sso': {
-          return 'POST /auth/sso';
-        }
-        case '/user': {
-          return 'POST /user';
-        }
-        case '/user/me': {
-          return 'POST /user/me';
-        }
-        case '/user/notifications/read-all': {
-          return 'POST /user/notifications/read-all';
-        }
-        case '/org': {
-          return 'POST /org';
-        }
-        case '/files/upload': {
-          return 'POST /files/upload';
-        }
-        case '/search/filters': {
-          return 'POST /search/filters';
-        }
-        case '/tags': {
-          return 'POST /tags';
-        }
-        case '/admin/impersonate': {
-          return 'POST /admin/impersonate';
-        }
-        case '/admin/exports': {
-          return 'POST /admin/exports';
-        }
+        case '/auth/register':
+          {
+            return 'POST /auth/register';
+          }
+          break;
+        case '/auth/login':
+          {
+            return 'POST /auth/login';
+          }
+          break;
+        case '/auth/logout':
+          {
+            return 'POST /auth/logout';
+          }
+          break;
+        case '/auth/refresh':
+          {
+            return 'POST /auth/refresh';
+          }
+          break;
+        case '/auth/password/forgot':
+          {
+            return 'POST /auth/password/forgot';
+          }
+          break;
+        case '/auth/password/reset':
+          {
+            return 'POST /auth/password/reset';
+          }
+          break;
+        case '/auth/sso':
+          {
+            return 'POST /auth/sso';
+          }
+          break;
+        case '/user':
+          {
+            return 'POST /user';
+          }
+          break;
+        case '/user/me':
+          {
+            return 'POST /user/me';
+          }
+          break;
+        case '/user/notifications/read-all':
+          {
+            return 'POST /user/notifications/read-all';
+          }
+          break;
+        case '/org':
+          {
+            return 'POST /org';
+          }
+          break;
+        case '/files/upload':
+          {
+            return 'POST /files/upload';
+          }
+          break;
+        case '/search/filters':
+          {
+            return 'POST /search/filters';
+          }
+          break;
+        case '/tags':
+          {
+            return 'POST /tags';
+          }
+          break;
+        case '/admin/impersonate':
+          {
+            return 'POST /admin/impersonate';
+          }
+          break;
+        case '/admin/exports':
+          {
+            return 'POST /admin/exports';
+          }
+          break;
       }
       {
         let l = p.length;
@@ -360,50 +392,79 @@
           }
         }
       }
+      break;
     case 'GET':
       switch (p) {
-        case '/auth/sso/providers': {
-          return 'GET /auth/sso/providers';
-        }
-        case '/user/me': {
-          return 'GET /user/me';
-        }
-        case '/user/me/preferences': {
-          return 'GET /user/me/preferences';
-        }
-        case '/user/me/sessions': {
-          return 'GET /user/me/sessions';
-        }
-        case '/user/notifications': {
-          return 'GET /user/notifications';
-        }
-        case '/search': {
-          return 'GET /search';
-        }
-        case '/search/filters': {
-          return 'GET /search/filters';
-        }
-        case '/tags': {
-          return 'GET /tags';
-        }
-        case '/status': {
-          return 'GET /status';
-        }
-        case '/admin/reports/time': {
-          return 'GET /admin/reports/time';
-        }
-        case '/admin/users': {
-          return 'GET /admin/users';
-        }
-        case '/admin/projects': {
-          return 'GET /admin/projects';
-        }
-        case '/admin/audit-logs': {
-          return 'GET /admin/audit-logs';
-        }
-        case '/admin/stats': {
-          return 'GET /admin/stats';
-        }
+        case '/auth/sso/providers':
+          {
+            return 'GET /auth/sso/providers';
+          }
+          break;
+        case '/user/me':
+          {
+            return 'GET /user/me';
+          }
+          break;
+        case '/user/me/preferences':
+          {
+            return 'GET /user/me/preferences';
+          }
+          break;
+        case '/user/me/sessions':
+          {
+            return 'GET /user/me/sessions';
+          }
+          break;
+        case '/user/notifications':
+          {
+            return 'GET /user/notifications';
+          }
+          break;
+        case '/search':
+          {
+            return 'GET /search';
+          }
+          break;
+        case '/search/filters':
+          {
+            return 'GET /search/filters';
+          }
+          break;
+        case '/tags':
+          {
+            return 'GET /tags';
+          }
+          break;
+        case '/status':
+          {
+            return 'GET /status';
+          }
+          break;
+        case '/admin/reports/time':
+          {
+            return 'GET /admin/reports/time';
+          }
+          break;
+        case '/admin/users':
+          {
+            return 'GET /admin/users';
+          }
+          break;
+        case '/admin/projects':
+          {
+            return 'GET /admin/projects';
+          }
+          break;
+        case '/admin/audit-logs':
+          {
+            return 'GET /admin/audit-logs';
+          }
+          break;
+        case '/admin/stats':
+          {
+            return 'GET /admin/stats';
+          }
+          break;
       }
       {
         let l = p.length;
@@ -692,11 +753,14 @@
           }
         }
       }
+      break;
     case 'PATCH':
       switch (p) {
-        case '/user/me/preferences': {
-          return 'PATCH /user/me/preferences';
-        }
+        case '/user/me/preferences':
+          {
+            return 'PATCH /user/me/preferences';
+          }
+          break;
       }
       {
         let l = p.length;
@@ -760,191 +824,196 @@
           }
         }
       }
-    case 'DELETE': {
-      let l = p.length;
-      if (l > 1) {
-        switch (p.charCodeAt(1)) {
-          case 117:
-            if (l > 18)
-              if (p.startsWith('ser/me/sessions/', 2)) {
-                if (!p.includes('/', 18)) {
-                  let q0 = p.slice(18);
-                  return 'DELETE /user/me/sessions/*';
+      break;
+    case 'DELETE':
+      {
+        let l = p.length;
+        if (l > 1) {
+          switch (p.charCodeAt(1)) {
+            case 117:
+              if (l > 18)
+                if (p.startsWith('ser/me/sessions/', 2)) {
+                  if (!p.includes('/', 18)) {
+                    let q0 = p.slice(18);
+                    return 'DELETE /user/me/sessions/*';
+                  }
                 }
-              }
-          case 111:
-            if (l > 5)
-              if (p.startsWith('rg/', 2)) {
-                let j = p.indexOf('/', 5);
-                if (j > 5) {
-                  if (l > j + 1) {
-                    let q0 = p.slice(5, j);
-                    switch (p.charCodeAt(j + 1)) {
-                      case 112:
-                        if (l > j + 10)
-                          if (p.startsWith('rojects/', j + 2)) {
-                            let i = j + 10;
-                            j = p.indexOf('/', i);
-                            if (j > i) {
-                              let q1 = p.slice(i, j);
-                              if (l > j + 7)
-                                if (p.startsWith('tasks/', j + 1)) {
-                                  switch (p.charCodeAt(j + 7)) {
+            case 111:
+              if (l > 5)
+                if (p.startsWith('rg/', 2)) {
+                  let j = p.indexOf('/', 5);
+                  if (j > 5) {
+                    if (l > j + 1) {
+                      let q0 = p.slice(5, j);
+                      switch (p.charCodeAt(j + 1)) {
+                        case 112:
+                          if (l > j + 10)
+                            if (p.startsWith('rojects/', j + 2)) {
+                              let i = j + 10;
+                              j = p.indexOf('/', i);
+                              if (j > i) {
+                                let q1 = p.slice(i, j);
+                                if (l > j + 7)
+                                  if (p.startsWith('tasks/', j + 1)) {
+                                    switch (p.charCodeAt(j + 7)) {
+                                      case 116:
+                                        if (p.startsWith('ags', j + 8)) {
+                                          if (l === j + 11) {
+                                            return 'DELETE /org/*/projects/*/tasks/tags';
+                                          }
+                                        }
+                                      case 99:
+                                        if (l > j + 21)
+                                          if (p.startsWith('ustom-fields/', j + 8)) {
+                                            if (!p.includes('/', j + 21)) {
+                                              let q2 = p.slice(j + 21);
+                                              return 'DELETE /org/*/projects/*/tasks/custom-fields/*';
+                                            }
+                                          }
+                                    }
+                                  }
+                              } else if (j === -1) {
+                                let q1 = p.slice(i);
+                                return 'DELETE /org/*/projects/*';
+                              }
+                            }
+                        case 116:
+                          if (l > j + 7)
+                            if (p.startsWith('asks/', j + 2)) {
+                              let i = j + 7;
+                              j = p.indexOf('/', i);
+                              if (j > i) {
+                                if (l > j + 1) {
+                                  let q1 = p.slice(i, j);
+                                  switch (p.charCodeAt(j + 1)) {
                                     case 116:
-                                      if (p.startsWith('ags', j + 8)) {
-                                        if (l === j + 11) {
-                                          return 'DELETE /org/*/projects/*/tasks/tags';
+                                      if (p.startsWith('ags', j + 2)) {
+                                        if (l === j + 5) {
+                                          return 'DELETE /org/*/tasks/*/tags';
                                         }
                                       }
                                     case 99:
-                                      if (l > j + 21)
-                                        if (p.startsWith('ustom-fields/', j + 8)) {
-                                          if (!p.includes('/', j + 21)) {
-                                            let q2 = p.slice(j + 21);
-                                            return 'DELETE /org/*/projects/*/tasks/custom-fields/*';
+                                      if (l > j + 15)
+                                        if (p.startsWith('ustom-fields/', j + 2)) {
+                                          if (!p.includes('/', j + 15)) {
+                                            let q2 = p.slice(j + 15);
+                                            return 'DELETE /org/*/tasks/*/custom-fields/*';
                                           }
                                         }
                                   }
                                 }
-                            } else if (j === -1) {
-                              let q1 = p.slice(i);
-                              return 'DELETE /org/*/projects/*';
-                            }
-                          }
-                      case 116:
-                        if (l > j + 7)
-                          if (p.startsWith('asks/', j + 2)) {
-                            let i = j + 7;
-                            j = p.indexOf('/', i);
-                            if (j > i) {
-                              if (l > j + 1) {
-                                let q1 = p.slice(i, j);
-                                switch (p.charCodeAt(j + 1)) {
-                                  case 116:
-                                    if (p.startsWith('ags', j + 2)) {
-                                      if (l === j + 5) {
-                                        return 'DELETE /org/*/tasks/*/tags';
-                                      }
-                                    }
-                                  case 99:
-                                    if (l > j + 15)
-                                      if (p.startsWith('ustom-fields/', j + 2)) {
-                                        if (!p.includes('/', j + 15)) {
-                                          let q2 = p.slice(j + 15);
-                                          return 'DELETE /org/*/tasks/*/custom-fields/*';
-                                        }
-                                      }
-                                }
+                              } else if (j === -1) {
+                                let q1 = p.slice(i);
+                                return 'DELETE /org/*/tasks/*';
                               }
-                            } else if (j === -1) {
-                              let q1 = p.slice(i);
-                              return 'DELETE /org/*/tasks/*';
                             }
-                          }
-                      case 98:
-                        if (l > j + 25)
-                          if (p.startsWith('illing/payment-methods/', j + 2)) {
-                            if (!p.includes('/', j + 25)) {
-                              let q1 = p.slice(j + 25);
-                              return 'DELETE /org/*/billing/payment-methods/*';
+                        case 98:
+                          if (l > j + 25)
+                            if (p.startsWith('illing/payment-methods/', j + 2)) {
+                              if (!p.includes('/', j + 25)) {
+                                let q1 = p.slice(j + 25);
+                                return 'DELETE /org/*/billing/payment-methods/*';
+                              }
                             }
-                          }
-                      case 97:
-                        if (l > j + 10)
-                          if (p.startsWith('pi-keys/', j + 2)) {
-                            if (!p.includes('/', j + 10)) {
-                              let q1 = p.slice(j + 10);
-                              return 'DELETE /org/*/api-keys/*';
+                        case 97:
+                          if (l > j + 10)
+                            if (p.startsWith('pi-keys/', j + 2)) {
+                              if (!p.includes('/', j + 10)) {
+                                let q1 = p.slice(j + 10);
+                                return 'DELETE /org/*/api-keys/*';
+                              }
                             }
-                          }
-                      case 119:
-                        if (l > j + 10)
-                          if (p.startsWith('ebhooks/', j + 2)) {
-                            if (!p.includes('/', j + 10)) {
-                              let q1 = p.slice(j + 10);
-                              return 'DELETE /org/*/webhooks/*';
+                        case 119:
+                          if (l > j + 10)
+                            if (p.startsWith('ebhooks/', j + 2)) {
+                              if (!p.includes('/', j + 10)) {
+                                let q1 = p.slice(j + 10);
+                                return 'DELETE /org/*/webhooks/*';
+                              }
                             }
-                          }
+                      }
                     }
+                  } else if (j === -1) {
+                    let q0 = p.slice(5);
+                    return 'DELETE /org/*';
                   }
-                } else if (j === -1) {
-                  let q0 = p.slice(5);
-                  return 'DELETE /org/*';
                 }
-              }
-          case 102:
-            if (l > 7)
-              if (p.startsWith('iles/', 2)) {
-                if (!p.includes('/', 7)) {
-                  let q0 = p.slice(7);
-                  return 'DELETE /files/*';
+            case 102:
+              if (l > 7)
+                if (p.startsWith('iles/', 2)) {
+                  if (!p.includes('/', 7)) {
+                    let q0 = p.slice(7);
+                    return 'DELETE /files/*';
+                  }
                 }
-              }
-          case 115:
-            if (l > 16)
-              if (p.startsWith('earch/filters/', 2)) {
-                if (!p.includes('/', 16)) {
-                  let q0 = p.slice(16);
-                  return 'DELETE /search/filters/*';
+            case 115:
+              if (l > 16)
+                if (p.startsWith('earch/filters/', 2)) {
+                  if (!p.includes('/', 16)) {
+                    let q0 = p.slice(16);
+                    return 'DELETE /search/filters/*';
+                  }
                 }
-              }
-          case 116:
-            if (l > 6)
-              if (p.startsWith('ags/', 2)) {
-                if (!p.includes('/', 6)) {
-                  let q0 = p.slice(6);
-                  return 'DELETE /tags/*';
+            case 116:
+              if (l > 6)
+                if (p.startsWith('ags/', 2)) {
+                  if (!p.includes('/', 6)) {
+                    let q0 = p.slice(6);
+                    return 'DELETE /tags/*';
+                  }
                 }
-              }
+          }
         }
       }
-    }
-    case 'PUT': {
-      let l = p.length;
-      if (l > 5)
-        if (p.startsWith('org/', 1)) {
-          let j = p.indexOf('/', 5);
-          if (j > 5) {
-            if (l > j + 1) {
-              let q0 = p.slice(5, j);
-              switch (p.charCodeAt(j + 1)) {
-                case 112:
-                  if (l > j + 10)
-                    if (p.startsWith('rojects/', j + 2)) {
-                      let i = j + 10;
-                      j = p.indexOf('/', i);
-                      if (j > i) {
-                        let q1 = p.slice(i, j);
-                        if (l > j + 21)
-                          if (p.startsWith('tasks/custom-fields/', j + 1)) {
-                            if (!p.includes('/', j + 21)) {
-                              let q2 = p.slice(j + 21);
-                              return 'PUT /org/*/projects/*/tasks/custom-fields/*';
+      break;
+    case 'PUT':
+      {
+        let l = p.length;
+        if (l > 5)
+          if (p.startsWith('org/', 1)) {
+            let j = p.indexOf('/', 5);
+            if (j > 5) {
+              if (l > j + 1) {
+                let q0 = p.slice(5, j);
+                switch (p.charCodeAt(j + 1)) {
+                  case 112:
+                    if (l > j + 10)
+                      if (p.startsWith('rojects/', j + 2)) {
+                        let i = j + 10;
+                        j = p.indexOf('/', i);
+                        if (j > i) {
+                          let q1 = p.slice(i, j);
+                          if (l > j + 21)
+                            if (p.startsWith('tasks/custom-fields/', j + 1)) {
+                              if (!p.includes('/', j + 21)) {
+                                let q2 = p.slice(j + 21);
+                                return 'PUT /org/*/projects/*/tasks/custom-fields/*';
+                              }
                             }
-                          }
+                        }
                       }
-                    }
-                case 116:
-                  if (l > j + 7)
-                    if (p.startsWith('asks/', j + 2)) {
-                      let i = j + 7;
-                      j = p.indexOf('/', i);
-                      if (j > i) {
-                        let q1 = p.slice(i, j);
-                        if (l > j + 15)
-                          if (p.startsWith('custom-fields/', j + 1)) {
-                            if (!p.includes('/', j + 15)) {
-                              let q2 = p.slice(j + 15);
-                              return 'PUT /org/*/tasks/*/custom-fields/*';
+                  case 116:
+                    if (l > j + 7)
+                      if (p.startsWith('asks/', j + 2)) {
+                        let i = j + 7;
+                        j = p.indexOf('/', i);
+                        if (j > i) {
+                          let q1 = p.slice(i, j);
+                          if (l > j + 15)
+                            if (p.startsWith('custom-fields/', j + 1)) {
+                              if (!p.includes('/', j + 15)) {
+                                let q2 = p.slice(j + 15);
+                                return 'PUT /org/*/tasks/*/custom-fields/*';
+                              }
                             }
-                          }
+                        }
                       }
-                    }
+                }
               }
             }
           }
-        }
-    }
+      }
+      break;
   }
   return '';
 };

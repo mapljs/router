@@ -5,7 +5,7 @@ import { compile, shouldBoundCheck } from '../tree/compiler.ts';
 let STR!: string, START_IDX!: 0 | 1;
 
 const each = (value: string, path: string) => {
-  STR += `case"${START_IDX === 1 ? path : path.slice(1)}":{${value}}`;
+  STR += `case"${START_IDX === 1 ? path : path.slice(1)}":{${value}}break;`;
 };
 
 const compileSubrouter = (mp: Map<string, string>, node: Node<string>): void => {
@@ -20,6 +20,7 @@ const compileSubrouter = (mp: Map<string, string>, node: Node<string>): void => 
       mp.has('/') || !shouldBoundCheck(node)
         ? `{let ${constants.PATH_LEN}=${constants.PATH}.length;${compile(node, 0, START_IDX, '')}}`
         : `{let ${constants.PATH_LEN}=${constants.PATH}.length;if(${constants.PATH_LEN}>${START_IDX}){${compile(node, 0, START_IDX, '')}}}`);
+  STR += 'break;';
 };
 
 export default (router: Router<string>, methodInput: string, start: 0 | 1): string => {
