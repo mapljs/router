@@ -1,6 +1,345 @@
 [
-  ["POST", "GET", "PATCH", "DELETE", "PUT"],
+  ["GET", "POST", "PATCH", "DELETE", "PUT"],
+  [{}, {}, {}, {}, {}],
   [
+    [
+      "/",
+      null,
+      [117, 111, 102, 97],
+      [
+        [
+          "user/",
+          null,
+          [],
+          [],
+          [
+            [
+              "/",
+              null,
+              [110, 105],
+              [
+                ["notifications", "return \"GET /user/*/notifications\"", [], [], null, null],
+                ["invites/", null, [], [], [null, "return \"GET /user/*/invites/*\""], null]
+              ],
+              null,
+              null
+            ],
+            "return \"GET /user/*\""
+          ],
+          null
+        ],
+        [
+          "org/",
+          null,
+          [],
+          [],
+          [
+            [
+              "/",
+              null,
+              [109, 114, 100, 112, 116, 98, 97, 119],
+              [
+                ["members", "return \"GET /org/*/members\"", [], [], null, null],
+                ["roles", "return \"GET /org/*/roles\"", [], [], null, null],
+                ["domains", "return \"GET /org/*/domains\"", [], [], null, null],
+                [
+                  "projects/",
+                  null,
+                  [],
+                  [],
+                  [
+                    [
+                      "/",
+                      null,
+                      [109, 97, 116],
+                      [
+                        ["members", "return \"GET /org/*/projects/*/members\"", [], [], null, null],
+                        [
+                          "activity",
+                          "return \"GET /org/*/projects/*/activity\"",
+                          [],
+                          [],
+                          null,
+                          null
+                        ],
+                        [
+                          "tasks",
+                          "return \"GET /org/*/projects/*/tasks\"",
+                          [47],
+                          [
+                            [
+                              "/",
+                              null,
+                              [116, 97],
+                              [
+                                [
+                                  "time-entries",
+                                  "return \"GET /org/*/projects/*/tasks/time-entries\"",
+                                  [],
+                                  [],
+                                  null,
+                                  null
+                                ],
+                                [
+                                  "attachments",
+                                  "return \"GET /org/*/projects/*/tasks/attachments\"",
+                                  [],
+                                  [],
+                                  null,
+                                  null
+                                ]
+                              ],
+                              null,
+                              null
+                            ]
+                          ],
+                          null,
+                          null
+                        ]
+                      ],
+                      null,
+                      null
+                    ],
+                    "return \"GET /org/*/projects/*\""
+                  ],
+                  null
+                ],
+                [
+                  "tasks",
+                  "return \"GET /org/*/tasks\"",
+                  [47],
+                  [
+                    [
+                      "/",
+                      null,
+                      [],
+                      [],
+                      [
+                        [
+                          "/",
+                          null,
+                          [99, 116, 97],
+                          [
+                            [
+                              "comments",
+                              "return \"GET /org/*/tasks/*/comments\"",
+                              [],
+                              [],
+                              null,
+                              null
+                            ],
+                            [
+                              "time-entries",
+                              "return \"GET /org/*/tasks/*/time-entries\"",
+                              [],
+                              [],
+                              null,
+                              null
+                            ],
+                            [
+                              "attachments",
+                              "return \"GET /org/*/tasks/*/attachments\"",
+                              [],
+                              [],
+                              null,
+                              null
+                            ]
+                          ],
+                          null,
+                          null
+                        ],
+                        "return \"GET /org/*/tasks/*\""
+                      ],
+                      null
+                    ]
+                  ],
+                  null,
+                  null
+                ],
+                [
+                  "billing/",
+                  null,
+                  [112, 115, 105],
+                  [
+                    [
+                      "p",
+                      null,
+                      [108, 97],
+                      [
+                        ["lans", "return \"GET /org/*/billing/plans\"", [], [], null, null],
+                        [
+                          "ayment-methods",
+                          "return \"GET /org/*/billing/payment-methods\"",
+                          [],
+                          [],
+                          null,
+                          null
+                        ]
+                      ],
+                      null,
+                      null
+                    ],
+                    [
+                      "subscription",
+                      "return \"GET /org/*/billing/subscription\"",
+                      [],
+                      [],
+                      null,
+                      null
+                    ],
+                    [
+                      "invoices",
+                      "return \"GET /org/*/billing/invoices\"",
+                      [47],
+                      [
+                        [
+                          "/",
+                          null,
+                          [],
+                          [],
+                          [null, "return \"GET /org/*/billing/invoices/*\""],
+                          null
+                        ]
+                      ],
+                      null,
+                      null
+                    ]
+                  ],
+                  null,
+                  null
+                ],
+                ["api-keys", "return \"GET /org/*/api-keys\"", [], [], null, null],
+                [
+                  "webhooks",
+                  "return \"GET /org/*/webhooks\"",
+                  [47],
+                  [
+                    [
+                      "/",
+                      null,
+                      [],
+                      [],
+                      [
+                        [
+                          "/",
+                          null,
+                          [100],
+                          [
+                            [
+                              "deliveries",
+                              "return \"GET /org/*/webhooks/*/deliveries\"",
+                              [47],
+                              [
+                                [
+                                  "/",
+                                  null,
+                                  [],
+                                  [],
+                                  [null, "return \"GET /org/*/webhooks/*/deliveries/*\""],
+                                  null
+                                ]
+                              ],
+                              null,
+                              null
+                            ]
+                          ],
+                          null,
+                          null
+                        ],
+                        null
+                      ],
+                      null
+                    ]
+                  ],
+                  null,
+                  null
+                ]
+              ],
+              null,
+              null
+            ],
+            "return \"GET /org/*\""
+          ],
+          null
+        ],
+        ["files/", null, [], [], [null, "return \"GET /files/*\""], null],
+        [
+          "admin/",
+          null,
+          [114, 101],
+          [
+            [
+              "reports/",
+              null,
+              [112, 117],
+              [
+                [
+                  "projects/",
+                  null,
+                  [],
+                  [],
+                  [
+                    [
+                      "/",
+                      null,
+                      [115],
+                      [
+                        [
+                          "summary",
+                          "return \"GET /admin/reports/projects/*/summary\"",
+                          [],
+                          [],
+                          null,
+                          null
+                        ]
+                      ],
+                      null,
+                      null
+                    ],
+                    null
+                  ],
+                  null
+                ],
+                [
+                  "users/",
+                  null,
+                  [],
+                  [],
+                  [
+                    [
+                      "/",
+                      null,
+                      [97],
+                      [
+                        [
+                          "activity",
+                          "return \"GET /admin/reports/users/*/activity\"",
+                          [],
+                          [],
+                          null,
+                          null
+                        ]
+                      ],
+                      null,
+                      null
+                    ],
+                    null
+                  ],
+                  null
+                ]
+              ],
+              null,
+              null
+            ],
+            ["exports/", null, [], [], [null, "return \"GET /admin/exports/*\""], null]
+          ],
+          null,
+          null
+        ]
+      ],
+      null,
+      null
+    ],
     [
       "/",
       null,
@@ -400,344 +739,6 @@
     [
       "/",
       null,
-      [117, 111, 102, 97],
-      [
-        [
-          "user/",
-          null,
-          [],
-          [],
-          [
-            [
-              "/",
-              null,
-              [110, 105],
-              [
-                ["notifications", "return \"GET /user/*/notifications\"", [], [], null, null],
-                ["invites/", null, [], [], [null, "return \"GET /user/*/invites/*\""], null]
-              ],
-              null,
-              null
-            ],
-            "return \"GET /user/*\""
-          ],
-          null
-        ],
-        [
-          "org/",
-          null,
-          [],
-          [],
-          [
-            [
-              "/",
-              null,
-              [109, 114, 100, 112, 116, 98, 97, 119],
-              [
-                ["members", "return \"GET /org/*/members\"", [], [], null, null],
-                ["roles", "return \"GET /org/*/roles\"", [], [], null, null],
-                ["domains", "return \"GET /org/*/domains\"", [], [], null, null],
-                [
-                  "projects/",
-                  null,
-                  [],
-                  [],
-                  [
-                    [
-                      "/",
-                      null,
-                      [109, 97, 116],
-                      [
-                        ["members", "return \"GET /org/*/projects/*/members\"", [], [], null, null],
-                        [
-                          "activity",
-                          "return \"GET /org/*/projects/*/activity\"",
-                          [],
-                          [],
-                          null,
-                          null
-                        ],
-                        [
-                          "tasks",
-                          "return \"GET /org/*/projects/*/tasks\"",
-                          [47],
-                          [
-                            [
-                              "/",
-                              null,
-                              [116, 97],
-                              [
-                                [
-                                  "time-entries",
-                                  "return \"GET /org/*/projects/*/tasks/time-entries\"",
-                                  [],
-                                  [],
-                                  null,
-                                  null
-                                ],
-                                [
-                                  "attachments",
-                                  "return \"GET /org/*/projects/*/tasks/attachments\"",
-                                  [],
-                                  [],
-                                  null,
-                                  null
-                                ]
-                              ],
-                              null,
-                              null
-                            ]
-                          ],
-                          null,
-                          null
-                        ]
-                      ],
-                      null,
-                      null
-                    ],
-                    "return \"GET /org/*/projects/*\""
-                  ],
-                  null
-                ],
-                [
-                  "tasks",
-                  "return \"GET /org/*/tasks\"",
-                  [47],
-                  [
-                    [
-                      "/",
-                      null,
-                      [],
-                      [],
-                      [
-                        [
-                          "/",
-                          null,
-                          [99, 116, 97],
-                          [
-                            [
-                              "comments",
-                              "return \"GET /org/*/tasks/*/comments\"",
-                              [],
-                              [],
-                              null,
-                              null
-                            ],
-                            [
-                              "time-entries",
-                              "return \"GET /org/*/tasks/*/time-entries\"",
-                              [],
-                              [],
-                              null,
-                              null
-                            ],
-                            [
-                              "attachments",
-                              "return \"GET /org/*/tasks/*/attachments\"",
-                              [],
-                              [],
-                              null,
-                              null
-                            ]
-                          ],
-                          null,
-                          null
-                        ],
-                        "return \"GET /org/*/tasks/*\""
-                      ],
-                      null
-                    ]
-                  ],
-                  null,
-                  null
-                ],
-                [
-                  "billing/",
-                  null,
-                  [112, 115, 105],
-                  [
-                    [
-                      "p",
-                      null,
-                      [108, 97],
-                      [
-                        ["lans", "return \"GET /org/*/billing/plans\"", [], [], null, null],
-                        [
-                          "ayment-methods",
-                          "return \"GET /org/*/billing/payment-methods\"",
-                          [],
-                          [],
-                          null,
-                          null
-                        ]
-                      ],
-                      null,
-                      null
-                    ],
-                    [
-                      "subscription",
-                      "return \"GET /org/*/billing/subscription\"",
-                      [],
-                      [],
-                      null,
-                      null
-                    ],
-                    [
-                      "invoices",
-                      "return \"GET /org/*/billing/invoices\"",
-                      [47],
-                      [
-                        [
-                          "/",
-                          null,
-                          [],
-                          [],
-                          [null, "return \"GET /org/*/billing/invoices/*\""],
-                          null
-                        ]
-                      ],
-                      null,
-                      null
-                    ]
-                  ],
-                  null,
-                  null
-                ],
-                ["api-keys", "return \"GET /org/*/api-keys\"", [], [], null, null],
-                [
-                  "webhooks",
-                  "return \"GET /org/*/webhooks\"",
-                  [47],
-                  [
-                    [
-                      "/",
-                      null,
-                      [],
-                      [],
-                      [
-                        [
-                          "/",
-                          null,
-                          [100],
-                          [
-                            [
-                              "deliveries",
-                              "return \"GET /org/*/webhooks/*/deliveries\"",
-                              [47],
-                              [
-                                [
-                                  "/",
-                                  null,
-                                  [],
-                                  [],
-                                  [null, "return \"GET /org/*/webhooks/*/deliveries/*\""],
-                                  null
-                                ]
-                              ],
-                              null,
-                              null
-                            ]
-                          ],
-                          null,
-                          null
-                        ],
-                        null
-                      ],
-                      null
-                    ]
-                  ],
-                  null,
-                  null
-                ]
-              ],
-              null,
-              null
-            ],
-            "return \"GET /org/*\""
-          ],
-          null
-        ],
-        ["files/", null, [], [], [null, "return \"GET /files/*\""], null],
-        [
-          "admin/",
-          null,
-          [114, 101],
-          [
-            [
-              "reports/",
-              null,
-              [112, 117],
-              [
-                [
-                  "projects/",
-                  null,
-                  [],
-                  [],
-                  [
-                    [
-                      "/",
-                      null,
-                      [115],
-                      [
-                        [
-                          "summary",
-                          "return \"GET /admin/reports/projects/*/summary\"",
-                          [],
-                          [],
-                          null,
-                          null
-                        ]
-                      ],
-                      null,
-                      null
-                    ],
-                    null
-                  ],
-                  null
-                ],
-                [
-                  "users/",
-                  null,
-                  [],
-                  [],
-                  [
-                    [
-                      "/",
-                      null,
-                      [97],
-                      [
-                        [
-                          "activity",
-                          "return \"GET /admin/reports/users/*/activity\"",
-                          [],
-                          [],
-                          null,
-                          null
-                        ]
-                      ],
-                      null,
-                      null
-                    ],
-                    null
-                  ],
-                  null
-                ]
-              ],
-              null,
-              null
-            ],
-            ["exports/", null, [], [], [null, "return \"GET /admin/exports/*\""], null]
-          ],
-          null,
-          null
-        ]
-      ],
-      null,
-      null
-    ],
-    [
-      "/",
-      null,
       [111, 115, 116],
       [
         [
@@ -964,6 +965,5 @@
       null,
       null
     ]
-  ],
-  [{}, {}, {}, {}, {}]
+  ]
 ]

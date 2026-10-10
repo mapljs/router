@@ -34,7 +34,7 @@ const writeFormatted = async (pathFromSnap: string, content: string) => {
     }
 
     promises.push(
-      writeFormatted(name + '.js', `(m,${PATH})=>{${compile(router, 'm', 1)}return ''}`),
+      writeFormatted(name + '.js', `(m,${PATH})=>{${compile(router, 'm', 1, '')}return ''}`),
       writeFormatted(name + '.json', JSON.stringify(router)),
     );
   }
