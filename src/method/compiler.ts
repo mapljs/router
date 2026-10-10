@@ -52,7 +52,7 @@ export default (
   start: 0 | 1,
   handleHeadCode: string,
 ): string => {
-  STR = '';
+  STR = `switch(${methodInput}){`;
   START_IDX = start;
 
   METHODS = router[0];
@@ -66,8 +66,6 @@ export default (
     swapIndices(matchAllIdx, i);
     matchAllIdx = i++;
   }
-
-  STR += `switch(${methodInput}){`;
 
   // Handle GET & HEAD
   {
