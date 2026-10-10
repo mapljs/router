@@ -4,9 +4,24 @@ import { compile, shouldBoundCheck } from '../tree/compiler.ts';
 
 let STR!: string,
   START_IDX!: 0 | 1,
-  METHODS!: Router<string>[0],
-  MAPS!: Router<string>[1],
-  NODES!: Router<string>[2];
+  METHODS!: Router<any>[0], MAPS!: Router<any>[1], NODES!: Router<any>[2];
+
+const swapIndices = (from: number, to: number) => {
+  if (from !== to) {
+    const oldMethod = METHODS[to],
+      oldMap = MAPS[to],
+      oldNodes = NODES[to];
+
+    METHODS[to] = METHODS[from];
+    METHODS[from] = oldMethod;
+
+    MAPS[to] = MAPS[from];
+    MAPS[from] = oldMap;
+
+    NODES[to] = NODES[from];
+    NODES[from] = oldNodes;
+  }
+};
 
 const each = (value: string, path: string) => {
   STR += `case"${START_IDX === 1 ? path : path.slice(1)}":{${value};break}`;
@@ -27,23 +42,6 @@ const compileSubrouter = (i: number): void => {
       map.has('/') || !shouldBoundCheck(node)
         ? `let ${constants.PATH_LEN}=${constants.PATH}.length;${compile(node, 0, START_IDX, '')}`
         : `let ${constants.PATH_LEN}=${constants.PATH}.length;if(${constants.PATH_LEN}>${START_IDX}){${compile(node, 0, START_IDX, '')}}`);
-};
-
-const swapIndices = (from: number, to: number) => {
-  if (from !== to) {
-    const oldMethod = METHODS[to],
-      oldMap = MAPS[to],
-      oldNodes = NODES[to];
-
-    METHODS[to] = METHODS[from];
-    METHODS[from] = oldMethod;
-
-    MAPS[to] = MAPS[from];
-    MAPS[from] = oldMap;
-
-    NODES[to] = NODES[from];
-    NODES[from] = oldNodes;
-  }
 };
 
 export default (
