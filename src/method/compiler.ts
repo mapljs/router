@@ -78,10 +78,12 @@ export default (
 
       STR += 'case"HEAD":{' + handleHeadCode;
 
-      let headIdx = METHODS.indexOf('HEAD', i);
-      if (headIdx !== -1) {
-        swapIndices(headIdx, i);
-        compileSubrouter((headIdx = i++));
+      {
+        let headIdx = METHODS.indexOf('HEAD', i);
+        if (headIdx !== -1) {
+          swapIndices(headIdx, i);
+          compileSubrouter((headIdx = i++));
+        }
       }
 
       STR += '}case "GET":{';
