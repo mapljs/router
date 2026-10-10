@@ -15,13 +15,11 @@ export const match = <T>(node: Node<T>, start: number): T | null => {
 
   // Check the next children node
   if (node[2].length > 0) {
-    const childId = node[2].indexOf(PATH.charCodeAt(start));
-    if (childId > -1) {
-      const child = node[3][childId];
-      const part = child[0];
-
+    let childId = node[2].indexOf(PATH.charCodeAt(start));
+    if (childId !== -1) {
+      let child = node[3][childId], part = child[0];
       if (part.length === 1 || PATH.startsWith(part, start)) {
-        const matched = match(child, start + part.length);
+        let matched = match(child, start + part.length);
         if (matched !== null) return matched;
       }
     }
@@ -29,7 +27,7 @@ export const match = <T>(node: Node<T>, start: number): T | null => {
 
   // Check for parameters
   if (node[4] !== null) {
-    const paramNode = node[4];
+    let paramNode = node[4];
 
     if (paramNode[0] === null) {
       if (!PATH.includes('/', start)) {
@@ -37,7 +35,7 @@ export const match = <T>(node: Node<T>, start: number): T | null => {
         return paramNode[1];
       }
     } else {
-      const endIdx = PATH.indexOf('/', start);
+      let endIdx = PATH.indexOf('/', start);
 
       if (endIdx === -1) {
         if (paramNode[1] !== null) {
@@ -47,7 +45,7 @@ export const match = <T>(node: Node<T>, start: number): T | null => {
       } else if (endIdx > start) {
         PARAMS.push(PATH.slice(start, endIdx));
 
-        const matched = match(paramNode[0], endIdx + 1);
+        let matched = match(paramNode[0], endIdx + 1);
         if (matched !== null) return matched;
 
         PARAMS.pop();
