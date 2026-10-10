@@ -77,7 +77,6 @@ export default (
       getIdx = i++;
 
       STR += 'case"HEAD":{' + handleHeadCode;
-
       {
         let headIdx = METHODS.indexOf('HEAD', i);
         if (headIdx !== -1) {
@@ -85,7 +84,6 @@ export default (
           compileSubrouter((headIdx = i++));
         }
       }
-
       STR += '}case "GET":{';
       compileSubrouter(getIdx);
       STR += 'break}';
